@@ -1486,7 +1486,55 @@ def _build_recommendation_html(mid_pool, high_pool, presurge):
 </div>"""
 
 
-def save_html(results: List[Dict]):
+
+# ============================================================
+# 复盘对比（晚盘专用）
+# ============================================================
+
+def _build_review_html(predicted: List[Dict], actual: List[Dict]) -> str:
+    """
+    对比早盘预测 vs 实际收盘结果，生成复盘 HTML。
+    """
+    pred_codes  = {r.get("code") for r in predicted}
+    actual_codes = {r.get("code") for r in actual}
+
+    hits  = pred_codes & actual_codes
+    misses = pred_codes - actual_codes
+    new_finds = actual_codes - pred_codes
+
+    hit_pct = len(hits) / len(pred_codes) * 100 if pred_codes else 0
+
+    hit_names  = [f"{r['name']}({r['code']})" for r in predicted if r.get("code") in hits]
+    miss_names = [f"{r['name']}({r['code']})" for r in predicted if r.get("code") in misses]
+    new_names  = [f"{r['name']}({r['code']})" for r in actual   if r.get("code") in new_finds]
+
+    hit_list  = "、".join(hit_names[:10])  + (" 等" if len(hit_names) > 10 else "") if hit_names else "—"
+    miss_list = "、".join(miss_names[:10]) + (" 等" if len(miss_names) > 10 else "") if miss_names else "—"
+    new_list  = "、".join(new_names[:10])  + (" 等" if len(new_names) > 10 else "") if new_names else "—"
+
+    return f"""
+<div class="review-box" style="margin:14px 20px 18px;background:#0f172a;color:#e2e8f0;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.15)">
+  <div style="background:linear-gradient(135deg,#b45309,#d97706);color:#fff;padding:10px 18px;font-size:13px;font-weight:700">
+    📋 早盘预测复盘 — 命中率 {hit_pct:.0f}%（{len(hits)}/{len(pred_codes)}）
+  </div>
+  <div style="display:flex;gap:18px;flex-wrap:wrap;padding:12px 18px;font-size:12px;line-height:1.8">
+    <div style="flex:1;min-width:180px">
+      <b style="color:#4ade80">✅ 命中 ({len(hits)}只)：</b><br>
+      <span style="color:#94a3b8">{hit_list}</span>
+    </div>
+    <div style="flex:1;min-width:180px">
+      <b style="color:#fbbf24">⚠ 未出现 ({len(misses)}只)：</b><br>
+      <span style="color:#94a3b8">{miss_list}</span>
+    </div>
+    <div style="flex:1;min-width:180px">
+      <b style="color:#60a5fa">🆕 新增异动 ({len(new_finds)}只)：</b><br>
+      <span style="color:#94a3b8">{new_list}</span>
+    </div>
+  </div>
+</div>"""
+
+
+def save_html(results: List[Dict], schedule: str = None, predicted: List[Dict] = None):
     scan_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # ── v5.0 双池分类 ──
@@ -1657,9 +1705,13 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 </head>
 <body>
 <div class="hd">
-  <h1>📈 A股异动筛选 v5.0 — 抓启动加速，剔除暴涨尾声</h1>
+  <h1>📈 A股异动筛选 v5.0 — """ + (f"☀️ 早盘预测" if schedule == "morning" else f"📋 收盘复盘" if schedule == "evening" else f"抓启动加速，剔除暴涨尾声") + f"""</h1>
   <div class="sub">扫描: {scan_time} &nbsp;|&nbsp; 🏗中段 <strong>{len(mid_pool)}</strong>只 &nbsp;|&nbsp; 🎯高位 <strong>{len(high_pool)}</strong>只 &nbsp;|&nbsp; 🔮预判 <strong>{len(presurge_items)}</strong>只</div>
 </div>
+
+""" + (f"""   <!-- 复盘对比 -->""" if schedule == "evening" and predicted else f"""   """) + (f"""
+<!-- 早盘预测 vs 收盘复盘 -->
+""" + _build_review_html(predicted, results) if schedule == "evening" and predicted else "") + f"""
 
 <!-- 操作建议 & 交易纪律（置顶） -->
 {_build_recommendation_html(mid_pool, high_pool, presurge_items)}
@@ -1843,6 +1895,7 @@ def main():
     parser.add_argument("--presurge", action="store_true", help="预判模式：在异动前发现（宽松条件，风险更高）")
     parser.add_argument("--both",    action="store_true", help="组合模式：同时跑异动确认+预判，合并输出（每日8:30用）")
     parser.add_argument("--history", action="store_true", help="仅重新生成历史回顾页面（不扫描）")
+    parser.add_argument("--schedule", choices=["morning","evening"], help="定时任务模式: morning=早盘预测(8:30) evening=收盘复盘(18:00)")
     args = parser.parse_args()
 
     Config.KLINE_DAYS = args.days
@@ -1870,6 +1923,11 @@ def main():
 
     if args.both:
         # 组合模式：先跑异动确认，再跑预判，合并结果
+        if args.schedule == "morning":
+            print("  时段: ☀️ 早盘预测 — 北京时间 8:30")
+        elif args.schedule == "evening":
+            print("  时段: 🌙 收盘复盘 — 北京时间 18:00")
+
         print("\n>>> 第一轮：异动确认扫描...")
         confirmed = scan_hot_stocks(presurge_mode=False) if args.mode != "full" else scan_full_market(presurge_mode=False)
         print(f"\n>>> 第二轮：PreSurge预判扫描...")
@@ -1923,8 +1981,37 @@ def main():
                   f"分{r['score']:.0f}")
 
     if not args.no_save:
-        save_json(results)
-        save_html(results)
+        # ── 定时任务：早盘预测 / 收盘复盘 ──
+        today_str = datetime.now().strftime("%Y-%m-%d")
+        pred_dir  = Path(Config.HISTORY_DIR).parent / "prediction"
+        pred_dir.mkdir(parents=True, exist_ok=True)
+
+        if args.schedule == "morning":
+            # 早盘预测：额外保存到 prediction/ 目录
+            pred_json = pred_dir / f"{today_str}_morning.json"
+            with open(pred_json, "w", encoding="utf-8") as f:
+                json.dump([{k: v for k, v in r.items() if not callable(v)} for r in results], f, ensure_ascii=False, indent=2, default=str)
+            print(f"[INFO] 早盘预测 → {pred_json}")
+
+            save_json(results)
+            save_html(results, schedule="morning")
+
+        elif args.schedule == "evening":
+            # 收盘复盘：加载早盘预测做对比
+            pred_json = pred_dir / f"{today_str}_morning.json"
+            predicted = []
+            if pred_json.exists():
+                try:
+                    with open(pred_json, "r", encoding="utf-8") as f:
+                        predicted = json.load(f)
+                except Exception:
+                    pass
+
+            save_json(results)
+            save_html(results, schedule="evening", predicted=predicted if predicted else None)
+        else:
+            save_json(results)
+            save_html(results)
 
     return results
 
