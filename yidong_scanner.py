@@ -1379,7 +1379,8 @@ def save_json(results: List[Dict]):
 
 def _build_recommendation_html(mid_pool, high_pool, presurge):
     """
-    v5.0 操作建议：分池纪律 + 低吸策略，彻底放弃高位涨停买入。
+    v5.0 操作建议 & 交易纪律（深色主题，置于报告最上面）。
+    只保留操作纪律，不重复统计卡片（统计卡片由 save_html 统一渲染）。
     """
     if not mid_pool and not high_pool:
         return ""
@@ -1414,46 +1415,74 @@ def _build_recommendation_html(mid_pool, high_pool, presurge):
     top4_rows = "".join(rec_row(r, i+1) for i, r in enumerate(top4))
 
     # 动态建议
-    mid_best = mid_pool[0] if mid_pool else None
+    mid_best  = mid_pool[0]  if mid_pool  else None
     high_best = high_pool[0] if high_pool else None
     advice = []
     if mid_best:
-        advice.append(f"<b>🏗 中段池首选 {mid_best['code']} {mid_best['name']}</b>：回踩MA5({mid_best['plan']['ma5']:.2f})或MA10({mid_best['plan']['ma10']:.2f})分批买入，盈利{Config.MID_TP_PCT}%减半，破5日线全走，单只仓位≤{Config.MID_POOL_POS*100:.0f}%")
+        advice.append(
+            f"<b>🏗 中段池首选 {mid_best['code']} {mid_best['name']}</b>："
+            f"回踩MA5({mid_best['plan']['ma5']:.2f})或MA10({mid_best['plan']['ma10']:.2f})分批买入，"
+            f"盈利{Config.MID_TP_PCT}%减半，破5日线全走，"
+            f"单只仓位≤{Config.MID_POOL_POS*100:.0f}%"
+        )
     if high_best:
-        advice.append(f"<b>🎯 高位池观察 {high_best['code']} {high_best['name']}</b>：只在大跌回踩MA10({high_best['plan']['ma10']:.2f})附近低吸，亏损{abs(Config.HIGH_STOP_PCT)}%无条件止损，盈利{Config.HIGH_TP_PCT}%全部离场，单只≤{Config.HIGH_POOL_POS*100:.0f}%")
+        advice.append(
+            f"<b>🎯 高位池观察 {high_best['code']} {high_best['name']}</b>："
+            f"只在大跌回踩MA10({high_best['plan']['ma10']:.2f})附近低吸，"
+            f"亏损{abs(Config.HIGH_STOP_PCT)}%无条件止损，"
+            f"盈利{Config.HIGH_TP_PCT}%全部离场，"
+            f"单只≤{Config.HIGH_POOL_POS*100:.0f}%"
+        )
     if not mid_pool and not high_pool:
-        advice.append("⚠ 当前无不建议参与的标的，等待新的异动信号")
-    advice.append(f"<b>📊 总仓位控制：</b>中段池单只≤{Config.MID_POOL_POS*100:.0f}% + 高位池单只≤{Config.HIGH_POOL_POS*100:.0f}%，永远不满仓")
+        advice.append("⚠ 当前无可参与标的，等待新的异动信号")
+    advice.append(
+        f"<b>📊 总仓位控制：</b>"
+        f"中段池单只≤{Config.MID_POOL_POS*100:.0f}% "
+        f"+ 高位池单只≤{Config.HIGH_POOL_POS*100:.0f}%，永远不满仓"
+    )
 
-    advice_html = "<br>".join(f"<li>{p}</li>" for p in advice)
+    # 深色背景的操作纪律区
+    DISC_BG   = "#1e293b"
+    DISC_FG   = "#fef3c7"
+    ADVICE_OL = ("<ol style='margin:8px 0 0 18px;padding:0'>" +
+                  "".join(f"<li style='color:{DISC_FG};margin:6px 0'>{p}</li>"
+                           for p in advice) +
+                  "</ol>")
 
     return f"""
-<div class="zone zone-advice" style="margin:16px 20px 24px">
-<div class="zone-hd" style="border-left-color:#f59e0b"><h2>🎯 操作建议 & 交易纪律</h2><span class="warn">中段回踩买 + 高位大跌买，放弃涨停追板</span></div>
-
-<div class="cards" style="margin:8px 0 12px">
-  <div class="card" style="border:2px solid #2563eb"><div class="v" style="color:#2563eb">{len(mid_pool)}</div><div class="l">🏗 中段加速</div></div>
-  <div class="card" style="border:2px solid #dc2626"><div class="v" style="color:#dc2626">{len(high_pool)}</div><div class="l">🎯 高位博弈</div></div>
-  <div class="card" style="border:2px solid #534AB7"><div class="v" style="color:#534AB7">{len(presurge)}</div><div class="l">🔮 预判候选</div></div>
-  <div class="card"><div class="v" style="color:#f59e0b">{min(len(top4), 4)}</div><div class="l">重点关注</div></div>
-</div>
-
-<div class="tw" style="margin:0 0 8px">
-<table>
-<thead><tr>
-  <th>优先级</th><th>代码</th><th>名称</th><th>现价</th><th>异动</th><th>买点</th><th>止损</th><th>目标</th><th>RR</th><th>仓位</th>
-</tr></thead>
-<tbody>{top4_rows or '<tr><td colspan="10" class="gray">暂无标的可推荐</td></tr>'}</tbody>
-</table>
-</div>
-
-<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:14px 18px;font-size:13px;line-height:1.8;color:#92400e">
-  <b>📌 操作纪律（严格执行）：</b>
-  <ol style="margin:8px 0 0 18px;padding:0">{advice_html}</ol>
-  <p style="margin:10px 0 0;font-size:12px;color:#a16207">
-    ⚠ 禁止追涨停板 | 中段回踩买高位大跌买 | 止损必须执行 | 数据仅供研究，不构成投资建议
-  </p>
-</div>
+<div class="zone zone-advice" style="border:2px solid #d97706;margin:14px 20px 18px">
+  <div class="zone-hd" style="background:#d97706;padding:10px 18px">
+    <h2 style="display:inline;font-size:15px;color:#fff">🎯 操作建议 & 交易纪律</h2>
+    <span style="margin-left:14px;font-size:12px;opacity:.85;color:#fff">
+      中段回踩买 ＋ 高位大跌买，放弃涨停追板
+    </span>
+  </div>
+  <!-- 重点关注 TOP4 -->
+  <div style="margin:10px 18px">
+    <table style="width:100%;border-collapse:collapse;font-size:12px">
+    <thead><tr style="background:#0f172a;color:#fff">
+      <th style="padding:6px 4px">优先级</th>
+      <th style="padding:6px 4px">代码</th>
+      <th style="padding:6px 4px">名称</th>
+      <th style="padding:6px 4px">现价</th>
+      <th style="padding:6px 4px">异动</th>
+      <th style="padding:6px 4px">买点</th>
+      <th style="padding:6px 4px">止损</th>
+      <th style="padding:6px 4px">目标</th>
+      <th style="padding:6px 4px">RR</th>
+      <th style="padding:6px 4px">仓位</th>
+    </tr></thead>
+    <tbody>{top4_rows or '<tr><td colspan="10" style="color:#888;padding:12px">暂无标的可推荐</td></tr>'}</tbody>
+    </table>
+  </div>
+  <!-- 操作纪律（深色） -->
+  <div style="background:{DISC_BG};color:{DISC_FG};padding:14px 18px;font-size:13px;line-height:1.9;border-top:1px solid #d97706">
+    <b style="color:#fbbf24">📌 交易纪律（严格执行）：</b>
+    {ADVICE_OL}
+    <p style="margin:10px 0 0;font-size:12px;color:#94a3b8">
+      ⚠ 禁止追涨停板 ｜ 中段回踩买、高位大跌买 ｜ 止损必须执行 ｜ 数据仅供研究，不构成投资建议
+    </p>
+  </div>
 </div>"""
 
 
@@ -1631,19 +1660,40 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
   <h1>📈 A股异动筛选 v5.0 — 抓启动加速，剔除暴涨尾声</h1>
   <div class="sub">扫描: {scan_time} &nbsp;|&nbsp; 🏗中段 <strong>{len(mid_pool)}</strong>只 &nbsp;|&nbsp; 🎯高位 <strong>{len(high_pool)}</strong>只 &nbsp;|&nbsp; 🔮预判 <strong>{len(presurge_items)}</strong>只</div>
 </div>
+
+<!-- 操作建议 & 交易纪律（置顶） -->
+{_build_recommendation_html(mid_pool, high_pool, presurge_items)}
+
 <div class="strat">
-  <h3>⚡ v5.0 策略：区间限位 + 抓启动加速 + 双池分仓</h3>
-  <p>
-    3日涨幅：<span class="bd">{Config.SURGE_3D_MIN}%~{Config.SURGE_3D_MAX}%</span> 超上限<span class="bd-red">剔除</span>
-    &nbsp;|&nbsp; 10日：<span class="bd">{Config.SURGE_10D_MIN}%~{Config.SURGE_10D_MAX}%</span>
-    &nbsp;|&nbsp; 30日：<span class="bd">{Config.SURGE_30D_MIN}%~{Config.SURGE_30D_MAX}%</span> 超<span class="bd-red">拉黑</span>
-    <br>
-    市值<span class="bd">{Config.MCAP_MIN}~{Config.MCAP_MAX}亿</span>
-    换手<span class="bd">{Config.TURNOVER_MIN}%~{Config.TURNOVER_MAX}%</span>
-    量能<span class="bd">3日递增</span>
-    中段池仓位<span class="bd-purple">≤{Config.MID_POOL_POS*100:.0f}%</span>
-    高位池<span class="bd-red">≤{Config.HIGH_POOL_POS*100:.0f}%</span>
-  </p>
+  <h3>⚡ v5.0 策略：区间限位 + 双池分仓</h3>
+  <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:8px">
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">异动区间限位（超上限剔除）</div>
+      <div style="font-size:13px;line-height:1.9">
+        3日：<span class="bd">{Config.SURGE_3D_MIN}%~{Config.SURGE_3D_MAX}%</span>
+        &nbsp; 10日：<span class="bd">{Config.SURGE_10D_MIN}%~{Config.SURGE_10D_MAX}%</span>
+        &nbsp; 30日：<span class="bd">{Config.SURGE_30D_MIN}%~{Config.SURGE_30D_MAX}%</span>
+        <span class="bd-red">超上限=拉黑</span>
+      </div>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">三道硬过滤</div>
+      <div style="font-size:13px;line-height:1.9">
+        市值 <span class="bd">{Config.MCAP_MIN}~{Config.MCAP_MAX}亿</span>
+        &nbsp; 换手 <span class="bd">{Config.TURNOVER_MIN}%~{Config.TURNOVER_MAX}%</span><br>
+        量能 <span class="bd">3日递增</span>
+        &nbsp; 主线板块 <span class="bd">≥3只涨停</span>
+      </div>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">双池仓位上限</div>
+      <div style="font-size:13px;line-height:1.9">
+        中段池 <span class="bd-purple">≤{Config.MID_POOL_POS*100:.0f}%</span>
+        &nbsp; 高位池 <span class="bd-red">≤{Config.HIGH_POOL_POS*100:.0f}%</span><br>
+        永远不满仓 &nbsp; 破5日线全走
+      </div>
+    </div>
+  </div>
 </div>
 <div class="cards">
   <div class="card" style="border:2px solid #2563eb"><div class="v" style="color:#2563eb">{len(mid_pool)}</div><div class="l">🏗 中段加速</div></div>
@@ -1696,9 +1746,6 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 </table>
 </div>
 </div>''' if presurge_items else ''}
-
-<!-- 操作建议 -->
-{_build_recommendation_html(mid_pool, high_pool, presurge_items)}
 
 <script>
 function tog(c){{
