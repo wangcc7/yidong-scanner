@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE
+.idea/
+.vscode/
+
+# WorkBuddy project memory
+.workbuddy/
+
+# Local tracking state (regenerated each run)
+.yidong_tracking.json
+
+# macOS
+.DS_Store
