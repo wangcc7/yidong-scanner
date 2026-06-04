@@ -1716,37 +1716,6 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 <!-- 操作建议 & 交易纪律（置顶） -->
 {_build_recommendation_html(mid_pool, high_pool, presurge_items)}
 
-<div class="strat">
-  <h3>⚡ v5.0 策略：区间限位 + 双池分仓</h3>
-  <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:8px">
-    <div style="flex:1;min-width:200px">
-      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">异动区间限位（超上限剔除）</div>
-      <div style="font-size:13px;line-height:1.9">
-        3日：<span class="bd">{Config.SURGE_3D_MIN}%~{Config.SURGE_3D_MAX}%</span>
-        &nbsp; 10日：<span class="bd">{Config.SURGE_10D_MIN}%~{Config.SURGE_10D_MAX}%</span>
-        &nbsp; 30日：<span class="bd">{Config.SURGE_30D_MIN}%~{Config.SURGE_30D_MAX}%</span>
-        <span class="bd-red">超上限=拉黑</span>
-      </div>
-    </div>
-    <div style="flex:1;min-width:200px">
-      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">三道硬过滤</div>
-      <div style="font-size:13px;line-height:1.9">
-        市值 <span class="bd">{Config.MCAP_MIN}~{Config.MCAP_MAX}亿</span>
-        &nbsp; 换手 <span class="bd">{Config.TURNOVER_MIN}%~{Config.TURNOVER_MAX}%</span><br>
-        量能 <span class="bd">3日递增</span>
-        &nbsp; 主线板块 <span class="bd">≥3只涨停</span>
-      </div>
-    </div>
-    <div style="flex:1;min-width:200px">
-      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">双池仓位上限</div>
-      <div style="font-size:13px;line-height:1.9">
-        中段池 <span class="bd-purple">≤{Config.MID_POOL_POS*100:.0f}%</span>
-        &nbsp; 高位池 <span class="bd-red">≤{Config.HIGH_POOL_POS*100:.0f}%</span><br>
-        永远不满仓 &nbsp; 破5日线全走
-      </div>
-    </div>
-  </div>
-</div>
 <div class="cards">
   <div class="card" style="border:2px solid #2563eb"><div class="v" style="color:#2563eb">{len(mid_pool)}</div><div class="l">🏗 中段加速</div></div>
   <div class="card" style="border:2px solid #dc2626"><div class="v">{len(high_pool)}</div><div class="l">🎯 高位博弈</div></div>
@@ -1799,6 +1768,39 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 </div>
 </div>''' if presurge_items else ''}
 
+<div class="strat">
+  <h3>⚡ v5.0 策略：区间限位 + 双池分仓</h3>
+  <div style="display:flex;gap:18px;flex-wrap:wrap;margin-top:8px">
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">异动区间限位（超上限剔除）</div>
+      <div style="font-size:13px;line-height:1.9">
+        3日：<span class="bd">{Config.SURGE_3D_MIN}%~{Config.SURGE_3D_MAX}%</span>
+        &nbsp; 10日：<span class="bd">{Config.SURGE_10D_MIN}%~{Config.SURGE_10D_MAX}%</span>
+        &nbsp; 30日：<span class="bd">{Config.SURGE_30D_MIN}%~{Config.SURGE_30D_MAX}%</span>
+        <span class="bd-red">超上限=拉黑</span>
+      </div>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">三道硬过滤</div>
+      <div style="font-size:13px;line-height:1.9">
+        市值 <span class="bd">{Config.MCAP_MIN}~{Config.MCAP_MAX}亿</span>
+        &nbsp; 换手 <span class="bd">{Config.TURNOVER_MIN}%~{Config.TURNOVER_MAX}%</span><br>
+        量能 <span class="bd">3日递增</span>
+        &nbsp; 主线板块 <span class="bd">≥3只涨停</span>
+      </div>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <div style="font-size:11px;color:#6b7280;margin-bottom:4px">双池仓位上限</div>
+      <div style="font-size:13px;line-height:1.9">
+        中段池 <span class="bd-purple">≤{Config.MID_POOL_POS*100:.0f}%</span>
+        &nbsp; 高位池 <span class="bd-red">≤{Config.HIGH_POOL_POS*100:.0f}%</span><br>
+        永远不满仓 &nbsp; 破5日线全走
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
 <script>
 function tog(c){{
   var r=document.getElementById('d'+c);
