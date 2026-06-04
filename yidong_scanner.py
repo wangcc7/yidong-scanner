@@ -1801,7 +1801,6 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 </div>
 
 <script>
-<script>
 function tog(c){{
   var r=document.getElementById('d'+c);
   r.style.display=r.style.display==='none'?'table-row':'none';
