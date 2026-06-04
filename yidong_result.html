@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>A股异动筛选 2026-06-04 10:19:22</title>
+<title>A股异动筛选 v5 2026-06-04 17:48:41</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:#222}
 .hd{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;padding:22px 28px}
 .hd h1{font-size:22px;font-weight:700;margin-bottom:4px}
 .hd .sub{font-size:12px;opacity:.7}
-.strat{background:#fff;margin:14px 20px;padding:14px 18px;border-radius:8px;border-left:4px solid #dc2626;box-shadow:0 2px 6px rgba(0,0,0,.06)}
-.strat h3{color:#dc2626;font-size:13px;margin-bottom:6px}
+.strat{background:#fff;margin:14px 20px;padding:14px 18px;border-radius:8px;border-left:4px solid #2563eb;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.strat h3{color:#2563eb;font-size:13px;margin-bottom:6px}
 .strat p{font-size:12px;color:#555;line-height:1.7}
-.bd{display:inline-block;background:#dc2626;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}
+.bd{display:inline-block;background:#2563eb;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}
+.bd-red{display:inline-block;background:#dc2626;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}
 .bd-purple{display:inline-block;background:#534AB7;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}
-.bd-gray{display:inline-block;background:#6b7280;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}
 .cards{display:flex;gap:12px;margin:0 20px 14px;flex-wrap:wrap}
 .card{background:#fff;border-radius:8px;padding:12px 18px;box-shadow:0 2px 6px rgba(0,0,0,.06);flex:1;min-width:100px}
 .card .v{font-size:26px;font-weight:700;color:#dc2626}
@@ -37,329 +37,1615 @@ td{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}
 .det{background:#f8fafc!important}
 .det td{text-align:left;padding:10px 14px;font-size:11px;line-height:1.8;border-top:1px dashed #e5e7eb}
 .tag{display:inline-block;background:#eff6ff;color:#2563eb;border-radius:3px;padding:1px 7px;margin:1px;font-size:11px}
+.tag-v-up{display:inline-block;background:#EAF3DE;color:#3B6D11;border-radius:3px;padding:1px 6px;font-size:10px;margin:1px}
+.tag-v-dn{display:inline-block;background:#FEE2E2;color:#991B1B;border-radius:3px;padding:1px 6px;font-size:10px;margin:1px}
 .det-btn{cursor:pointer;color:#2563eb;font-size:11px;white-space:nowrap}
 .det-btn:hover{text-decoration:underline}
-/* 专区样式 */
+/* 专区 */
 .zone{margin:0 20px 20px;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.1)}
 .zone-hd{color:#fff;padding:12px 18px}
 .zone-hd h2{font-size:14px;font-weight:700;display:inline}
 .zone-hd .warn{font-size:11px;opacity:.85;margin-left:12px}
-.zone-buy{border:2px solid #16a34a}.zone-buy .zone-hd{background:#16a34a}
-.zone-limit{border:2px solid #dc2626}.zone-limit .zone-hd{background:#dc2626}
-.zone-ft{border:2px solid #6b7280}.zone-ft .zone-hd{background:#6b7280}
+.zone-mid{border:2px solid #2563eb}.zone-mid .zone-hd{background:#2563eb}
+.zone-high{border:2px solid #dc2626}.zone-high .zone-hd{background:#dc2626}
 .zone-ps{border:2px solid #534AB7}.zone-ps .zone-hd{background:#534AB7}
 .ps-row{background:#faf9ff}
 .ps-row:hover td{background:#f0eeff!important}
-.ps5{color:#534AB7;font-weight:700}
-.ps3{color:#854F0B;font-weight:600}
+.ps5{color:#534AB7;font-weight:700}.ps3{color:#854F0B;font-weight:600}
 .psscore{font-size:11px}
-.ps0{color:#aaa}.ps1{color:#aaa}.ps2{color:#aaa}.ps3{color:#d97706}.ps4{color:#534AB7;font-weight:700}.ps5{color:#534AB7;font-weight:700}
+.ps0,.ps1,.ps2{color:#aaa}.ps3{color:#d97706}.ps4,.ps5{color:#534AB7;font-weight:700}
+.badge-mid{display:inline-block;background:#DBEAFE;color:#1E40AF;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}
+.badge-high{display:inline-block;background:#FEE2E2;color:#991B1B;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}
 .badge-pre{display:inline-block;background:#FAEEDA;color:#854F0B;border-radius:3px;padding:1px 6px;font-size:10px}
-.badge-conf{display:inline-block;background:#EAF3DE;color:#3B6D11;border-radius:3px;padding:1px 6px;font-size:10px}
-.badge-limit{display:inline-block;background:#FEE2E2;color:#991B1B;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}
-.badge-ft{display:inline-block;background:#F3F4F6;color:#6b7280;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}
 .ps-detail{font-family:monospace;font-size:10px;color:#534AB7;background:#EEEDFE;padding:2px 6px;border-radius:3px}
 </style>
 </head>
 <body>
 <div class="hd">
-  <h1>📈 A股异动股票筛选报告</h1>
-  <div class="sub">扫描时间: 2026-06-04 10:19:22 &nbsp;|&nbsp; 🔥可买 <strong>2</strong>只 &nbsp;|&nbsp; 🚫涨停 <strong>4</strong>只 &nbsp;|&nbsp; 🐟鱼尾 <strong>2</strong>只 &nbsp;|&nbsp; 🔮预判 <strong>0</strong>只</div>
+  <h1>📈 A股异动筛选 v5.0 — 抓启动加速，剔除暴涨尾声</h1>
+  <div class="sub">扫描: 2026-06-04 17:48:41 &nbsp;|&nbsp; 🏗中段 <strong>9</strong>只 &nbsp;|&nbsp; 🎯高位 <strong>41</strong>只 &nbsp;|&nbsp; 🔮预判 <strong>0</strong>只</div>
 </div>
 <div class="strat">
-  <h3>⚡ 策略：好股票压着异动走，在异动前发现，竞价介入</h3>
+  <h3>⚡ v5.0 策略：区间限位 + 抓启动加速 + 双池分仓</h3>
   <p>
-    异动定义：<span class="bd">3日≥20%</span>
-    <span class="bd">10日≥100%</span>
-    <span class="bd">30日≥200%</span>
-    &nbsp;|&nbsp; 同向异动：<span class="bd">4~6次</span>
-    &nbsp;|&nbsp; <span class="bd-gray">≥7次=鱼尾剔除</span>
-    &nbsp;|&nbsp; 涨停判断：<span class="bd">≥9.5%</span>
-    &nbsp;|&nbsp; <span class="bd-purple">PreSurge预判</span>
+    3日涨幅：<span class="bd">12%~20%</span> 超上限<span class="bd-red">剔除</span>
+    &nbsp;|&nbsp; 10日：<span class="bd">40%~80%</span>
+    &nbsp;|&nbsp; 30日：<span class="bd">60%~180%</span> 超<span class="bd-red">拉黑</span>
+    <br>
+    市值<span class="bd">60~350亿</span>
+    换手<span class="bd">5.0%~12.0%</span>
+    量能<span class="bd">3日递增</span>
+    中段池仓位<span class="bd-purple">≤30%</span>
+    高位池<span class="bd-red">≤10%</span>
   </p>
 </div>
 <div class="cards">
-  <div class="card" style="border:2px solid #16a34a"><div class="v" style="color:#16a34a">2</div><div class="l">🔥 可买入竞价</div></div>
-  <div class="card" style="border:2px solid #dc2626"><div class="v">4</div><div class="l">🚫 已涨停买不进</div></div>
-  <div class="card"><div class="v" style="color:#6b7280">2</div><div class="l">🐟 鱼尾行情</div></div>
-  <div class="card"><div class="v">0</div><div class="l">风险收益≥3x</div></div>
+  <div class="card" style="border:2px solid #2563eb"><div class="v" style="color:#2563eb">9</div><div class="l">🏗 中段加速</div></div>
+  <div class="card" style="border:2px solid #dc2626"><div class="v">41</div><div class="l">🎯 高位博弈</div></div>
   <div class="card" style="border:2px solid #534AB7"><div class="v" style="color:#534AB7">0</div><div class="l">预判高分≥4</div></div>
+  <div class="card"><div class="v">41</div><div class="l">RR≥1x</div></div>
 </div>
 
-<!-- 🔥 可买入区 -->
-<div class="zone zone-buy">
-<div class="zone-hd"><h2>🔥 可买入竞价（2只）</h2><span class="warn">未涨停 + 非鱼尾，可直接参与竞价</span></div>
+<!-- 🏗 中段改良池 -->
+<div class="zone zone-mid">
+<div class="zone-hd"><h2>🏗 中段改良池（9只）</h2><span class="warn">加速启动阶段，回踩5/10日线买入 | 盈利8%减半 | 破5日线全走 | 单只≤30%</span></div>
 <div class="tw" style="margin:0">
 <table>
 <thead><tr>
   <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
-  <th>异动<br>次数</th><th>压线<br>回调</th><th>趋势状态</th><th>量比</th>
-  <th>买入价</th><th>止损价</th><th>目标1</th><th>风险<br>收益比</th>
-  <th>市值</th><th>预判分</th><th>评分</th><th>详情</th>
+  <th>异动</th><th>市值</th><th>换手</th><th>量能</th><th>趋势</th>
+  <th>买点</th><th>止损</th><th>目标</th><th>RR</th><th>仓位</th><th>预判</th><th>评分</th><th>详情</th>
 </tr></thead>
 <tbody>
 <tr>
   <td class="rank">1</td>
-  <td class="code-cell">001896</td>
-  <td class="name-cell">豫能控股</td>
-  <td class="price-cell">21.60</td>
-  <td class="up">+7.57%</td>
-  <td class="surge">6次<br><small>3d+23%</small></td>
-  <td class="good">🆕突破新高</td>
-  <td class="trend small">压线走 回调-7.9% 斜率↑0.546</td>
-  <td class="bad">0.69x</td>
-  <td class="price-cell">21.66</td>
-  <td class="dn">15.88<br><small>-26.7%</small></td>
-  <td class="up">24.91</td>
-  <td class="bad">0.56x</td>
-  <td class="small">330亿</td>
-  <td class="psscore ps1">1/5 信号弱</td>
-  <td class="score">86</td>
-  <td class="det-btn" onclick="tog('001896')">▼详情</td>
+  <td class="code-cell">000733</td>
+  <td class="name-cell">振华科技<span class="badge-mid">中段加速</span></td>
+  <td class="price-cell">59.31</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">5次<br><small>3d窗17%</small></td>
+  <td><span class="ok">329亿</span></td>
+  <td><span class="bad">13.9%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 543014→768752</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">55.56</td>
+  <td class="dn">52.32</td>
+  <td class="up">64.05</td>
+  <td class="ok">0.68x</td>
+  <td class="small">≤30%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">94</td>
+  <td class="det-btn" onclick="tog('000733')">▼详情</td>
 </tr>
-<tr id="d001896" class="det">
-  <td colspan="17">
-    <b>历史异动 (6次)：</b><span class="tag">3d窗口 +21.0%</span><span class="tag">3d窗口 +22.5%</span><span class="tag">3d窗口 +33.0%</span><span class="tag">10d窗口 +118.7%</span><span class="tag">3d窗口 +25.4%</span><span class="tag">3d窗口 +22.7%</span><br>
-    <small class="gray">完整记录: 3d窗口+21.0%(2025-07-10~2025-07-14) → 3d窗口+22.5%(2026-02-09~2026-02-12) → 3d窗口+33.0%(2026-02-13~2026-02-26) → 10d窗口+118.7%(2026-02-05~2026-02-27) → 3d窗口+25.4%(2026-04-10~2026-04-15) → 3d窗口+22.7%(2026-05-29~2026-06-03)</small><br>
-    <b>均线：</b>MA5=18.8 &nbsp; MA10=17.47 &nbsp; MA20=16.84 &nbsp; MA60=15.93<br>
-    <b>交易计划：</b>买入21.66 → 止损15.88(-26.7%) → 目标1:24.91 → 目标2:28.16 &nbsp;|&nbsp; <b>风险收益比 0.56x</b><br>
-    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.01x 价变22.7% | S2韵律✗ 历史间隔均50日 已等1日(比值0.02) | S3收口✗ ATR=1.84 前=1.54 未明显收窄 | S4底抬✗ 低点:15.02→14.38→14.76 | S5MACD✓ 柱扩大 0.259→0.603→0.983</span>
+<tr id="d000733" class="det">
+  <td colspan="18">
+    <b>历史异动 (5次)：</b><span class="tag">3d窗 +17.9%</span><span class="tag">3d窗 +16.6%</span><span class="tag">3d窗 +14.1%</span><span class="tag">3d窗 +13.9%</span><span class="tag">3d窗 +16.6%</span><br>
+    <small class="gray">完整记录: 3d窗+17.9%(2025-03-10~2025-03-13) → 3d窗+16.6%(2025-04-08~2025-04-11) → 3d窗+14.1%(2025-10-22~2025-10-27) → 3d窗+13.9%(2026-05-21~2026-05-25) → 3d窗+16.6%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=53.94 &nbsp; MA10=52.5 &nbsp; MA20=49.22 &nbsp; MA60=47.66<br>
+    <b>交易纪律：</b>回踩5/10日线买 | +8%减半 | 破5日线全走 &nbsp;|&nbsp; 仓位≤30%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比2.61x 价变16.6% | S2韵律✗ 历史间隔均72日 已等0日(比值0.00) | S3收口✗ ATR=3.93 前=1.71 未明显收窄 | S4底抬✓ 低点抬高:41.88→43.30→46.07 | S5MACD✗ 柱=2.007</span>
   </td>
 </tr>
 <tr>
   <td class="rank">2</td>
-  <td class="code-cell">600367</td>
-  <td class="name-cell">XD红星发</td>
-  <td class="price-cell">46.50</td>
-  <td class="up">+8.87%</td>
-  <td class="surge">5次<br><small>3d+33%</small></td>
-  <td class="good">🆕突破新高</td>
-  <td class="trend small">压线走 回调-8.9% 斜率↑2.130</td>
-  <td class="ok">1.1x</td>
-  <td class="price-cell">46.53</td>
-  <td class="dn">31.14<br><small>-33.1%</small></td>
-  <td class="up">53.51</td>
-  <td class="bad">0.45x</td>
-  <td class="small">150亿</td>
-  <td class="psscore ps2">2/5 信号弱</td>
-  <td class="score">78</td>
-  <td class="det-btn" onclick="tog('600367')">▼详情</td>
+  <td class="code-cell">002585</td>
+  <td class="name-cell">双星新材<span class="badge-mid">中段加速</span></td>
+  <td class="price-cell">11.80</td>
+  <td class="up">+9.97%</td>
+  <td class="surge">3次<br><small>10d窗45%</small></td>
+  <td><span class="ok">105亿</span></td>
+  <td><span class="good">8.3%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 1844539→736616</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">11.24</td>
+  <td class="dn">10.58</td>
+  <td class="up">12.74</td>
+  <td class="ok">0.78x</td>
+  <td class="small">≤30%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">69</td>
+  <td class="det-btn" onclick="tog('002585')">▼详情</td>
 </tr>
-<tr id="d600367" class="det">
-  <td colspan="17">
-    <b>历史异动 (5次)：</b><span class="tag">3d窗口 +24.6%</span><span class="tag">3d窗口 +27.3%</span><span class="tag">3d窗口 +21.3%</span><span class="tag">3d窗口 +22.7%</span><span class="tag">3d窗口 +33.1%</span><br>
-    <small class="gray">完整记录: 3d窗口+24.6%(2025-01-13~2025-01-16) → 3d窗口+27.3%(2026-02-26~2026-03-03) → 3d窗口+21.3%(2026-03-12~2026-03-17) → 3d窗口+22.7%(2026-05-25~2026-05-28) → 3d窗口+33.1%(2026-05-29~2026-06-03)</small><br>
-    <b>均线：</b>MA5=39.1 &nbsp; MA10=34.2 &nbsp; MA20=29.36 &nbsp; MA60=24.81<br>
-    <b>交易计划：</b>买入46.53 → 止损31.14(-33.1%) → 目标1:53.51 → 目标2:60.49 &nbsp;|&nbsp; <b>风险收益比 0.45x</b><br>
-    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比0.71x 价变31.8% | S2韵律✗ 历史间隔均80日 已等1日(比值0.01) | S3收口✗ ATR=3.06 前=1.43 未明显收窄 | S4底抬✓ 低点抬高:20.43→23.01→25.19 | S5MACD✓ 柱扩大 2.460→3.118→3.810</span>
-  </td>
-</tr></tbody>
-</table>
-</div>
-</div>
-
-<!-- 🚫 涨停区 -->
-<div class="zone zone-limit">
-<div class="zone-hd"><h2>🚫 已涨停/接近涨停（4只）</h2><span class="warn">涨停买不进，保持关注，次日若开板可考虑</span></div>
-<div class="tw" style="margin:0">
-<table>
-<thead><tr>
-  <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
-  <th>异动<br>次数</th><th>压线<br>回调</th><th>趋势状态</th><th>量比</th>
-  <th>买入价</th><th>止损价</th><th>目标1</th><th>风险<br>收益比</th>
-  <th>市值</th><th>预判分</th><th>评分</th><th>详情</th>
-</tr></thead>
-<tbody>
-<tr>
-  <td class="rank">1</td>
-  <td class="code-cell">600246</td>
-  <td class="name-cell">万通发展 <span class="badge-limit">涨停</span></td>
-  <td class="price-cell">18.87</td>
-  <td class="up">+10.03%</td>
-  <td class="surge">6次<br><small>3d+21%</small></td>
-  <td class="good">🆕突破新高</td>
-  <td class="trend small">压线走 回调0.0% 斜率↑0.267</td>
-  <td class="bad">0.77x</td>
-  <td class="price-cell">18.87</td>
-  <td class="dn">15.15<br><small>-19.7%</small></td>
-  <td class="up">21.70</td>
-  <td class="bad">0.76x</td>
-  <td class="small">357亿</td>
-  <td class="psscore ps2">2/5 信号弱</td>
-  <td class="score">79</td>
-  <td class="det-btn" onclick="tog('600246')">▼详情</td>
-</tr>
-<tr id="d600246" class="det">
-  <td colspan="17">
-    <b>历史异动 (6次)：</b><span class="tag">3d窗口 +33.0%</span><span class="tag">3d窗口 +31.2%</span><span class="tag">3d窗口 +23.2%</span><span class="tag">3d窗口 +29.2%</span><span class="tag">3d窗口 +21.8%</span><span class="tag">3d窗口 +20.8%</span> <span class="badge-limit">涨停</span><br>
-    <small class="gray">完整记录: 3d窗口+33.0%(2025-08-07~2025-08-12) → 3d窗口+31.2%(2025-08-19~2025-08-22) → 3d窗口+23.2%(2025-08-29~2025-09-03) → 3d窗口+29.2%(2025-11-24~2025-11-27) → 3d窗口+21.8%(2026-05-18~2026-05-21) → 3d窗口+20.8%(2026-06-02~2026-06-04)</small><br>
-    <b>均线：</b>MA5=16.73 &nbsp; MA10=16.2 &nbsp; MA20=14.77 &nbsp; MA60=11.69<br>
-    <b>交易计划：</b>买入18.87 → 止损15.15(-19.7%) → 目标1:21.7 → 目标2:24.53 &nbsp;|&nbsp; <b>风险收益比 0.76x</b><br>
-    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.02x 价变19.1% | S2韵律✗ 历史间隔均36日 已等0日(比值0.00) | S3收口✗ ATR=1.54 前=1.00 未明显收窄 | S4底抬✓ 低点抬高:9.38→12.00→14.15 | S5MACD✓ 柱扩大 0.176→0.244→0.470</span>
-  </td>
-</tr>
-<tr>
-  <td class="rank">2</td>
-  <td class="code-cell">000700</td>
-  <td class="name-cell">模塑科技 <span class="badge-limit">涨停</span></td>
-  <td class="price-cell">18.24</td>
-  <td class="up">+10.01%</td>
-  <td class="surge">5次<br><small>3d+33%</small></td>
-  <td class="good">🆕突破新高</td>
-  <td class="trend small">压线走 回调0.0% 斜率↑0.167</td>
-  <td class="ok">1.13x</td>
-  <td class="price-cell">18.24</td>
-  <td class="dn">13.29<br><small>-27.1%</small></td>
-  <td class="up">20.98</td>
-  <td class="bad">0.55x</td>
-  <td class="small">167亿</td>
-  <td class="psscore ps2">2/5 信号弱</td>
-  <td class="score">70</td>
-  <td class="det-btn" onclick="tog('000700')">▼详情</td>
-</tr>
-<tr id="d000700" class="det">
-  <td colspan="17">
-    <b>历史异动 (5次)：</b><span class="tag">3d窗口 +23.6%</span><span class="tag">3d窗口 +21.2%</span><span class="tag">3d窗口 +20.6%</span><span class="tag">3d窗口 +20.4%</span><span class="tag">3d窗口 +33.1%</span> <span class="badge-limit">涨停</span><br>
-    <small class="gray">完整记录: 3d窗口+23.6%(2025-08-11~2025-08-14) → 3d窗口+21.2%(2025-09-12~2025-09-17) → 3d窗口+20.6%(2025-12-24~2025-12-29) → 3d窗口+20.4%(2026-04-30~2026-05-08) → 3d窗口+33.1%(2026-06-01~2026-06-04)</small><br>
-    <b>均线：</b>MA5=15.55 &nbsp; MA10=15.39 &nbsp; MA20=14.71 &nbsp; MA60=12.79<br>
-    <b>交易计划：</b>买入18.24 → 止损13.29(-27.1%) → 目标1:20.98 → 目标2:23.71 &nbsp;|&nbsp; <b>风险收益比 0.55x</b><br>
-    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.36x 价变33.1% | S2韵律✗ 历史间隔均45日 已等0日(比值0.00) | S3收口✗ ATR=1.14 前=0.90 未明显收窄 | S4底抬✓ 低点抬高:10.80→12.98→13.65 | S5MACD✓ 柱扩大 -0.117→0.104→0.436</span>
+<tr id="d002585" class="det">
+  <td colspan="18">
+    <b>历史异动 (3次)：</b><span class="tag">3d窗 +18.0%</span><span class="tag">30d窗 +66.0%</span><span class="tag">10d窗 +44.6%</span><br>
+    <small class="gray">完整记录: 3d窗+18.0%(2026-05-20~2026-05-25) → 30d窗+66.0%(2026-04-13~2026-05-28) → 10d窗+44.6%(2026-05-21~2026-06-04)</small><br>
+    <b>均线：</b>MA5=10.91 &nbsp; MA10=10.64 &nbsp; MA20=9.57 &nbsp; MA60=8.08<br>
+    <b>交易纪律：</b>回踩5/10日线买 | +8%减半 | 破5日线全走 &nbsp;|&nbsp; 仓位≤30%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.33x 价变11.6% | S3收口✗ ATR=1.11 前=0.61 未明显收窄 | S4底抬✓ 低点抬高:7.24→7.82→7.88 | S5MACD✗ 柱=0.342</span>
   </td>
 </tr>
 <tr>
   <td class="rank">3</td>
-  <td class="code-cell">605162</td>
-  <td class="name-cell">新中港 <span class="badge-limit">涨停</span></td>
-  <td class="price-cell">12.71</td>
-  <td class="up">+10.04%</td>
-  <td class="surge">4次<br><small>3d+25%</small></td>
-  <td class="good">🆕突破新高</td>
-  <td class="trend small">压线走 回调0.0% 斜率↑0.120</td>
-  <td class="good">1.66x</td>
-  <td class="price-cell">12.71</td>
-  <td class="dn">9.89<br><small>-22.2%</small></td>
-  <td class="up">14.62</td>
-  <td class="bad">0.68x</td>
-  <td class="small">56亿</td>
-  <td class="psscore ps1">1/5 信号弱</td>
-  <td class="score">61</td>
-  <td class="det-btn" onclick="tog('605162')">▼详情</td>
+  <td class="code-cell">002051</td>
+  <td class="name-cell">中工国际<span class="badge-mid">中段加速</span></td>
+  <td class="price-cell">12.02</td>
+  <td class="up">+9.97%</td>
+  <td class="surge">3次<br><small>3d窗16%</small></td>
+  <td><span class="ok">147亿</span></td>
+  <td><span class="good">6.9%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 439158→842537</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">11.51</td>
+  <td class="dn">10.84</td>
+  <td class="up">12.98</td>
+  <td class="ok">0.82x</td>
+  <td class="small">≤30%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">68</td>
+  <td class="det-btn" onclick="tog('002051')">▼详情</td>
 </tr>
-<tr id="d605162" class="det">
-  <td colspan="17">
-    <b>历史异动 (4次)：</b><span class="tag">3d窗口 +23.2%</span><span class="tag">3d窗口 +33.2%</span><span class="tag">3d窗口 +21.0%</span><span class="tag">3d窗口 +24.6%</span> <span class="badge-limit">涨停</span><br>
-    <small class="gray">完整记录: 3d窗口+23.2%(2025-07-02~2025-07-07) → 3d窗口+33.2%(2026-03-30~2026-04-02) → 3d窗口+21.0%(2026-04-03~2026-04-08) → 3d窗口+24.6%(2026-06-01~2026-06-04)</small><br>
-    <b>均线：</b>MA5=10.95 &nbsp; MA10=10.79 &nbsp; MA20=11.08 &nbsp; MA60=11.63<br>
-    <b>交易计划：</b>买入12.71 → 止损9.89(-22.2%) → 目标1:14.62 → 目标2:16.52 &nbsp;|&nbsp; <b>风险收益比 0.68x</b><br>
-    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.38x 价变24.6% | S2韵律✗ 历史间隔均71日 已等0日(比值0.00) | S3收口✗ ATR=0.85 前=0.47 未明显收窄 | S4底抬✗ 低点:11.09→10.39→9.55 | S5MACD✓ 柱扩大 -0.141→0.062→0.341</span>
+<tr id="d002051" class="det">
+  <td colspan="18">
+    <b>历史异动 (3次)：</b><span class="tag">3d窗 +12.3%</span><span class="tag">3d窗 +13.1%</span><span class="tag">3d窗 +15.5%</span><br>
+    <small class="gray">完整记录: 3d窗+12.3%(2025-02-17~2025-02-19) → 3d窗+13.1%(2026-03-30~2026-04-02) → 3d窗+15.5%(2026-04-29~2026-05-07)</small><br>
+    <b>均线：</b>MA5=11.18 &nbsp; MA10=11.11 &nbsp; MA20=11.07 &nbsp; MA60=10.32<br>
+    <b>交易纪律：</b>回踩5/10日线买 | +8%减半 | 破5日线全走 &nbsp;|&nbsp; 仓位≤30%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.89x 价变8.6% | S2韵律✗ 历史间隔均144日 已等20日(比值0.14) | S3收口✗ ATR=0.78 前=0.63 未明显收窄 | S4底抬✗ 低点:9.88→10.30→9.98 | S5MACD✓ 柱翻红 -0.094→0.051</span>
   </td>
 </tr>
 <tr>
   <td class="rank">4</td>
-  <td class="code-cell">300726</td>
-  <td class="name-cell">宏达电子 <span class="badge-limit">涨停</span></td>
-  <td class="price-cell">79.92</td>
-  <td class="up">+20.00%</td>
-  <td class="surge">4次<br><small>3d+33%</small></td>
-  <td class="good">🆕突破新高</td>
-  <td class="trend small">压线走 回调0.0% 斜率↑1.106</td>
-  <td class="ok">1.28x</td>
-  <td class="price-cell">79.92</td>
-  <td class="dn">58.36<br><small>-27.0%</small></td>
-  <td class="up">91.91</td>
-  <td class="bad">0.56x</td>
-  <td class="small">171亿</td>
-  <td class="psscore ps2">2/5 信号弱</td>
-  <td class="score">60</td>
-  <td class="det-btn" onclick="tog('300726')">▼详情</td>
+  <td class="code-cell">003043</td>
+  <td class="name-cell">华亚智能<span class="badge-mid">中段加速</span></td>
+  <td class="price-cell">67.57</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">3次<br><small>3d窗13%</small></td>
+  <td><span class="bad">57亿</span></td>
+  <td><span class="good">10.9%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 45201→91801</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">64.06</td>
+  <td class="dn">60.33</td>
+  <td class="up">72.98</td>
+  <td class="ok">0.75x</td>
+  <td class="small">≤30%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">68</td>
+  <td class="det-btn" onclick="tog('003043')">▼详情</td>
 </tr>
-<tr id="d300726" class="det">
-  <td colspan="17">
-    <b>历史异动 (4次)：</b><span class="tag">3d窗口 +20.4%</span><span class="tag">3d窗口 +22.7%</span><span class="tag">3d窗口 +30.8%</span><span class="tag">3d窗口 +32.8%</span> <span class="badge-limit">涨停</span><br>
-    <small class="gray">完整记录: 3d窗口+20.4%(2025-03-06~2025-03-11) → 3d窗口+22.7%(2025-10-22~2025-10-27) → 3d窗口+30.8%(2025-12-18~2025-12-23) → 3d窗口+32.8%(2026-06-01~2026-06-04)</small><br>
-    <b>均线：</b>MA5=66.79 &nbsp; MA10=64.74 &nbsp; MA20=60.71 &nbsp; MA60=50.64<br>
-    <b>交易计划：</b>买入79.92 → 止损58.36(-27.0%) → 目标1:91.91 → 目标2:103.9 &nbsp;|&nbsp; <b>风险收益比 0.56x</b><br>
-    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.46x 价变32.8% | S2韵律✗ 历史间隔均97日 已等0日(比值0.00) | S3收口✗ ATR=5.99 前=3.86 未明显收窄 | S4底抬✓ 低点抬高:45.51→50.35→57.20 | S5MACD✓ 柱扩大 0.235→0.486→2.251</span>
+<tr id="d003043" class="det">
+  <td colspan="18">
+    <b>历史异动 (3次)：</b><span class="tag">3d窗 +12.1%</span><span class="tag">3d窗 +18.5%</span><span class="tag">3d窗 +12.8%</span><br>
+    <small class="gray">完整记录: 3d窗+12.1%(2025-04-07~2025-04-10) → 3d窗+18.5%(2026-03-23~2026-03-26) → 3d窗+12.8%(2026-06-02~2026-06-04)</small><br>
+    <b>均线：</b>MA5=62.2 &nbsp; MA10=62.27 &nbsp; MA20=61.48 &nbsp; MA60=56.22<br>
+    <b>交易纪律：</b>回踩5/10日线买 | +8%减半 | 破5日线全走 &nbsp;|&nbsp; 仓位≤30%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.14x 价变9.5% | S2韵律✗ 历史间隔均136日 已等0日(比值0.00) | S3收口✗ ATR=4.04 前=3.44 未明显收窄 | S4底抬✓ 低点抬高:53.31→56.08→58.50 | S5MACD✓ 柱翻红 -0.769→0.066</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">5</td>
+  <td class="code-cell">002971</td>
+  <td class="name-cell">和远气体<span class="badge-mid">中段加速</span></td>
+  <td class="price-cell">37.39</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">4次<br><small>3d窗13%</small></td>
+  <td><span class="bad">58亿</span></td>
+  <td><span class="good">10.0%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 121053→156016</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">36.02</td>
+  <td class="dn">33.92</td>
+  <td class="up">40.38</td>
+  <td class="ok">0.86x</td>
+  <td class="small">≤30%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">65</td>
+  <td class="det-btn" onclick="tog('002971')">▼详情</td>
+</tr>
+<tr id="d002971" class="det">
+  <td colspan="18">
+    <b>历史异动 (4次)：</b><span class="tag">3d窗 +17.7%</span><span class="tag">3d窗 +13.4%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +12.7%</span><br>
+    <small class="gray">完整记录: 3d窗+17.7%(2025-09-02~2025-09-05) → 3d窗+13.4%(2025-09-22~2025-09-25) → 3d窗+12.4%(2026-01-05~2026-01-08) → 3d窗+12.7%(2026-04-20~2026-04-23)</small><br>
+    <b>均线：</b>MA5=34.97 &nbsp; MA10=34.22 &nbsp; MA20=35.25 &nbsp; MA60=32.1<br>
+    <b>交易纪律：</b>回踩5/10日线买 | +8%减半 | 破5日线全走 &nbsp;|&nbsp; 仓位≤30%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.8x 价变8.1% | S2韵律✗ 历史间隔均47日 已等27日(比值0.58) | S3收口✓ ATR从2.94→2.12(-28%) | S4底抬✓ 低点抬高:29.70→30.78→30.93 | S5MACD✗ 柱=-0.216</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">6</td>
+  <td class="code-cell">600482</td>
+  <td class="name-cell">中国动力<span class="badge-mid">中段加速</span></td>
+  <td class="price-cell">39.81</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">4次<br><small>3d窗12%</small></td>
+  <td><span class="bad">903亿</span></td>
+  <td><span class="bad">3.1%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 441841→699240</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">38.31</td>
+  <td class="dn">36.08</td>
+  <td class="up">42.99</td>
+  <td class="ok">0.85x</td>
+  <td class="small">≤30%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">63</td>
+  <td class="det-btn" onclick="tog('600482')">▼详情</td>
+</tr>
+<tr id="d600482" class="det">
+  <td colspan="18">
+    <b>历史异动 (4次)：</b><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +16.9%</span><span class="tag">3d窗 +14.4%</span><span class="tag">3d窗 +12.1%</span><br>
+    <small class="gray">完整记录: 3d窗+12.4%(2025-12-31~2026-01-06) → 3d窗+16.9%(2026-02-06~2026-02-11) → 3d窗+14.4%(2026-03-04~2026-03-06) → 3d窗+12.1%(2026-04-03~2026-04-09)</small><br>
+    <b>均线：</b>MA5=37.2 &nbsp; MA10=37.1 &nbsp; MA20=37.36 &nbsp; MA60=36.22<br>
+    <b>交易纪律：</b>回踩5/10日线买 | +8%减半 | 破5日线全走 &nbsp;|&nbsp; 仓位≤30%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.23x 价变9.0% | S2韵律✗ 历史间隔均17日 已等37日(比值2.13) | S3收口✗ ATR=2.39 前=2.20 未明显收窄 | S4底抬✗ 低点:36.67→35.00→33.80 | S5MACD✓ 柱翻红 -0.347→0.111</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">7</td>
+  <td class="code-cell">600293</td>
+  <td class="name-cell">三峡新材<span class="badge-mid">中段加速</span></td>
+  <td class="price-cell">3.60</td>
+  <td class="up">+10.09%</td>
+  <td class="surge">2次<br><small>3d窗12%</small></td>
+  <td><span class="bad">42亿</span></td>
+  <td><span class="good">6.9%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 491662→797377</small></td>
+  <td class="trend small">贴近高点 -0.8%</td>
+  <td class="price-cell">3.44</td>
+  <td class="dn">3.24</td>
+  <td class="up">3.89</td>
+  <td class="ok">0.81x</td>
+  <td class="small">≤30%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">56</td>
+  <td class="det-btn" onclick="tog('600293')">▼详情</td>
+</tr>
+<tr id="d600293" class="det">
+  <td colspan="18">
+    <b>历史异动 (2次)：</b><span class="tag">3d窗 +14.6%</span><span class="tag">3d窗 +12.0%</span><br>
+    <small class="gray">完整记录: 3d窗+14.6%(2024-12-04~2024-12-09) → 3d窗+12.0%(2026-01-20~2026-01-23)</small><br>
+    <b>均线：</b>MA5=3.34 &nbsp; MA10=3.33 &nbsp; MA20=3.27 &nbsp; MA60=3.28<br>
+    <b>交易纪律：</b>回踩5/10日线买 | +8%减半 | 破5日线全走 &nbsp;|&nbsp; 仓位≤30%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.39x 价变8.1% | S2韵律✗ 历史间隔均271日 已等84日(比值0.31) | S3收口✗ ATR=0.24 前=0.11 未明显收窄 | S4底抬✓ 低点抬高:2.97→3.07→3.08 | S5MACD✗ 柱=0.052</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">8</td>
+  <td class="code-cell">603135</td>
+  <td class="name-cell">中重科技<span class="badge-mid">中段加速</span></td>
+  <td class="price-cell">12.75</td>
+  <td class="up">+10.01%</td>
+  <td class="surge">3次<br><small>3d窗13%</small></td>
+  <td><span class="ok">80亿</span></td>
+  <td><span class="bad">2.4%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 71230→149320</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">11.41</td>
+  <td class="dn">10.75</td>
+  <td class="up">13.77</td>
+  <td class="ok">0.51x</td>
+  <td class="small">≤30%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">56</td>
+  <td class="det-btn" onclick="tog('603135')">▼详情</td>
+</tr>
+<tr id="d603135" class="det">
+  <td colspan="18">
+    <b>历史异动 (3次)：</b><span class="tag">3d窗 +12.6%</span><span class="tag">3d窗 +14.5%</span><span class="tag">3d窗 +13.1%</span><br>
+    <small class="gray">完整记录: 3d窗+12.6%(2025-02-28~2025-03-05) → 3d窗+14.5%(2026-01-13~2026-01-16) → 3d窗+13.1%(2026-05-29~2026-06-03)</small><br>
+    <b>均线：</b>MA5=11.08 &nbsp; MA10=11.04 &nbsp; MA20=11.64 &nbsp; MA60=11.18<br>
+    <b>交易纪律：</b>回踩5/10日线买 | +8%减半 | 破5日线全走 &nbsp;|&nbsp; 仓位≤30%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.74x 价变24.1% | S2韵律✗ 历史间隔均148日 已等1日(比值0.01) | S3收口✗ ATR=0.67 前=0.52 未明显收窄 | S4底抬✗ 低点:11.21→11.30→9.99 | S5MACD✓ 柱翻红 -0.237→0.051</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">9</td>
+  <td class="code-cell">600688</td>
+  <td class="name-cell">上海石化<span class="badge-mid">中段加速</span></td>
+  <td class="price-cell">3.38</td>
+  <td class="up">+10.10%</td>
+  <td class="surge">2次<br><small>3d窗13%</small></td>
+  <td><span class="ok">248亿</span></td>
+  <td><span class="bad">2.4%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 581619→1757458</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">3.03</td>
+  <td class="dn">2.86</td>
+  <td class="up">3.65</td>
+  <td class="ok">0.52x</td>
+  <td class="small">≤30%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">45</td>
+  <td class="det-btn" onclick="tog('600688')">▼详情</td>
+</tr>
+<tr id="d600688" class="det">
+  <td colspan="18">
+    <b>历史异动 (2次)：</b><span class="tag">3d窗 +12.3%</span><span class="tag">3d窗 +12.9%</span><br>
+    <small class="gray">完整记录: 3d窗+12.3%(2026-04-27~2026-04-30) → 3d窗+12.9%(2026-05-29~2026-06-03)</small><br>
+    <b>均线：</b>MA5=2.94 &nbsp; MA10=2.87 &nbsp; MA20=2.93 &nbsp; MA60=2.97<br>
+    <b>交易纪律：</b>回踩5/10日线买 | +8%减半 | 破5日线全走 &nbsp;|&nbsp; 仓位≤30%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.43x 价变22.5% | S2韵律✗ 历史间隔均18日 已等1日(比值0.06) | S3收口✗ ATR=0.11 前=0.10 未明显收窄 | S4底抬✗ 低点:2.75→2.78→2.70 | S5MACD✓ 柱扩大 -0.032→0.013→0.081</span>
   </td>
 </tr></tbody>
 </table>
 </div>
 </div>
 
-<!-- 🐟 鱼尾区 -->
-<div class="zone zone-ft">
-<div class="zone-hd"><h2>🐟 鱼尾行情（2只）</h2><span class="warn">异动≥7次，肉不多，不建议参与</span></div>
+<!-- 🎯 高位博弈池 -->
+<div class="zone zone-high">
+<div class="zone-hd"><h2>🎯 高位博弈池（41只）</h2><span class="warn">接近上限但未超 | 只大跌回踩MA10低吸 | 亏损5%止损 | 盈利10%全离 | 单只≤10.0%</span></div>
 <div class="tw" style="margin:0">
 <table>
 <thead><tr>
   <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
-  <th>异动<br>次数</th><th>压线<br>回调</th><th>趋势状态</th><th>量比</th>
-  <th>买入价</th><th>止损价</th><th>目标1</th><th>风险<br>收益比</th>
-  <th>市值</th><th>预判分</th><th>评分</th><th>详情</th>
+  <th>异动</th><th>市值</th><th>换手</th><th>量能</th><th>趋势</th>
+  <th>买点</th><th>止损</th><th>目标</th><th>RR</th><th>仓位</th><th>预判</th><th>评分</th><th>详情</th>
 </tr></thead>
 <tbody>
 <tr>
   <td class="rank">1</td>
-  <td class="code-cell">600403</td>
-  <td class="name-cell">大有能源 <span class="badge-limit">涨停</span> <span class="badge-ft">鱼尾</span></td>
-  <td class="price-cell">7.40</td>
-  <td class="up">+9.96%</td>
-  <td class="surge">8次<br><small>3d+22%</small></td>
-  <td class="good">🆕突破新高</td>
-  <td class="trend small">压线走 回调-20.9% 斜率↑0.229</td>
-  <td class="ok">1.14x</td>
-  <td class="price-cell">7.40</td>
-  <td class="dn">4.87<br><small>-34.2%</small></td>
-  <td class="up">8.51</td>
-  <td class="bad">0.44x</td>
-  <td class="small">177亿</td>
-  <td class="psscore ps1">1/5 信号弱</td>
-  <td class="score">120</td>
-  <td class="det-btn" onclick="tog('600403')">▼详情</td>
+  <td class="code-cell">603516</td>
+  <td class="name-cell">淳中科技<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">126.39</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">29次<br><small>3d窗14%</small></td>
+  <td><span class="ok">257亿</span></td>
+  <td><span class="bad">4.6%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 53710→93525</small></td>
+  <td class="trend small">均线偏弱 MA5=114.92<MA20*0.95</td>
+  <td class="price-cell">119.22</td>
+  <td class="dn">120.07</td>
+  <td class="up">139.03</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">234</td>
+  <td class="det-btn" onclick="tog('603516')">▼详情</td>
 </tr>
-<tr id="d600403" class="det">
-  <td colspan="17">
-    <b>历史异动 (8次)：</b><span class="tag">3d窗口 +21.3%</span><span class="tag">3d窗口 +21.0%</span><span class="tag">3d窗口 +26.3%</span><span class="tag">3d窗口 +33.2%</span><span class="tag">10d窗口 +116.5%</span><span class="tag">3d窗口 +21.0%</span><span class="tag">3d窗口 +25.7%</span><span class="tag">3d窗口 +21.9%</span> <span class="badge-limit">涨停</span> <span class="badge-ft">鱼尾</span><br>
-    <small class="gray">完整记录: 3d窗口+21.3%(2025-03-12~2025-03-14) → 3d窗口+21.0%(2025-03-17~2025-03-19) → 3d窗口+26.3%(2025-10-09~2025-10-14) → 3d窗口+33.2%(2025-10-15~2025-10-20) → 10d窗口+116.5%(2025-09-30~2025-10-22) → 3d窗口+21.0%(2025-10-21~2025-10-23) → 3d窗口+25.7%(2025-11-12~2025-11-17) → 3d窗口+21.9%(2026-05-28~2026-06-02)</small><br>
-    <b>均线：</b>MA5=6.17 &nbsp; MA10=5.63 &nbsp; MA20=5.56 &nbsp; MA60=5.88<br>
-    <b>交易计划：</b>买入7.4 → 止损4.87(-34.2%) → 目标1:8.51 → 目标2:9.62 &nbsp;|&nbsp; <b>风险收益比 0.44x</b><br>
-    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比2.43x 价变33.1% | S2韵律✗ 历史间隔均55日 已等2日(比值0.04) | S3收口✗ ATR=0.36 前=0.18 未明显收窄 | S4底抬✗ 低点:5.52→5.09→4.90 | S5MACD✓ 柱扩大 0.148→0.299→0.466</span>
+<tr id="d603516" class="det">
+  <td colspan="18">
+    <b>历史异动 (29次)：</b><span class="tag">30d窗 +61.0%</span><span class="tag">3d窗 +19.6%</span><span class="tag">3d窗 +14.9%</span><span class="tag">3d窗 +13.0%</span><span class="tag">3d窗 +13.5%</span><span class="tag">30d窗 +62.9%</span><span class="tag">3d窗 +14.1%</span><span class="tag">3d窗 +14.4%</span><br>
+    <small class="gray">完整记录: 30d窗+61.0%(2025-10-17~2025-11-07) → 3d窗+19.6%(2025-12-04~2025-12-09) → 3d窗+14.9%(2025-12-19~2025-12-24) → 3d窗+13.0%(2025-12-31~2026-01-07) → 3d窗+13.5%(2026-01-08~2026-01-13) → 30d窗+62.9%(2025-12-03~2026-01-13) → 3d窗+14.1%(2026-04-03~2026-04-09) → 3d窗+14.4%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=114.92 &nbsp; MA10=116.88 &nbsp; MA20=121.54 &nbsp; MA60=137.15<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.78x 价变14.4% | S2韵律✗ 历史间隔均19日 已等0日(比值0.00) | S3收口✓ ATR从9.71→6.31(-35%) | S4底抬✗ 低点:132.30→113.26→108.38 | S5MACD✓ 柱翻红 -0.714→1.436</span>
   </td>
 </tr>
 <tr>
   <td class="rank">2</td>
-  <td class="code-cell">003036</td>
-  <td class="name-cell">泰坦股份 <span class="badge-limit">涨停</span> <span class="badge-ft">鱼尾</span></td>
-  <td class="price-cell">74.86</td>
-  <td class="up">+10.01%</td>
-  <td class="surge">7次<br><small>3d+28%</small></td>
-  <td class="good">🆕突破新高</td>
-  <td class="trend small">压线走 回调-4.9% 斜率↑2.132</td>
-  <td class="bad">0.63x</td>
-  <td class="price-cell">74.86</td>
-  <td class="dn">54.30<br><small>-27.5%</small></td>
-  <td class="up">86.09</td>
-  <td class="bad">0.55x</td>
-  <td class="small">162亿</td>
-  <td class="psscore ps1">1/5 信号弱</td>
-  <td class="score">93</td>
-  <td class="det-btn" onclick="tog('003036')">▼详情</td>
+  <td class="code-cell">603090</td>
+  <td class="name-cell">宏盛股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">62.36</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">22次<br><small>3d窗18%</small></td>
+  <td><span class="ok">62亿</span></td>
+  <td><span class="good">5.2%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 34397→51808</small></td>
+  <td class="trend small">均线偏弱 MA5=59.05<MA20*0.95</td>
+  <td class="price-cell">59.24</td>
+  <td class="dn">62.55</td>
+  <td class="up">68.60</td>
+  <td class="good">623.6x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">191</td>
+  <td class="det-btn" onclick="tog('603090')">▼详情</td>
 </tr>
-<tr id="d003036" class="det">
-  <td colspan="17">
-    <b>历史异动 (7次)：</b><span class="tag">3d窗口 +22.7%</span><span class="tag">3d窗口 +20.3%</span><span class="tag">3d窗口 +21.1%</span><span class="tag">3d窗口 +22.0%</span><span class="tag">3d窗口 +28.0%</span><span class="tag">3d窗口 +21.7%</span><span class="tag">3d窗口 +27.5%</span> <span class="badge-limit">涨停</span> <span class="badge-ft">鱼尾</span><br>
-    <small class="gray">完整记录: 3d窗口+22.7%(2025-04-30~2025-05-08) → 3d窗口+20.3%(2025-09-03~2025-09-08) → 3d窗口+21.1%(2025-10-28~2025-10-31) → 3d窗口+22.0%(2026-04-21~2026-04-24) → 3d窗口+28.0%(2026-04-30~2026-05-08) → 3d窗口+21.7%(2026-05-19~2026-05-22) → 3d窗口+27.5%(2026-05-25~2026-05-28)</small><br>
-    <b>均线：</b>MA5=70.7 &nbsp; MA10=65.82 &nbsp; MA20=54.78 &nbsp; MA60=35.55<br>
-    <b>交易计划：</b>买入74.86 → 止损54.3(-27.5%) → 目标1:86.09 → 目标2:97.32 &nbsp;|&nbsp; <b>风险收益比 0.55x</b><br>
-    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比0.83x 价变4.3% | S2韵律✗ 历史间隔均40日 已等5日(比值0.13) | S3收口✗ ATR=6.44 前=3.96 未明显收窄 | S4底抬✓ 低点抬高:27.06→39.24→46.92 | S5MACD✗ 柱=2.891</span>
+<tr id="d603090" class="det">
+  <td colspan="18">
+    <b>历史异动 (22次)：</b><span class="tag">3d窗 +14.0%</span><span class="tag">30d窗 +62.6%</span><span class="tag">3d窗 +12.5%</span><span class="tag">10d窗 +41.8%</span><span class="tag">3d窗 +18.1%</span><span class="tag">3d窗 +15.6%</span><span class="tag">3d窗 +17.8%</span><span class="tag">3d窗 +17.5%</span><br>
+    <small class="gray">完整记录: 3d窗+14.0%(2026-01-07~2026-01-12) → 30d窗+62.6%(2025-12-01~2026-01-14) → 3d窗+12.5%(2026-01-13~2026-01-16) → 10d窗+41.8%(2025-12-31~2026-01-16) → 3d窗+18.1%(2026-01-19~2026-01-22) → 3d窗+15.6%(2026-02-10~2026-02-13) → 3d窗+17.8%(2026-04-03~2026-04-09) → 3d窗+17.5%(2026-05-18~2026-05-21)</small><br>
+    <b>均线：</b>MA5=59.05 &nbsp; MA10=64.06 &nbsp; MA20=65.84 &nbsp; MA60=65.99<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.6x 价变5.2% | S2韵律✓ 历史间隔均15日 已等10日(比值0.65) | S3收口✗ ATR=4.51 前=4.75 未明显收窄 | S4底抬✗ 低点:63.40→61.43→55.30 | S5MACD✗ 柱=-2.207</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">3</td>
+  <td class="code-cell">301123</td>
+  <td class="name-cell">奕东电子<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">106.79</td>
+  <td class="up">+20.00%</td>
+  <td class="surge">22次<br><small>30d窗60%</small></td>
+  <td><span class="ok">176亿</span></td>
+  <td><span class="bad">15.5%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 190347→255298</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">89.85</td>
+  <td class="dn">101.45</td>
+  <td class="up">117.47</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">180</td>
+  <td class="det-btn" onclick="tog('301123')">▼详情</td>
+</tr>
+<tr id="d301123" class="det">
+  <td colspan="18">
+    <b>历史异动 (22次)：</b><span class="tag">30d窗 +74.5%</span><span class="tag">10d窗 +40.3%</span><span class="tag">3d窗 +16.6%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +17.2%</span><span class="tag">3d窗 +16.0%</span><span class="tag">10d窗 +45.1%</span><span class="tag">30d窗 +60.5%</span><br>
+    <small class="gray">完整记录: 30d窗+74.5%(2025-11-11~2025-12-23) → 10d窗+40.3%(2025-12-19~2025-12-30) → 3d窗+16.6%(2026-04-02~2026-04-08) → 3d窗+12.4%(2026-05-21~2026-05-22) → 3d窗+17.2%(2026-05-25~2026-05-28) → 3d窗+16.0%(2026-06-02~2026-06-04) → 10d窗+45.1%(2026-05-21~2026-06-04) → 30d窗+60.5%(2026-04-20~2026-06-04)</small><br>
+    <b>均线：</b>MA5=92.98 &nbsp; MA10=88.09 &nbsp; MA20=81.31 &nbsp; MA60=66.83<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.44x 价变20.3% | S2韵律✗ 历史间隔均23日 已等0日(比值0.00) | S3收口✗ ATR=10.51 前=5.09 未明显收窄 | S4底抬✓ 低点抬高:62.58→68.22→73.66 | S5MACD✗ 柱=3.550</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">4</td>
+  <td class="code-cell">603950</td>
+  <td class="name-cell">长源东谷<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">70.05</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">22次<br><small>30d窗68%</small></td>
+  <td><span class="ok">227亿</span></td>
+  <td><span class="bad">3.0%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 117534→98537</small></td>
+  <td class="trend small">近10日趋势向下(斜率-0.220)</td>
+  <td class="price-cell">66.55</td>
+  <td class="dn">66.85</td>
+  <td class="up">77.06</td>
+  <td class="good">2.19x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">178</td>
+  <td class="det-btn" onclick="tog('603950')">▼详情</td>
+</tr>
+<tr id="d603950" class="det">
+  <td colspan="18">
+    <b>历史异动 (22次)：</b><span class="tag">10d窗 +40.4%</span><span class="tag">30d窗 +63.8%</span><span class="tag">3d窗 +12.2%</span><span class="tag">3d窗 +13.5%</span><span class="tag">10d窗 +40.7%</span><span class="tag">3d窗 +13.4%</span><span class="tag">3d窗 +12.2%</span><span class="tag">30d窗 +67.6%</span><br>
+    <small class="gray">完整记录: 10d窗+40.4%(2026-02-05~2026-02-27) → 30d窗+63.8%(2026-01-13~2026-03-03) → 3d窗+12.2%(2026-03-20~2026-04-09) → 3d窗+13.5%(2026-04-13~2026-04-16) → 10d窗+40.7%(2026-03-18~2026-04-16) → 3d窗+13.4%(2026-04-29~2026-05-07) → 3d窗+12.2%(2026-05-08~2026-05-13) → 30d窗+67.6%(2026-03-12~2026-05-13)</small><br>
+    <b>均线：</b>MA5=68.67 &nbsp; MA10=69.46 &nbsp; MA20=70.37 &nbsp; MA60=57.45<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.05x 价变0.7% | S2韵律✓ 历史间隔均18日 已等16日(比值0.87) | S3收口✗ ATR=5.72 前=5.65 未明显收窄 | S4底抬✗ 低点:54.72→62.05→61.83 | S5MACD✗ 柱=-2.159</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">5</td>
+  <td class="code-cell">001896</td>
+  <td class="name-cell">豫能控股<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">22.09</td>
+  <td class="up">+10.01%</td>
+  <td class="surge">20次<br><small>10d窗40%</small></td>
+  <td><span class="ok">337亿</span></td>
+  <td><span class="bad">13.5%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 2757733→2061521</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">17.86</td>
+  <td class="dn">20.99</td>
+  <td class="up">24.30</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">162</td>
+  <td class="det-btn" onclick="tog('001896')">▼详情</td>
+</tr>
+<tr id="d001896" class="det">
+  <td colspan="18">
+    <b>历史异动 (20次)：</b><span class="tag">30d窗 +71.1%</span><span class="tag">3d窗 +14.0%</span><span class="tag">3d窗 +17.7%</span><span class="tag">3d窗 +13.4%</span><span class="tag">10d窗 +48.8%</span><span class="tag">3d窗 +13.7%</span><span class="tag">3d窗 +12.1%</span><span class="tag">10d窗 +40.2%</span><br>
+    <small class="gray">完整记录: 30d窗+71.1%(2026-02-24~2026-03-12) → 3d窗+14.0%(2026-03-18~2026-03-23) → 3d窗+17.7%(2026-04-09~2026-04-14) → 3d窗+13.4%(2026-04-15~2026-04-20) → 10d窗+48.8%(2026-04-03~2026-04-20) → 3d窗+13.7%(2026-05-20~2026-05-25) → 3d窗+12.1%(2026-05-27~2026-06-01) → 10d窗+40.2%(2026-05-22~2026-06-04)</small><br>
+    <b>均线：</b>MA5=18.89 &nbsp; MA10=17.51 &nbsp; MA20=16.86 &nbsp; MA60=15.94<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.14x 价变25.2% | S2韵律✗ 历史间隔均16日 已等0日(比值0.00) | S3收口✗ ATR=1.84 前=1.54 未明显收窄 | S4底抬✗ 低点:15.02→14.38→14.76 | S5MACD✓ 柱扩大 0.259→0.603→1.038</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">6</td>
+  <td class="code-cell">600246</td>
+  <td class="name-cell">万通发展<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">18.87</td>
+  <td class="up">+10.03%</td>
+  <td class="surge">19次<br><small>3d窗19%</small></td>
+  <td><span class="bad">357亿</span></td>
+  <td><span class="good">8.0%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 1483898→1509259</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">16.52</td>
+  <td class="dn">17.93</td>
+  <td class="up">20.76</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">161</td>
+  <td class="det-btn" onclick="tog('600246')">▼详情</td>
+</tr>
+<tr id="d600246" class="det">
+  <td colspan="18">
+    <b>历史异动 (19次)：</b><span class="tag">3d窗 +13.6%</span><span class="tag">3d窗 +12.2%</span><span class="tag">3d窗 +17.1%</span><span class="tag">3d窗 +12.8%</span><span class="tag">3d窗 +12.8%</span><span class="tag">30d窗 +68.0%</span><span class="tag">3d窗 +12.7%</span><span class="tag">3d窗 +19.1%</span><br>
+    <small class="gray">完整记录: 3d窗+13.6%(2025-09-26~2025-10-09) → 3d窗+12.2%(2025-11-11~2025-11-14) → 3d窗+17.1%(2025-11-21~2025-11-26) → 3d窗+12.8%(2026-01-20~2026-01-23) → 3d窗+12.8%(2026-04-28~2026-05-06) → 30d窗+68.0%(2026-04-03~2026-05-21) → 3d窗+12.7%(2026-05-19~2026-05-22) → 3d窗+19.1%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=16.73 &nbsp; MA10=16.2 &nbsp; MA20=14.77 &nbsp; MA60=11.69<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.03x 价变19.1% | S2韵律✗ 历史间隔均26日 已等0日(比值0.00) | S3收口✗ ATR=1.54 前=1.00 未明显收窄 | S4底抬✓ 低点抬高:9.38→12.00→14.15 | S5MACD✓ 柱扩大 0.176→0.244→0.470</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">7</td>
+  <td class="code-cell">603286</td>
+  <td class="name-cell">日盈电子<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">59.64</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">18次<br><small>3d窗13%</small></td>
+  <td><span class="ok">69亿</span></td>
+  <td><span class="good">5.0%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 30460→57941</small></td>
+  <td class="trend small">均线偏弱 MA5=55.93<MA20*0.95</td>
+  <td class="price-cell">56.66</td>
+  <td class="dn">61.54</td>
+  <td class="up">65.60</td>
+  <td class="good">596.4x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">160</td>
+  <td class="det-btn" onclick="tog('603286')">▼详情</td>
+</tr>
+<tr id="d603286" class="det">
+  <td colspan="18">
+    <b>历史异动 (18次)：</b><span class="tag">3d窗 +16.9%</span><span class="tag">30d窗 +61.7%</span><span class="tag">3d窗 +15.6%</span><span class="tag">3d窗 +12.8%</span><span class="tag">3d窗 +14.4%</span><span class="tag">30d窗 +66.3%</span><span class="tag">3d窗 +16.4%</span><span class="tag">3d窗 +12.7%</span><br>
+    <small class="gray">完整记录: 3d窗+16.9%(2025-09-26~2025-10-09) → 30d窗+61.7%(2025-09-04~2025-10-09) → 3d窗+15.6%(2025-11-21~2025-11-26) → 3d窗+12.8%(2025-11-28~2025-12-03) → 3d窗+14.4%(2025-12-25~2025-12-30) → 30d窗+66.3%(2025-11-19~2025-12-31) → 3d窗+16.4%(2026-01-16~2026-01-20) → 3d窗+12.7%(2026-04-29~2026-05-07)</small><br>
+    <b>均线：</b>MA5=55.93 &nbsp; MA10=61.47 &nbsp; MA20=64.78 &nbsp; MA60=62.06<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.86x 价变6.6% | S2韵律✓ 历史间隔均20日 已等20日(比值0.98) | S3收口✗ ATR=4.25 前=3.47 未明显收窄 | S4底抬✗ 低点:59.79→65.60→53.12 | S5MACD✗ 柱=-2.882</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">8</td>
+  <td class="code-cell">605060</td>
+  <td class="name-cell">联德股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">52.44</td>
+  <td class="up">+10.01%</td>
+  <td class="surge">19次<br><small>3d窗16%</small></td>
+  <td><span class="ok">125亿</span></td>
+  <td><span class="bad">2.9%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 65775→69375</small></td>
+  <td class="trend small">均线偏弱 MA5=49.53<MA20*0.95</td>
+  <td class="price-cell">49.82</td>
+  <td class="dn">52.85</td>
+  <td class="up">57.68</td>
+  <td class="good">524.4x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">160</td>
+  <td class="det-btn" onclick="tog('605060')">▼详情</td>
+</tr>
+<tr id="d605060" class="det">
+  <td colspan="18">
+    <b>历史异动 (19次)：</b><span class="tag">10d窗 +52.0%</span><span class="tag">30d窗 +60.9%</span><span class="tag">3d窗 +12.0%</span><span class="tag">10d窗 +42.1%</span><span class="tag">3d窗 +16.0%</span><span class="tag">30d窗 +66.3%</span><span class="tag">3d窗 +14.1%</span><span class="tag">3d窗 +15.6%</span><br>
+    <small class="gray">完整记录: 10d窗+52.0%(2025-10-23~2025-11-06) → 30d窗+60.9%(2025-09-19~2025-11-10) → 3d窗+12.0%(2026-02-02~2026-02-04) → 10d窗+42.1%(2026-01-27~2026-02-10) → 3d窗+16.0%(2026-02-09~2026-02-12) → 30d窗+66.3%(2025-12-30~2026-02-12) → 3d窗+14.1%(2026-02-24~2026-02-26) → 3d窗+15.6%(2026-04-15~2026-04-20)</small><br>
+    <b>均线：</b>MA5=49.53 &nbsp; MA10=51.74 &nbsp; MA20=55.64 &nbsp; MA60=56.55<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.78x 价变5.9% | S2韵律✗ 历史间隔均21日 已等30日(比值1.44) | S3收口✓ ATR从3.90→3.12(-20%) | S4底抬✗ 低点:56.33→53.40→46.96 | S5MACD✗ 柱=-1.415</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">9</td>
+  <td class="code-cell">002645</td>
+  <td class="name-cell">华宏科技<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">36.10</td>
+  <td class="up">+9.99%</td>
+  <td class="surge">19次<br><small>3d窗20%</small></td>
+  <td><span class="ok">205亿</span></td>
+  <td><span class="bad">13.0%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 351154→734849</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">31.93</td>
+  <td class="dn">34.30</td>
+  <td class="up">39.71</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">156</td>
+  <td class="det-btn" onclick="tog('002645')">▼详情</td>
+</tr>
+<tr id="d002645" class="det">
+  <td colspan="18">
+    <b>历史异动 (19次)：</b><span class="tag">3d窗 +15.2%</span><span class="tag">3d窗 +15.7%</span><span class="tag">3d窗 +16.8%</span><span class="tag">30d窗 +72.6%</span><span class="tag">3d窗 +16.4%</span><span class="tag">10d窗 +41.3%</span><span class="tag">3d窗 +14.6%</span><span class="tag">3d窗 +19.7%</span><br>
+    <small class="gray">完整记录: 3d窗+15.2%(2026-03-23~2026-03-25) → 3d窗+15.7%(2026-04-07~2026-04-10) → 3d窗+16.8%(2026-04-27~2026-04-30) → 30d窗+72.6%(2026-03-20~2026-05-07) → 3d窗+16.4%(2026-05-06~2026-05-11) → 10d窗+41.3%(2026-04-28~2026-05-11) → 3d窗+14.6%(2026-05-21~2026-05-26) → 3d窗+19.7%(2026-06-02~2026-06-04)</small><br>
+    <b>均线：</b>MA5=31.43 &nbsp; MA10=31.3 &nbsp; MA20=29.91 &nbsp; MA60=23.02<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.44x 价变26.3% | S2韵律✗ 历史间隔均19日 已等0日(比值0.00) | S3收口✗ ATR=2.44 前=1.84 未明显收窄 | S4底抬✓ 低点抬高:21.17→26.00→27.79 | S5MACD✓ 柱翻红 -0.281→0.305</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">10</td>
+  <td class="code-cell">002484</td>
+  <td class="name-cell">江海股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">96.35</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">19次<br><small>10d窗50%</small></td>
+  <td><span class="bad">791亿</span></td>
+  <td><span class="bad">4.5%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 685074→366398</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">76.49</td>
+  <td class="dn">91.53</td>
+  <td class="up">105.98</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">153</td>
+  <td class="det-btn" onclick="tog('002484')">▼详情</td>
+</tr>
+<tr id="d002484" class="det">
+  <td colspan="18">
+    <b>历史异动 (19次)：</b><span class="tag">3d窗 +14.3%</span><span class="tag">3d窗 +15.2%</span><span class="tag">30d窗 +66.8%</span><span class="tag">3d窗 +12.8%</span><span class="tag">10d窗 +53.0%</span><span class="tag">3d窗 +19.6%</span><span class="tag">3d窗 +12.5%</span><span class="tag">10d窗 +49.5%</span><br>
+    <small class="gray">完整记录: 3d窗+14.3%(2026-04-10~2026-04-15) → 3d窗+15.2%(2026-04-29~2026-05-07) → 30d窗+66.8%(2026-03-23~2026-05-07) → 3d窗+12.8%(2026-05-13~2026-05-18) → 10d窗+53.0%(2026-04-30~2026-05-19) → 3d窗+19.6%(2026-05-25~2026-05-28) → 3d窗+12.5%(2026-05-29~2026-06-03) → 10d窗+49.5%(2026-05-20~2026-06-03)</small><br>
+    <b>均线：</b>MA5=84.88 &nbsp; MA10=74.99 &nbsp; MA20=62.58 &nbsp; MA60=42.17<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.03x 价变21.7% | S2韵律✗ 历史间隔均25日 已等1日(比值0.04) | S3收口✗ ATR=6.99 前=4.02 未明显收窄 | S4底抬✓ 低点抬高:33.98→42.38→56.33 | S5MACD✓ 柱扩大 4.909→5.220→6.097</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">11</td>
+  <td class="code-cell">002667</td>
+  <td class="name-cell">*ST威领<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">22.64</td>
+  <td class="up">+5.01%</td>
+  <td class="surge">17次<br><small>3d窗16%</small></td>
+  <td><span class="bad">54亿</span></td>
+  <td><span class="good">8.9%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 116267→210330</small></td>
+  <td class="trend small">均线偏弱 MA5=20.58<MA20*0.95</td>
+  <td class="price-cell">20.80</td>
+  <td class="dn">21.51</td>
+  <td class="up">24.90</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">150</td>
+  <td class="det-btn" onclick="tog('002667')">▼详情</td>
+</tr>
+<tr id="d002667" class="det">
+  <td colspan="18">
+    <b>历史异动 (17次)：</b><span class="tag">3d窗 +12.7%</span><span class="tag">3d窗 +16.4%</span><span class="tag">10d窗 +40.4%</span><span class="tag">3d窗 +19.5%</span><span class="tag">30d窗 +63.6%</span><span class="tag">3d窗 +14.0%</span><span class="tag">3d窗 +15.7%</span><span class="tag">3d窗 +15.8%</span><br>
+    <small class="gray">完整记录: 3d窗+12.7%(2026-02-25~2026-03-02) → 3d窗+16.4%(2026-03-03~2026-03-06) → 10d窗+40.4%(2026-02-13~2026-03-09) → 3d窗+19.5%(2026-03-09~2026-03-12) → 30d窗+63.6%(2026-01-30~2026-03-12) → 3d窗+14.0%(2026-04-08~2026-04-13) → 3d窗+15.7%(2026-05-21~2026-05-26) → 3d窗+15.8%(2026-05-29~2026-06-03)</small><br>
+    <b>均线：</b>MA5=20.58 &nbsp; MA10=20.39 &nbsp; MA20=21.9 &nbsp; MA60=26.33<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.33x 价变15.8% | S2韵律✗ 历史间隔均31日 已等1日(比值0.03) | S3收口✗ ATR=1.43 前=1.30 未明显收窄 | S4底抬✗ 低点:27.80→18.37→17.45 | S5MACD✓ 柱扩大 -0.290→0.112→0.532</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">12</td>
+  <td class="code-cell">002213</td>
+  <td class="name-cell">大为股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">38.59</td>
+  <td class="up">+10.01%</td>
+  <td class="surge">17次<br><small>3d窗17%</small></td>
+  <td><span class="ok">80亿</span></td>
+  <td><span class="good">7.4%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 183853→153679</small></td>
+  <td class="trend small">均线偏弱 MA5=35.05<MA20*0.95</td>
+  <td class="price-cell">36.66</td>
+  <td class="dn">37.09</td>
+  <td class="up">42.45</td>
+  <td class="good">2.57x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps0">0/5</td>
+  <td class="score">146</td>
+  <td class="det-btn" onclick="tog('002213')">▼详情</td>
+</tr>
+<tr id="d002213" class="det">
+  <td colspan="18">
+    <b>历史异动 (17次)：</b><span class="tag">10d窗 +41.8%</span><span class="tag">30d窗 +64.2%</span><span class="tag">3d窗 +18.0%</span><span class="tag">3d窗 +17.2%</span><span class="tag">10d窗 +44.1%</span><span class="tag">3d窗 +15.7%</span><span class="tag">30d窗 +69.5%</span><span class="tag">3d窗 +16.7%</span><br>
+    <small class="gray">完整记录: 10d窗+41.8%(2025-10-20~2025-10-28) → 30d窗+64.2%(2025-09-08~2025-10-28) → 3d窗+18.0%(2025-11-14~2025-11-19) → 3d窗+17.2%(2026-04-08~2026-04-13) → 10d窗+44.1%(2026-04-03~2026-04-16) → 3d窗+15.7%(2026-04-30~2026-05-08) → 30d窗+69.5%(2026-04-03~2026-05-11) → 3d窗+16.7%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=35.05 &nbsp; MA10=36.23 &nbsp; MA20=39.04 &nbsp; MA60=34.53<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.68x 价变16.7% | S2韵律✗ 历史间隔均24日 已等0日(比值0.00) | S3收口✗ ATR=2.42 前=2.82 未明显收窄 | S4底抬✗ 低点:33.63→38.01→31.67 | S5MACD✗ 柱=-1.172</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">13</td>
+  <td class="code-cell">603067</td>
+  <td class="name-cell">振华股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">38.45</td>
+  <td class="up">+10.01%</td>
+  <td class="surge">16次<br><small>3d窗14%</small></td>
+  <td><span class="ok">290亿</span></td>
+  <td><span class="good">7.8%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 273902→586538</small></td>
+  <td class="trend small">均线偏弱 MA5=35.63<MA20*0.95</td>
+  <td class="price-cell">36.53</td>
+  <td class="dn">37.70</td>
+  <td class="up">42.30</td>
+  <td class="good">5.14x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">146</td>
+  <td class="det-btn" onclick="tog('603067')">▼详情</td>
+</tr>
+<tr id="d603067" class="det">
+  <td colspan="18">
+    <b>历史异动 (16次)：</b><span class="tag">3d窗 +18.3%</span><span class="tag">3d窗 +12.6%</span><span class="tag">3d窗 +19.0%</span><span class="tag">3d窗 +17.4%</span><span class="tag">3d窗 +18.9%</span><span class="tag">3d窗 +12.0%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +14.5%</span><br>
+    <small class="gray">完整记录: 3d窗+18.3%(2025-11-04~2025-11-07) → 3d窗+12.6%(2025-12-18~2025-12-22) → 3d窗+19.0%(2025-12-30~2026-01-06) → 3d窗+17.4%(2026-01-08~2026-01-13) → 3d窗+18.9%(2026-02-13~2026-02-26) → 3d窗+12.0%(2026-03-04~2026-03-06) → 3d窗+12.4%(2026-04-03~2026-04-08) → 3d窗+14.5%(2026-04-29~2026-05-07)</small><br>
+    <b>均线：</b>MA5=35.63 &nbsp; MA10=38.7 &nbsp; MA20=39.69 &nbsp; MA60=37.33<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.93x 价变9.5% | S2韵律✓ 历史间隔均26日 已等20日(比值0.78) | S3收口✗ ATR=3.53 前=2.71 未明显收窄 | S4底抬✗ 低点:34.40→38.70→33.01 | S5MACD✗ 柱=-1.458</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">14</td>
+  <td class="code-cell">600828</td>
+  <td class="name-cell">茂业商业<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">4.95</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">16次<br><small>3d窗13%</small></td>
+  <td><span class="ok">86亿</span></td>
+  <td><span class="bad">1.8%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 490879→307586</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">4.61</td>
+  <td class="dn">4.70</td>
+  <td class="up">5.45</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">131</td>
+  <td class="det-btn" onclick="tog('600828')">▼详情</td>
+</tr>
+<tr id="d600828" class="det">
+  <td colspan="18">
+    <b>历史异动 (16次)：</b><span class="tag">3d窗 +16.8%</span><span class="tag">30d窗 +61.6%</span><span class="tag">3d窗 +12.3%</span><span class="tag">3d窗 +18.5%</span><span class="tag">10d窗 +40.3%</span><span class="tag">3d窗 +19.3%</span><span class="tag">3d窗 +13.1%</span><span class="tag">3d窗 +12.6%</span><br>
+    <small class="gray">完整记录: 3d窗+16.8%(2025-11-27~2025-12-02) → 30d窗+61.6%(2025-10-24~2025-12-02) → 3d窗+12.3%(2025-12-04~2025-12-09) → 3d窗+18.5%(2026-01-06~2026-01-09) → 10d窗+40.3%(2025-12-26~2026-01-13) → 3d窗+19.3%(2026-01-28~2026-02-02) → 3d窗+13.1%(2026-02-03~2026-02-05) → 3d窗+12.6%(2026-05-28~2026-06-01)</small><br>
+    <b>均线：</b>MA5=4.68 &nbsp; MA10=4.52 &nbsp; MA20=4.64 &nbsp; MA60=5.17<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✓ 近3日量比1.64x 价格仅动4.4% | S2韵律✗ 历史间隔均31日 已等3日(比值0.10) | S3收口✗ ATR=0.26 前=0.17 未明显收窄 | S4底抬✗ 低点:4.92→4.34→4.18 | S5MACD✗ 柱=0.121</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">15</td>
+  <td class="code-cell">600353</td>
+  <td class="name-cell">旭光电子<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">26.44</td>
+  <td class="up">+9.98%</td>
+  <td class="surge">15次<br><small>3d窗18%</small></td>
+  <td><span class="ok">219亿</span></td>
+  <td><span class="good">6.1%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 679224→506556</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">24.14</td>
+  <td class="dn">25.12</td>
+  <td class="up">29.08</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">129</td>
+  <td class="det-btn" onclick="tog('600353')">▼详情</td>
+</tr>
+<tr id="d600353" class="det">
+  <td colspan="18">
+    <b>历史异动 (15次)：</b><span class="tag">3d窗 +17.0%</span><span class="tag">3d窗 +17.4%</span><span class="tag">3d窗 +12.5%</span><span class="tag">3d窗 +13.7%</span><span class="tag">3d窗 +12.8%</span><span class="tag">30d窗 +62.1%</span><span class="tag">3d窗 +13.4%</span><span class="tag">3d窗 +18.1%</span><br>
+    <small class="gray">完整记录: 3d窗+17.0%(2025-06-27~2025-07-01) → 3d窗+17.4%(2025-07-08~2025-07-11) → 3d窗+12.5%(2025-08-27~2025-09-01) → 3d窗+13.7%(2025-09-29~2025-10-10) → 3d窗+12.8%(2026-05-11~2026-05-14) → 30d窗+62.1%(2026-04-01~2026-05-19) → 3d窗+13.4%(2026-05-15~2026-05-20) → 3d窗+18.1%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=23.66 &nbsp; MA10=23.67 &nbsp; MA20=22.24 &nbsp; MA60=17.89<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.95x 价变18.1% | S2韵律✗ 历史间隔均31日 已等0日(比值0.00) | S3收口✗ ATR=2.05 前=1.35 未明显收窄 | S4底抬✓ 低点抬高:15.95→17.54→21.50 | S5MACD✓ 柱翻红 -0.127→0.183</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">16</td>
+  <td class="code-cell">002501</td>
+  <td class="name-cell">*ST利源<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">1.66</td>
+  <td class="up">+5.06%</td>
+  <td class="surge">16次<br><small>3d窗16%</small></td>
+  <td><span class="bad">59亿</span></td>
+  <td><span class="bad">0.2%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 621190→64155</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">1.52</td>
+  <td class="dn">1.58</td>
+  <td class="up">1.83</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">127</td>
+  <td class="det-btn" onclick="tog('002501')">▼详情</td>
+</tr>
+<tr id="d002501" class="det">
+  <td colspan="18">
+    <b>历史异动 (16次)：</b><span class="tag">3d窗 +13.8%</span><span class="tag">3d窗 +15.1%</span><span class="tag">3d窗 +14.4%</span><span class="tag">3d窗 +14.2%</span><span class="tag">3d窗 +17.3%</span><span class="tag">3d窗 +15.6%</span><span class="tag">3d窗 +15.7%</span><span class="tag">3d窗 +16.1%</span><br>
+    <small class="gray">完整记录: 3d窗+13.8%(2025-08-08~2025-08-13) → 3d窗+15.1%(2025-09-12~2025-09-17) → 3d窗+14.4%(2025-12-17~2025-12-22) → 3d窗+14.2%(2025-12-30~2026-01-06) → 3d窗+17.3%(2026-02-05~2026-02-10) → 3d窗+15.6%(2026-03-26~2026-03-31) → 3d窗+15.7%(2026-05-08~2026-05-13) → 3d窗+16.1%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=1.52 &nbsp; MA10=1.49 &nbsp; MA20=1.45 &nbsp; MA60=1.71<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.44x 价变16.1% | S2韵律✗ 历史间隔均27日 已等0日(比值0.00) | S3收口✓ ATR从0.08→0.07(-15%) | S4底抬✗ 低点:1.34→1.22→1.38 | S5MACD✓ 柱扩大 0.046→0.059→0.076</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">17</td>
+  <td class="code-cell">002824</td>
+  <td class="name-cell">和胜股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">27.45</td>
+  <td class="up">+10.02%</td>
+  <td class="surge">14次<br><small>3d窗15%</small></td>
+  <td><span class="ok">62亿</span></td>
+  <td><span class="good">10.3%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 172566→233739</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">25.54</td>
+  <td class="dn">26.08</td>
+  <td class="up">30.20</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">123</td>
+  <td class="det-btn" onclick="tog('002824')">▼详情</td>
+</tr>
+<tr id="d002824" class="det">
+  <td colspan="18">
+    <b>历史异动 (14次)：</b><span class="tag">3d窗 +15.0%</span><span class="tag">3d窗 +12.8%</span><span class="tag">3d窗 +13.2%</span><span class="tag">10d窗 +43.7%</span><span class="tag">3d窗 +17.2%</span><span class="tag">30d窗 +64.1%</span><span class="tag">3d窗 +12.1%</span><span class="tag">3d窗 +14.6%</span><br>
+    <small class="gray">完整记录: 3d窗+15.0%(2026-01-14~2026-01-19) → 3d窗+12.8%(2026-01-20~2026-01-22) → 3d窗+13.2%(2026-04-03~2026-04-09) → 10d窗+43.7%(2026-03-26~2026-04-10) → 3d窗+17.2%(2026-04-10~2026-04-15) → 30d窗+64.1%(2026-03-20~2026-04-17) → 3d窗+12.1%(2026-05-06~2026-05-11) → 3d窗+14.6%(2026-05-27~2026-05-29)</small><br>
+    <b>均线：</b>MA5=25.9 &nbsp; MA10=25.04 &nbsp; MA20=25.87 &nbsp; MA60=23.88<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.09x 价变7.4% | S2韵律✗ 历史间隔均32日 已等4日(比值0.13) | S3收口✗ ATR=1.85 前=1.57 未明显收窄 | S4底抬✗ 低点:24.73→24.32→21.88 | S5MACD✓ 柱翻红 -0.308→0.055</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">18</td>
+  <td class="code-cell">600868</td>
+  <td class="name-cell">梅雁吉祥<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">3.78</td>
+  <td class="up">+9.88%</td>
+  <td class="surge">14次<br><small>3d窗14%</small></td>
+  <td><span class="ok">72亿</span></td>
+  <td><span class="bad">16.5%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 824070→3130748</small></td>
+  <td class="trend small">贴近高点 -3.3%</td>
+  <td class="price-cell">3.49</td>
+  <td class="dn">3.59</td>
+  <td class="up">4.16</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">120</td>
+  <td class="det-btn" onclick="tog('600868')">▼详情</td>
+</tr>
+<tr id="d600868" class="det">
+  <td colspan="18">
+    <b>历史异动 (14次)：</b><span class="tag">3d窗 +12.7%</span><span class="tag">3d窗 +13.7%</span><span class="tag">10d窗 +41.7%</span><span class="tag">3d窗 +13.7%</span><span class="tag">3d窗 +15.0%</span><span class="tag">10d窗 +40.8%</span><span class="tag">3d窗 +12.2%</span><span class="tag">3d窗 +13.7%</span><br>
+    <small class="gray">完整记录: 3d窗+12.7%(2025-11-05~2025-11-10) → 3d窗+13.7%(2025-11-21~2025-11-26) → 10d窗+41.7%(2025-11-21~2025-12-01) → 3d窗+13.7%(2026-01-07~2026-01-12) → 3d窗+15.0%(2026-01-16~2026-01-21) → 10d窗+40.8%(2026-01-08~2026-01-22) → 3d窗+12.2%(2026-03-09~2026-03-12) → 3d窗+13.7%(2026-03-23~2026-03-25)</small><br>
+    <b>均线：</b>MA5=3.52 &nbsp; MA10=3.42 &nbsp; MA20=3.47 &nbsp; MA60=3.6<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.97x 价变8.6% | S2韵律✗ 历史间隔均28日 已等47日(比值1.70) | S3收口✗ ATR=0.20 前=0.14 未明显收窄 | S4底抬✗ 低点:3.27→3.28→3.20 | S5MACD✓ 柱扩大 0.019→0.023→0.069</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">19</td>
+  <td class="code-cell">600408</td>
+  <td class="name-cell">安泰集团<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">3.47</td>
+  <td class="up">+10.16%</td>
+  <td class="surge">13次<br><small>3d窗14%</small></td>
+  <td><span class="bad">35亿</span></td>
+  <td><span class="bad">15.2%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 871252→1530139</small></td>
+  <td class="trend small">跌穿异动起点3.91</td>
+  <td class="price-cell">3.14</td>
+  <td class="dn">3.30</td>
+  <td class="up">3.82</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">112</td>
+  <td class="det-btn" onclick="tog('600408')">▼详情</td>
+</tr>
+<tr id="d600408" class="det">
+  <td colspan="18">
+    <b>历史异动 (13次)：</b><span class="tag">10d窗 +42.8%</span><span class="tag">30d窗 +66.9%</span><span class="tag">3d窗 +13.0%</span><span class="tag">10d窗 +65.6%</span><span class="tag">3d窗 +19.7%</span><span class="tag">3d窗 +12.9%</span><span class="tag">3d窗 +13.2%</span><span class="tag">3d窗 +13.8%</span><br>
+    <small class="gray">完整记录: 10d窗+42.8%(2025-10-22~2025-11-05) → 30d窗+66.9%(2025-09-16~2025-11-05) → 3d窗+13.0%(2025-11-06~2025-11-11) → 10d窗+65.6%(2025-11-06~2025-11-17) → 3d窗+19.7%(2025-11-28~2025-12-03) → 3d窗+12.9%(2025-12-31~2026-01-07) → 3d窗+13.2%(2026-03-11~2026-03-13) → 3d窗+13.8%(2026-03-16~2026-03-19)</small><br>
+    <b>均线：</b>MA5=3.18 &nbsp; MA10=3.08 &nbsp; MA20=3.13 &nbsp; MA60=3.42<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比2.41x 价变8.4% | S2韵律✗ 历史间隔均34日 已等51日(比值1.48) | S3收口✗ ATR=0.19 前=0.12 未明显收窄 | S4底抬✗ 低点:3.02→2.90→2.87 | S5MACD✓ 柱扩大 0.034→0.046→0.094</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">20</td>
+  <td class="code-cell">002733</td>
+  <td class="name-cell">雄韬股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">32.67</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">12次<br><small>3d窗14%</small></td>
+  <td><span class="ok">121亿</span></td>
+  <td><span class="good">6.3%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 269061→232006</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">31.04</td>
+  <td class="dn">31.04</td>
+  <td class="up">35.94</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps0">0/5</td>
+  <td class="score">105</td>
+  <td class="det-btn" onclick="tog('002733')">▼详情</td>
+</tr>
+<tr id="d002733" class="det">
+  <td colspan="18">
+    <b>历史异动 (12次)：</b><span class="tag">3d窗 +12.6%</span><span class="tag">3d窗 +13.5%</span><span class="tag">3d窗 +17.8%</span><span class="tag">10d窗 +47.3%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +13.5%</span><span class="tag">3d窗 +15.2%</span><span class="tag">3d窗 +14.0%</span><br>
+    <small class="gray">完整记录: 3d窗+12.6%(2025-08-04~2025-08-07) → 3d窗+13.5%(2025-08-08~2025-08-13) → 3d窗+17.8%(2025-08-15~2025-08-19) → 10d窗+47.3%(2025-08-05~2025-08-19) → 3d窗+12.4%(2026-03-06~2026-03-11) → 3d窗+13.5%(2026-04-02~2026-04-08) → 3d窗+15.2%(2026-04-09~2026-04-14) → 3d窗+14.0%(2026-05-20~2026-05-25)</small><br>
+    <b>均线：</b>MA5=31.18 &nbsp; MA10=31.35 &nbsp; MA20=29.24 &nbsp; MA60=28.4<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.76x 价变8.6% | S2韵律✗ 历史间隔均38日 已等8日(比值0.21) | S3收口✗ ATR=2.76 前=1.53 未明显收窄 | S4底抬✗ 低点:27.10→25.05→25.29 | S5MACD✗ 柱=0.486</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">21</td>
+  <td class="code-cell">002520</td>
+  <td class="name-cell">日发精机<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">6.26</td>
+  <td class="up">+10.02%</td>
+  <td class="surge">11次<br><small>3d窗14%</small></td>
+  <td><span class="bad">45亿</span></td>
+  <td><span class="good">7.4%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 217312→529960</small></td>
+  <td class="trend small">均线偏弱 MA5=5.89<MA20*0.95</td>
+  <td class="price-cell">5.95</td>
+  <td class="dn">6.05</td>
+  <td class="up">6.89</td>
+  <td class="good">3.02x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps0">0/5</td>
+  <td class="score">100</td>
+  <td class="det-btn" onclick="tog('002520')">▼详情</td>
+</tr>
+<tr id="d002520" class="det">
+  <td colspan="18">
+    <b>历史异动 (11次)：</b><span class="tag">10d窗 +40.5%</span><span class="tag">3d窗 +17.0%</span><span class="tag">3d窗 +16.2%</span><span class="tag">3d窗 +13.4%</span><span class="tag">3d窗 +13.2%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +14.3%</span><span class="tag">3d窗 +14.5%</span><br>
+    <small class="gray">完整记录: 10d窗+40.5%(2025-01-27~2025-02-18) → 3d窗+17.0%(2025-02-17~2025-02-20) → 3d窗+16.2%(2025-03-17~2025-03-20) → 3d窗+13.4%(2025-04-30~2025-05-08) → 3d窗+13.2%(2025-05-15~2025-05-19) → 3d窗+12.4%(2025-12-02~2025-12-05) → 3d窗+14.3%(2026-03-03~2026-03-06) → 3d窗+14.5%(2026-04-28~2026-05-06)</small><br>
+    <b>均线：</b>MA5=5.89 &nbsp; MA10=6.07 &nbsp; MA20=6.37 &nbsp; MA60=6.01<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.59x 价变6.5% | S2韵律✗ 历史间隔均44日 已等21日(比值0.47) | S3收口✗ ATR=0.33 前=0.32 未明显收窄 | S4底抬✗ 低点:5.18→6.10→5.61 | S5MACD✗ 柱=-0.155</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">22</td>
+  <td class="code-cell">000670</td>
+  <td class="name-cell">盈方微<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">9.67</td>
+  <td class="up">+10.01%</td>
+  <td class="surge">12次<br><small>3d窗14%</small></td>
+  <td><span class="ok">79亿</span></td>
+  <td><span class="bad">12.1%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 712247→991182</small></td>
+  <td class="trend small">近10日趋势向下(斜率-0.033)</td>
+  <td class="price-cell">9.19</td>
+  <td class="dn">9.19</td>
+  <td class="up">10.64</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">98</td>
+  <td class="det-btn" onclick="tog('000670')">▼详情</td>
+</tr>
+<tr id="d000670" class="det">
+  <td colspan="18">
+    <b>历史异动 (12次)：</b><span class="tag">3d窗 +12.9%</span><span class="tag">3d窗 +13.9%</span><span class="tag">3d窗 +12.3%</span><span class="tag">3d窗 +13.0%</span><span class="tag">3d窗 +15.5%</span><span class="tag">10d窗 +41.7%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +13.8%</span><br>
+    <small class="gray">完整记录: 3d窗+12.9%(2025-04-18~2025-04-22) → 3d窗+13.9%(2025-05-15~2025-05-20) → 3d窗+12.3%(2025-07-01~2025-07-04) → 3d窗+13.0%(2025-08-04~2025-08-07) → 3d窗+15.5%(2025-12-30~2026-01-20) → 10d窗+41.7%(2025-12-23~2026-01-22) → 3d窗+12.4%(2026-04-09~2026-04-14) → 3d窗+13.8%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=8.87 &nbsp; MA10=9.13 &nbsp; MA20=8.68 &nbsp; MA60=8.28<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.98x 价变13.8% | S2韵律✗ 历史间隔均33日 已等0日(比值0.00) | S3收口✗ ATR=0.83 前=0.41 未明显收窄 | S4底抬✓ 低点抬高:7.28→7.84→8.01 | S5MACD✓ 柱翻红 -0.020→0.069</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">23</td>
+  <td class="code-cell">600667</td>
+  <td class="name-cell">太极实业<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">16.36</td>
+  <td class="up">+10.02%</td>
+  <td class="surge">11次<br><small>30d窗63%</small></td>
+  <td><span class="ok">342亿</span></td>
+  <td><span class="good">9.2%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 3908635→1933062</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">14.22</td>
+  <td class="dn">15.54</td>
+  <td class="up">18.00</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">97</td>
+  <td class="det-btn" onclick="tog('600667')">▼详情</td>
+</tr>
+<tr id="d600667" class="det">
+  <td colspan="18">
+    <b>历史异动 (11次)：</b><span class="tag">3d窗 +13.9%</span><span class="tag">3d窗 +14.0%</span><span class="tag">3d窗 +13.9%</span><span class="tag">3d窗 +12.5%</span><span class="tag">3d窗 +12.6%</span><span class="tag">3d窗 +18.9%</span><span class="tag">3d窗 +16.2%</span><span class="tag">30d窗 +63.3%</span><br>
+    <small class="gray">完整记录: 3d窗+13.9%(2026-01-27~2026-01-30) → 3d窗+14.0%(2026-02-11~2026-02-24) → 3d窗+13.9%(2026-03-13~2026-03-18) → 3d窗+12.5%(2026-04-03~2026-04-09) → 3d窗+12.6%(2026-04-29~2026-05-07) → 3d窗+18.9%(2026-05-11~2026-05-13) → 3d窗+16.2%(2026-05-29~2026-06-02) → 30d窗+63.3%(2026-04-20~2026-06-04)</small><br>
+    <b>均线：</b>MA5=14.52 &nbsp; MA10=13.94 &nbsp; MA20=13.2 &nbsp; MA60=11.07<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.18x 价变20.5% | S2韵律✗ 历史间隔均15日 已等0日(比值0.00) | S3收口✗ ATR=1.19 前=0.99 未明显收窄 | S4底抬✓ 低点抬高:9.35→10.60→12.14 | S5MACD✓ 柱扩大 0.175→0.232→0.430</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">24</td>
+  <td class="code-cell">603920</td>
+  <td class="name-cell">世运电路<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">62.69</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">11次<br><small>3d窗14%</small></td>
+  <td><span class="bad">452亿</span></td>
+  <td><span class="bad">4.9%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 338440→350877</small></td>
+  <td class="trend small">均线偏弱 MA5=58.89<MA20*0.95</td>
+  <td class="price-cell">59.56</td>
+  <td class="dn">60.39</td>
+  <td class="up">68.96</td>
+  <td class="good">2.72x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps0">0/5</td>
+  <td class="score">90</td>
+  <td class="det-btn" onclick="tog('603920')">▼详情</td>
+</tr>
+<tr id="d603920" class="det">
+  <td colspan="18">
+    <b>历史异动 (11次)：</b><span class="tag">3d窗 +18.5%</span><span class="tag">10d窗 +43.9%</span><span class="tag">3d窗 +13.3%</span><span class="tag">30d窗 +60.3%</span><span class="tag">3d窗 +14.2%</span><span class="tag">3d窗 +13.4%</span><span class="tag">3d窗 +16.4%</span><span class="tag">3d窗 +13.6%</span><br>
+    <small class="gray">完整记录: 3d窗+18.5%(2025-09-12~2025-09-17) → 10d窗+43.9%(2025-09-04~2025-09-17) → 3d窗+13.3%(2025-12-29~2026-01-05) → 30d窗+60.3%(2025-12-10~2026-01-23) → 3d窗+14.2%(2026-01-22~2026-01-27) → 3d窗+13.4%(2026-01-30~2026-02-04) → 3d窗+16.4%(2026-04-03~2026-04-09) → 3d窗+13.6%(2026-04-30~2026-05-08)</small><br>
+    <b>均线：</b>MA5=58.89 &nbsp; MA10=63.25 &nbsp; MA20=63.56 &nbsp; MA60=57.5<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.7x 价变12.0% | S2韵律✗ 历史间隔均40日 已等19日(比值0.47) | S3收口✗ ATR=4.85 前=4.36 未明显收窄 | S4底抬✗ 低点:50.68→57.65→53.66 | S5MACD✗ 柱=-2.028</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">25</td>
+  <td class="code-cell">605398</td>
+  <td class="name-cell">新炬网络<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">25.39</td>
+  <td class="up">+10.01%</td>
+  <td class="surge">10次<br><small>3d窗19%</small></td>
+  <td><span class="bad">41亿</span></td>
+  <td><span class="bad">3.3%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 48828→53348</small></td>
+  <td class="trend small">跌穿异动起点28.91</td>
+  <td class="price-cell">24.12</td>
+  <td class="dn">24.32</td>
+  <td class="up">27.93</td>
+  <td class="good">2.38x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">86</td>
+  <td class="det-btn" onclick="tog('605398')">▼详情</td>
+</tr>
+<tr id="d605398" class="det">
+  <td colspan="18">
+    <b>历史异动 (10次)：</b><span class="tag">30d窗 +67.6%</span><span class="tag">3d窗 +17.2%</span><span class="tag">10d窗 +71.6%</span><span class="tag">3d窗 +19.5%</span><span class="tag">3d窗 +17.4%</span><span class="tag">3d窗 +19.5%</span><span class="tag">3d窗 +14.4%</span><span class="tag">3d窗 +18.9%</span><br>
+    <small class="gray">完整记录: 30d窗+67.6%(2024-12-17~2025-02-06) → 3d窗+17.2%(2025-02-11~2025-02-13) → 10d窗+71.6%(2025-02-05~2025-02-13) → 3d窗+19.5%(2025-06-13~2025-06-18) → 3d窗+17.4%(2025-06-20~2025-06-25) → 3d窗+19.5%(2025-09-08~2025-09-11) → 3d窗+14.4%(2025-11-13~2025-11-18) → 3d窗+18.9%(2026-01-07~2026-01-12)</small><br>
+    <b>均线：</b>MA5=23.88 &nbsp; MA10=24.08 &nbsp; MA20=25.61 &nbsp; MA60=26.97<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✓ 近3日量比1.94x 价格仅动2.5% | S2韵律✗ 历史间隔均35日 已等93日(比值2.63) | S3收口✗ ATR=1.40 前=0.84 未明显收窄 | S4底抬✗ 低点:26.21→25.15→22.48 | S5MACD✗ 柱=-0.133</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">26</td>
+  <td class="code-cell">605162</td>
+  <td class="name-cell">新中港<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">12.71</td>
+  <td class="up">+10.04%</td>
+  <td class="surge">9次<br><small>3d窗18%</small></td>
+  <td><span class="bad">56亿</span></td>
+  <td><span class="good">7.3%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 207656→325694</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">11.00</td>
+  <td class="dn">12.07</td>
+  <td class="up">13.98</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">84</td>
+  <td class="det-btn" onclick="tog('605162')">▼详情</td>
+</tr>
+<tr id="d605162" class="det">
+  <td colspan="18">
+    <b>历史异动 (9次)：</b><span class="tag">3d窗 +12.2%</span><span class="tag">10d窗 +53.3%</span><span class="tag">3d窗 +13.3%</span><span class="tag">3d窗 +16.9%</span><span class="tag">3d窗 +14.0%</span><span class="tag">10d窗 +43.6%</span><span class="tag">30d窗 +65.4%</span><span class="tag">3d窗 +17.9%</span><br>
+    <small class="gray">完整记录: 3d窗+12.2%(2025-07-01~2025-07-04) → 10d窗+53.3%(2025-06-25~2025-07-09) → 3d窗+13.3%(2025-07-11~2025-07-15) → 3d窗+16.9%(2026-01-07~2026-01-12) → 3d窗+14.0%(2026-03-27~2026-04-01) → 10d窗+43.6%(2026-03-24~2026-04-08) → 30d窗+65.4%(2026-02-24~2026-04-08) → 3d窗+17.9%(2026-05-29~2026-06-03)</small><br>
+    <b>均线：</b>MA5=10.95 &nbsp; MA10=10.79 &nbsp; MA20=11.08 &nbsp; MA60=11.63<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.41x 价变24.6% | S2韵律✗ 历史间隔均61日 已等1日(比值0.02) | S3收口✗ ATR=0.85 前=0.47 未明显收窄 | S4底抬✗ 低点:11.09→10.39→9.55 | S5MACD✓ 柱扩大 -0.141→0.062→0.341</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">27</td>
+  <td class="code-cell">300726</td>
+  <td class="name-cell">宏达电子<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">79.92</td>
+  <td class="up">+20.00%</td>
+  <td class="surge">10次<br><small>30d窗74%</small></td>
+  <td><span class="ok">171亿</span></td>
+  <td><span class="bad">12.5%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 265989→268865</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">66.03</td>
+  <td class="dn">75.92</td>
+  <td class="up">87.91</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">83</td>
+  <td class="det-btn" onclick="tog('300726')">▼详情</td>
+</tr>
+<tr id="d300726" class="det">
+  <td colspan="18">
+    <b>历史异动 (10次)：</b><span class="tag">3d窗 +13.0%</span><span class="tag">3d窗 +18.5%</span><span class="tag">3d窗 +12.7%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +12.7%</span><span class="tag">3d窗 +13.2%</span><span class="tag">10d窗 +40.5%</span><span class="tag">30d窗 +74.0%</span><br>
+    <small class="gray">完整记录: 3d窗+13.0%(2025-05-07~2025-05-12) → 3d窗+18.5%(2025-10-23~2025-10-27) → 3d窗+12.7%(2025-11-25~2025-11-28) → 3d窗+12.4%(2026-02-13~2026-02-26) → 3d窗+12.7%(2026-05-08~2026-05-13) → 3d窗+13.2%(2026-05-21~2026-05-25) → 10d窗+40.5%(2026-05-21~2026-06-04) → 30d窗+74.0%(2026-04-20~2026-06-04)</small><br>
+    <b>均线：</b>MA5=66.79 &nbsp; MA10=64.74 &nbsp; MA20=60.71 &nbsp; MA60=50.64<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.51x 价变32.8% | S2韵律✗ 历史间隔均39日 已等0日(比值0.00) | S3收口✗ ATR=5.99 前=3.86 未明显收窄 | S4底抬✓ 低点抬高:45.51→50.35→57.20 | S5MACD✓ 柱扩大 0.235→0.486→2.251</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">28</td>
+  <td class="code-cell">002570</td>
+  <td class="name-cell">贝因美<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">5.72</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">9次<br><small>3d窗18%</small></td>
+  <td><span class="ok">62亿</span></td>
+  <td><span class="bad">14.0%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 532240→1516130</small></td>
+  <td class="trend small">跌穿异动起点6.24</td>
+  <td class="price-cell">5.15</td>
+  <td class="dn">5.43</td>
+  <td class="up">6.29</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">80</td>
+  <td class="det-btn" onclick="tog('002570')">▼详情</td>
+</tr>
+<tr id="d002570" class="det">
+  <td colspan="18">
+    <b>历史异动 (9次)：</b><span class="tag">3d窗 +17.1%</span><span class="tag">3d窗 +12.6%</span><span class="tag">3d窗 +16.9%</span><span class="tag">10d窗 +41.7%</span><span class="tag">30d窗 +65.5%</span><span class="tag">3d窗 +17.6%</span><span class="tag">3d窗 +15.2%</span><span class="tag">3d窗 +18.4%</span><br>
+    <small class="gray">完整记录: 3d窗+17.1%(2025-03-12~2025-03-17) → 3d窗+12.6%(2025-03-24~2025-03-26) → 3d窗+16.9%(2025-04-03~2025-04-09) → 10d窗+41.7%(2025-03-28~2025-04-11) → 30d窗+65.5%(2025-03-10~2025-04-16) → 3d窗+17.6%(2025-04-21~2025-04-24) → 3d窗+15.2%(2025-05-16~2025-05-21) → 3d窗+18.4%(2025-07-25~2025-07-30)</small><br>
+    <b>均线：</b>MA5=5.23 &nbsp; MA10=5.05 &nbsp; MA20=5.03 &nbsp; MA60=5.17<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比3.85x 价变11.3% | S2韵律✗ 历史间隔均22日 已等203日(比值9.37) | S3收口✗ ATR=0.26 前=0.13 未明显收窄 | S4底抬✗ 低点:4.74→4.77→4.75 | S5MACD✓ 柱扩大 0.066→0.083→0.157</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">29</td>
+  <td class="code-cell">002072</td>
+  <td class="name-cell">凯瑞德<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">8.99</td>
+  <td class="up">+10.04%</td>
+  <td class="surge">8次<br><small>3d窗17%</small></td>
+  <td><span class="bad">33亿</span></td>
+  <td><span class="good">9.4%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 234987→345565</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">8.18</td>
+  <td class="dn">8.54</td>
+  <td class="up">9.89</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">77</td>
+  <td class="det-btn" onclick="tog('002072')">▼详情</td>
+</tr>
+<tr id="d002072" class="det">
+  <td colspan="18">
+    <b>历史异动 (8次)：</b><span class="tag">3d窗 +14.9%</span><span class="tag">3d窗 +12.6%</span><span class="tag">3d窗 +13.3%</span><span class="tag">3d窗 +12.8%</span><span class="tag">3d窗 +12.1%</span><span class="tag">3d窗 +13.5%</span><span class="tag">3d窗 +17.2%</span><span class="tag">3d窗 +16.8%</span><br>
+    <small class="gray">完整记录: 3d窗+14.9%(2025-04-08~2025-04-11) → 3d窗+12.6%(2025-04-28~2025-05-06) → 3d窗+13.3%(2025-06-19~2025-06-24) → 3d窗+12.8%(2025-08-04~2025-08-07) → 3d窗+12.1%(2025-09-03~2025-09-08) → 3d窗+13.5%(2026-02-03~2026-02-06) → 3d窗+17.2%(2026-05-22~2026-05-27) → 3d窗+16.8%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=8.14 &nbsp; MA10=8.02 &nbsp; MA20=7.61 &nbsp; MA60=7.5<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.53x 价变16.8% | S2韵律✗ 历史间隔均37日 已等0日(比值0.00) | S3收口✗ ATR=0.64 前=0.41 未明显收窄 | S4底抬✗ 低点:7.12→6.89→6.85 | S5MACD✓ 柱扩大 0.149→0.154→0.251</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">30</td>
+  <td class="code-cell">603903</td>
+  <td class="name-cell">中持股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">12.32</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">8次<br><small>3d窗14%</small></td>
+  <td><span class="bad">31亿</span></td>
+  <td><span class="good">5.3%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 51446→136366</small></td>
+  <td class="trend small">均线偏弱 MA5=11.47<MA20*0.95</td>
+  <td class="price-cell">11.70</td>
+  <td class="dn">11.87</td>
+  <td class="up">13.55</td>
+  <td class="good">2.76x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">75</td>
+  <td class="det-btn" onclick="tog('603903')">▼详情</td>
+</tr>
+<tr id="d603903" class="det">
+  <td colspan="18">
+    <b>历史异动 (8次)：</b><span class="tag">3d窗 +15.4%</span><span class="tag">3d窗 +14.3%</span><span class="tag">10d窗 +45.1%</span><span class="tag">30d窗 +61.8%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +12.2%</span><span class="tag">3d窗 +12.0%</span><span class="tag">3d窗 +14.1%</span><br>
+    <small class="gray">完整记录: 3d窗+15.4%(2025-08-22~2025-08-27) → 3d窗+14.3%(2025-08-29~2025-09-03) → 10d窗+45.1%(2025-08-22~2025-09-05) → 30d窗+61.8%(2025-08-14~2025-09-05) → 3d窗+12.4%(2025-10-13~2025-10-15) → 3d窗+12.2%(2025-10-17~2025-10-22) → 3d窗+12.0%(2025-10-30~2025-11-03) → 3d窗+14.1%(2026-05-12~2026-05-15)</small><br>
+    <b>均线：</b>MA5=11.47 &nbsp; MA10=11.72 &nbsp; MA20=12.5 &nbsp; MA60=12.04<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.5x 价变6.6% | S2韵律✗ 历史间隔均31日 已等14日(比值0.45) | S3收口✓ ATR从0.87→0.71(-18%) | S4底抬✗ 低点:11.58→12.00→10.81 | S5MACD✗ 柱=-0.293</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">31</td>
+  <td class="code-cell">601010</td>
+  <td class="name-cell">ST文峰<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">1.72</td>
+  <td class="up">+4.88%</td>
+  <td class="surge">9次<br><small>3d窗13%</small></td>
+  <td><span class="bad">32亿</span></td>
+  <td><span class="bad">3.2%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 594278→583432</small></td>
+  <td class="trend small">跌穿异动起点2.63</td>
+  <td class="price-cell">1.63</td>
+  <td class="dn">1.65</td>
+  <td class="up">1.89</td>
+  <td class="good">2.37x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">75</td>
+  <td class="det-btn" onclick="tog('601010')">▼详情</td>
+</tr>
+<tr id="d601010" class="det">
+  <td colspan="18">
+    <b>历史异动 (9次)：</b><span class="tag">10d窗 +49.8%</span><span class="tag">30d窗 +82.8%</span><span class="tag">3d窗 +15.6%</span><span class="tag">3d窗 +15.0%</span><span class="tag">3d窗 +13.7%</span><span class="tag">3d窗 +14.0%</span><span class="tag">3d窗 +12.2%</span><span class="tag">3d窗 +12.9%</span><br>
+    <small class="gray">完整记录: 10d窗+49.8%(2024-11-27~2024-12-11) → 30d窗+82.8%(2024-11-26~2024-12-16) → 3d窗+15.6%(2024-12-30~2025-01-03) → 3d窗+15.0%(2025-02-14~2025-02-18) → 3d窗+13.7%(2025-02-20~2025-02-24) → 3d窗+14.0%(2025-04-07~2025-04-10) → 3d窗+12.2%(2025-04-16~2025-04-21) → 3d窗+12.9%(2025-11-25~2025-11-28)</small><br>
+    <b>均线：</b>MA5=1.7 &nbsp; MA10=1.64 &nbsp; MA20=1.73 &nbsp; MA60=2.13<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.06x 价变1.2% | S2韵律✗ 历史间隔均36日 已等119日(比值3.32) | S3收口✓ ATR从0.10→0.08(-21%) | S4底抬✗ 低点:2.21→1.63→1.52 | S5MACD✓ 柱扩大 0.031→0.033→0.046</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">32</td>
+  <td class="code-cell">603610</td>
+  <td class="name-cell">麒盛科技<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">19.32</td>
+  <td class="up">+10.02%</td>
+  <td class="surge">9次<br><small>3d窗14%</small></td>
+  <td><span class="ok">68亿</span></td>
+  <td><span class="bad">4.1%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 58238→143817</small></td>
+  <td class="trend small">近10日趋势向下(斜率-0.032)</td>
+  <td class="price-cell">18.35</td>
+  <td class="dn">18.35</td>
+  <td class="up">21.25</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">75</td>
+  <td class="det-btn" onclick="tog('603610')">▼详情</td>
+</tr>
+<tr id="d603610" class="det">
+  <td colspan="18">
+    <b>历史异动 (9次)：</b><span class="tag">3d窗 +12.8%</span><span class="tag">3d窗 +14.0%</span><span class="tag">3d窗 +14.1%</span><span class="tag">10d窗 +52.1%</span><span class="tag">30d窗 +63.7%</span><span class="tag">3d窗 +12.3%</span><span class="tag">3d窗 +16.4%</span><span class="tag">3d窗 +13.9%</span><br>
+    <small class="gray">完整记录: 3d窗+12.8%(2024-12-23~2024-12-26) → 3d窗+14.0%(2025-02-06~2025-02-11) → 3d窗+14.1%(2025-04-28~2025-05-06) → 10d窗+52.1%(2025-04-22~2025-05-09) → 30d窗+63.7%(2025-04-08~2025-05-09) → 3d窗+12.3%(2025-08-07~2025-08-12) → 3d窗+16.4%(2025-08-27~2025-08-29) → 3d窗+13.9%(2026-05-12~2026-05-15)</small><br>
+    <b>均线：</b>MA5=17.91 &nbsp; MA10=18.16 &nbsp; MA20=18.11 &nbsp; MA60=17.14<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.73x 价变9.3% | S2韵律✗ 历史间隔均53日 已等14日(比值0.27) | S3收口✗ ATR=1.02 前=0.83 未明显收窄 | S4底抬✓ 低点抬高:14.92→16.27→17.08 | S5MACD✗ 柱=-0.090</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">33</td>
+  <td class="code-cell">001376</td>
+  <td class="name-cell">百通能源<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">14.38</td>
+  <td class="up">+10.02%</td>
+  <td class="surge">8次<br><small>3d窗16%</small></td>
+  <td><span class="bad">31亿</span></td>
+  <td><span class="good">8.0%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 151527→170106</small></td>
+  <td class="trend small">近10日趋势向下(斜率-0.063)</td>
+  <td class="price-cell">13.66</td>
+  <td class="dn">13.76</td>
+  <td class="up">15.82</td>
+  <td class="good">2.33x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps0">0/5</td>
+  <td class="score">75</td>
+  <td class="det-btn" onclick="tog('001376')">▼详情</td>
+</tr>
+<tr id="d001376" class="det">
+  <td colspan="18">
+    <b>历史异动 (8次)：</b><span class="tag">3d窗 +14.6%</span><span class="tag">3d窗 +19.7%</span><span class="tag">3d窗 +14.0%</span><span class="tag">3d窗 +15.2%</span><span class="tag">30d窗 +75.8%</span><span class="tag">3d窗 +16.8%</span><span class="tag">3d窗 +14.5%</span><span class="tag">3d窗 +15.8%</span><br>
+    <small class="gray">完整记录: 3d窗+14.6%(2025-12-10~2025-12-12) → 3d窗+19.7%(2025-12-23~2025-12-26) → 3d窗+14.0%(2026-01-13~2026-01-16) → 3d窗+15.2%(2026-01-20~2026-01-22) → 30d窗+75.8%(2025-12-09~2026-01-22) → 3d窗+16.8%(2026-01-26~2026-01-29) → 3d窗+14.5%(2026-03-23~2026-03-25) → 3d窗+15.8%(2026-05-21~2026-05-26)</small><br>
+    <b>均线：</b>MA5=14.15 &nbsp; MA10=14.38 &nbsp; MA20=14.49 &nbsp; MA60=16.05<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.25x 价变-1.4% | S2韵律✗ 历史间隔均15日 已等7日(比值0.47) | S3收口✗ ATR=1.01 前=0.68 未明显收窄 | S4底抬✗ 低点:14.86→13.18→12.80 | S5MACD✗ 柱=0.078</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">34</td>
+  <td class="code-cell">603989</td>
+  <td class="name-cell">艾华集团<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">34.25</td>
+  <td class="up">+9.99%</td>
+  <td class="surge">7次<br><small>10d窗44%</small></td>
+  <td><span class="ok">137亿</span></td>
+  <td><span class="good">7.7%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 401677→306082</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">32.54</td>
+  <td class="dn">32.54</td>
+  <td class="up">37.68</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">66</td>
+  <td class="det-btn" onclick="tog('603989')">▼详情</td>
+</tr>
+<tr id="d603989" class="det">
+  <td colspan="18">
+    <b>历史异动 (7次)：</b><span class="tag">3d窗 +12.5%</span><span class="tag">3d窗 +12.9%</span><span class="tag">3d窗 +13.3%</span><span class="tag">3d窗 +18.0%</span><span class="tag">30d窗 +61.4%</span><span class="tag">3d窗 +19.4%</span><span class="tag">10d窗 +44.0%</span><br>
+    <small class="gray">完整记录: 3d窗+12.5%(2025-01-06~2025-01-09) → 3d窗+12.9%(2025-01-13~2025-01-16) → 3d窗+13.3%(2026-04-02~2026-04-08) → 3d窗+18.0%(2026-05-14~2026-05-19) → 30d窗+61.4%(2026-04-07~2026-05-22) → 3d窗+19.4%(2026-05-20~2026-05-25) → 10d窗+44.0%(2026-05-11~2026-05-25)</small><br>
+    <b>均线：</b>MA5=33.03 &nbsp; MA10=32.94 &nbsp; MA20=27.6 &nbsp; MA60=21.51<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.43x 价变6.3% | S2韵律✗ 历史间隔均105日 已等8日(比值0.08) | S3收口✗ ATR=3.16 前=1.24 未明显收窄 | S4底抬✓ 低点抬高:18.98→19.85→26.31 | S5MACD✗ 柱=0.667</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">35</td>
+  <td class="code-cell">000536</td>
+  <td class="name-cell">华映科技<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">4.13</td>
+  <td class="up">+10.13%</td>
+  <td class="surge">8次<br><small>3d窗13%</small></td>
+  <td><span class="ok">114亿</span></td>
+  <td><span class="bad">4.0%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 757559→1099970</small></td>
+  <td class="trend small">近10日趋势向下(斜率-0.076)</td>
+  <td class="price-cell">3.92</td>
+  <td class="dn">3.92</td>
+  <td class="up">4.54</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps0">0/5</td>
+  <td class="score">66</td>
+  <td class="det-btn" onclick="tog('000536')">▼详情</td>
+</tr>
+<tr id="d000536" class="det">
+  <td colspan="18">
+    <b>历史异动 (8次)：</b><span class="tag">3d窗 +14.6%</span><span class="tag">3d窗 +19.5%</span><span class="tag">3d窗 +17.3%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +14.8%</span><span class="tag">3d窗 +13.7%</span><span class="tag">3d窗 +13.3%</span><span class="tag">3d窗 +12.6%</span><br>
+    <small class="gray">完整记录: 3d窗+14.6%(2024-11-29~2024-12-03) → 3d窗+19.5%(2025-01-27~2025-02-07) → 3d窗+17.3%(2025-02-21~2025-02-26) → 3d窗+12.4%(2025-08-04~2025-08-07) → 3d窗+14.8%(2025-08-15~2025-08-20) → 3d窗+13.7%(2025-11-12~2025-11-17) → 3d窗+13.3%(2025-11-28~2025-12-03) → 3d窗+12.6%(2026-05-20~2026-05-25)</small><br>
+    <b>均线：</b>MA5=3.9 &nbsp; MA10=4.16 &nbsp; MA20=4.1 &nbsp; MA60=4.25<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比0.94x 价变5.4% | S2韵律✗ 历史间隔均48日 已等8日(比值0.17) | S3收口✗ ATR=0.31 前=0.13 未明显收窄 | S4底抬✗ 低点:3.80→3.85→3.66 | S5MACD✗ 柱=-0.044</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">36</td>
+  <td class="code-cell">600439</td>
+  <td class="name-cell">瑞贝卡<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">2.88</td>
+  <td class="up">+9.92%</td>
+  <td class="surge">6次<br><small>3d窗18%</small></td>
+  <td><span class="bad">33亿</span></td>
+  <td><span class="good">8.6%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 174368→971027</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">2.52</td>
+  <td class="dn">2.74</td>
+  <td class="up">3.17</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">64</td>
+  <td class="det-btn" onclick="tog('600439')">▼详情</td>
+</tr>
+<tr id="d600439" class="det">
+  <td colspan="18">
+    <b>历史异动 (6次)：</b><span class="tag">3d窗 +13.5%</span><span class="tag">3d窗 +16.3%</span><span class="tag">3d窗 +14.6%</span><span class="tag">3d窗 +15.3%</span><span class="tag">3d窗 +12.9%</span><span class="tag">3d窗 +17.6%</span><br>
+    <small class="gray">完整记录: 3d窗+13.5%(2024-11-29~2024-12-03) → 3d窗+16.3%(2025-02-11~2025-02-14) → 3d窗+14.6%(2025-02-18~2025-02-20) → 3d窗+15.3%(2025-04-10~2025-04-15) → 3d窗+12.9%(2025-05-23~2025-05-28) → 3d窗+17.6%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=2.54 &nbsp; MA10=2.47 &nbsp; MA20=2.53 &nbsp; MA60=2.57<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比3.0x 价变17.6% | S2韵律✗ 历史间隔均70日 已等0日(比值0.00) | S3收口✗ ATR=0.13 前=0.09 未明显收窄 | S4底抬✗ 低点:2.43→2.42→2.28 | S5MACD✓ 柱扩大 -0.029→0.007→0.063</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">37</td>
+  <td class="code-cell">688303</td>
+  <td class="name-cell">大全能源<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">22.46</td>
+  <td class="up">+19.98%</td>
+  <td class="surge">7次<br><small>3d窗15%</small></td>
+  <td><span class="bad">482亿</span></td>
+  <td><span class="bad">2.4%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 177602→511966</small></td>
+  <td class="trend small">均线偏弱 MA5=19.80<MA20*0.95</td>
+  <td class="price-cell">20.19</td>
+  <td class="dn">21.34</td>
+  <td class="up">24.71</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">63</td>
+  <td class="det-btn" onclick="tog('688303')">▼详情</td>
+</tr>
+<tr id="d688303" class="det">
+  <td colspan="18">
+    <b>历史异动 (7次)：</b><span class="tag">3d窗 +18.2%</span><span class="tag">3d窗 +19.2%</span><span class="tag">3d窗 +14.4%</span><span class="tag">3d窗 +15.1%</span><span class="tag">3d窗 +16.9%</span><span class="tag">3d窗 +13.2%</span><span class="tag">3d窗 +14.9%</span><br>
+    <small class="gray">完整记录: 3d窗+18.2%(2025-05-08~2025-05-13) → 3d窗+19.2%(2025-06-27~2025-07-02) → 3d窗+14.4%(2025-07-03~2025-07-08) → 3d窗+15.1%(2025-08-20~2025-08-25) → 3d窗+16.9%(2025-09-02~2025-09-05) → 3d窗+13.2%(2025-10-24~2025-10-29) → 3d窗+14.9%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=19.8 &nbsp; MA10=19.79 &nbsp; MA20=20.85 &nbsp; MA60=21.78<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.41x 价变14.9% | S2韵律✗ 历史间隔均40日 已等0日(比值0.00) | S3收口✗ ATR=1.21 前=1.04 未明显收窄 | S4底抬✗ 低点:21.55→20.31→18.45 | S5MACD✓ 柱翻红 -0.426→0.099</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">38</td>
+  <td class="code-cell">600226</td>
+  <td class="name-cell">亨通股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">6.71</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">6次<br><small>3d窗15%</small></td>
+  <td><span class="ok">200亿</span></td>
+  <td><span class="good">8.1%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 1128881→2403182</small></td>
+  <td class="trend small">近10日趋势向下(斜率-0.012)</td>
+  <td class="price-cell">6.37</td>
+  <td class="dn">6.37</td>
+  <td class="up">7.38</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">61</td>
+  <td class="det-btn" onclick="tog('600226')">▼详情</td>
+</tr>
+<tr id="d600226" class="det">
+  <td colspan="18">
+    <b>历史异动 (6次)：</b><span class="tag">3d窗 +13.1%</span><span class="tag">3d窗 +16.8%</span><span class="tag">30d窗 +63.0%</span><span class="tag">3d窗 +12.6%</span><span class="tag">3d窗 +12.1%</span><span class="tag">3d窗 +15.0%</span><br>
+    <small class="gray">完整记录: 3d窗+13.1%(2025-08-13~2025-08-18) → 3d窗+16.8%(2025-08-27~2025-09-01) → 30d窗+63.0%(2025-08-14~2025-09-25) → 3d窗+12.6%(2025-09-29~2025-10-10) → 3d窗+12.1%(2025-12-15~2025-12-18) → 3d窗+15.0%(2026-05-21~2026-05-26)</small><br>
+    <b>均线：</b>MA5=6.27 &nbsp; MA10=6.39 &nbsp; MA20=6.05 &nbsp; MA60=5.46<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.2x 价变10.4% | S2韵律✗ 历史间隔均38日 已等7日(比值0.18) | S3收口✗ ATR=0.43 前=0.24 未明显收窄 | S4底抬✓ 低点抬高:5.10→5.43→5.81 | S5MACD✓ 柱翻红 -0.040→0.010</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">39</td>
+  <td class="code-cell">603500</td>
+  <td class="name-cell">祥和实业<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">11.12</td>
+  <td class="up">+9.99%</td>
+  <td class="surge">7次<br><small>3d窗13%</small></td>
+  <td><span class="bad">37亿</span></td>
+  <td><span class="bad">3.8%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 118554→126614</small></td>
+  <td class="trend small">跌穿异动起点11.95</td>
+  <td class="price-cell">10.56</td>
+  <td class="dn">10.56</td>
+  <td class="up">12.23</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps0">0/5</td>
+  <td class="score">59</td>
+  <td class="det-btn" onclick="tog('603500')">▼详情</td>
+</tr>
+<tr id="d603500" class="det">
+  <td colspan="18">
+    <b>历史异动 (7次)：</b><span class="tag">3d窗 +15.5%</span><span class="tag">3d窗 +14.4%</span><span class="tag">10d窗 +43.8%</span><span class="tag">3d窗 +17.7%</span><span class="tag">3d窗 +12.4%</span><span class="tag">3d窗 +12.9%</span><span class="tag">3d窗 +12.6%</span><br>
+    <small class="gray">完整记录: 3d窗+15.5%(2024-12-20~2024-12-25) → 3d窗+14.4%(2024-12-31~2025-01-06) → 10d窗+43.8%(2024-12-23~2025-01-07) → 3d窗+17.7%(2025-04-08~2025-04-11) → 3d窗+12.4%(2025-08-06~2025-08-11) → 3d窗+12.9%(2025-08-14~2025-08-19) → 3d窗+12.6%(2025-10-23~2025-10-27)</small><br>
+    <b>均线：</b>MA5=10.55 &nbsp; MA10=10.44 &nbsp; MA20=10.34 &nbsp; MA60=10.83<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.27x 价变3.4% | S2韵律✗ 历史间隔均37日 已等146日(比值3.95) | S3收口✗ ATR=0.72 前=0.31 未明显收窄 | S4底抬✗ 低点:10.25→9.88→9.81 | S5MACD✗ 柱=0.174</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">40</td>
+  <td class="code-cell">002806</td>
+  <td class="name-cell">华锋股份<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">20.68</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">7次<br><small>3d窗17%</small></td>
+  <td><span class="bad">36亿</span></td>
+  <td><span class="bad">16.2%</span></td>
+  <td><span class="tag-v-dn">📉量递减</span><br><small class="gray">量能递减 729993→282158</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">18.15</td>
+  <td class="dn">19.65</td>
+  <td class="up">22.75</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps1">1/5</td>
+  <td class="score">58</td>
+  <td class="det-btn" onclick="tog('002806')">▼详情</td>
+</tr>
+<tr id="d002806" class="det">
+  <td colspan="18">
+    <b>历史异动 (7次)：</b><span class="tag">3d窗 +13.3%</span><span class="tag">3d窗 +14.4%</span><span class="tag">3d窗 +13.3%</span><span class="tag">3d窗 +16.8%</span><span class="tag">3d窗 +12.7%</span><span class="tag">3d窗 +12.3%</span><span class="tag">3d窗 +16.7%</span><br>
+    <small class="gray">完整记录: 3d窗+13.3%(2025-01-10~2025-01-14) → 3d窗+14.4%(2025-06-23~2025-06-26) → 3d窗+13.3%(2025-11-11~2025-11-14) → 3d窗+16.8%(2026-02-05~2026-02-10) → 3d窗+12.7%(2026-04-07~2026-04-10) → 3d窗+12.3%(2026-05-20~2026-05-22) → 3d窗+16.7%(2026-05-26~2026-05-29)</small><br>
+    <b>均线：</b>MA5=19.36 &nbsp; MA10=17.8 &nbsp; MA20=16.43 &nbsp; MA60=14.9<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比2.48x 价变11.9% | S2韵律✗ 历史间隔均51日 已等4日(比值0.08) | S3收口✗ ATR=1.81 前=0.68 未明显收窄 | S4底抬✓ 低点抬高:13.66→14.42→15.12 | S5MACD✗ 柱=0.938</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">41</td>
+  <td class="code-cell">605358</td>
+  <td class="name-cell">立昂微<span class="badge-high">高位博弈</span></td>
+  <td class="price-cell">63.90</td>
+  <td class="up">+10.00%</td>
+  <td class="surge">6次<br><small>3d窗14%</small></td>
+  <td><span class="bad">429亿</span></td>
+  <td><span class="bad">14.5%</span></td>
+  <td><span class="tag-v-up">📈量递增</span><br><small class="gray">量能递增 517504→970865</small></td>
+  <td class="trend small">🆕突破新高</td>
+  <td class="price-cell">57.33</td>
+  <td class="dn">60.70</td>
+  <td class="up">70.29</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+  <td class="psscore ps2">2/5</td>
+  <td class="score">52</td>
+  <td class="det-btn" onclick="tog('605358')">▼详情</td>
+</tr>
+<tr id="d605358" class="det">
+  <td colspan="18">
+    <b>历史异动 (6次)：</b><span class="tag">3d窗 +14.6%</span><span class="tag">3d窗 +16.0%</span><span class="tag">3d窗 +12.9%</span><span class="tag">3d窗 +16.5%</span><span class="tag">30d窗 +61.7%</span><span class="tag">3d窗 +13.9%</span><br>
+    <small class="gray">完整记录: 3d窗+14.6%(2025-09-18~2025-09-23) → 3d窗+16.0%(2025-10-23~2025-10-28) → 3d窗+12.9%(2025-12-05~2025-12-10) → 3d窗+16.5%(2026-04-29~2026-05-07) → 30d窗+61.7%(2026-03-31~2026-05-13) → 3d窗+13.9%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=57.46 &nbsp; MA10=56.21 &nbsp; MA20=54.07 &nbsp; MA60=42.32<br>
+    <b>交易纪律：</b>大跌低吸MA10 | -5%止损 | +10%全离 &nbsp;|&nbsp; 仓位≤10%<br>
+    <b>PreSurge预判：</b><span class="ps-detail">S1量预热✗ 量比1.26x 价变13.9% | S2韵律✗ 历史间隔均37日 已等0日(比值0.00) | S3收口✗ ATR=4.77 前=3.97 未明显收窄 | S4底抬✓ 低点抬高:37.75→45.35→50.51 | S5MACD✓ 柱翻红 -0.283→0.510</span>
   </td>
 </tr></tbody>
 </table>
 </div>
 </div>
 
-<!-- PreSurge 预判专区 -->
+<!-- PreSurge 预判 -->
 
+
+<!-- 操作建议 -->
+
+<div class="zone zone-advice" style="margin:16px 20px 24px">
+<div class="zone-hd" style="border-left-color:#f59e0b"><h2>🎯 操作建议 & 交易纪律</h2><span class="warn">中段回踩买 + 高位大跌买，放弃涨停追板</span></div>
+
+<div class="cards" style="margin:8px 0 12px">
+  <div class="card" style="border:2px solid #2563eb"><div class="v" style="color:#2563eb">9</div><div class="l">🏗 中段加速</div></div>
+  <div class="card" style="border:2px solid #dc2626"><div class="v" style="color:#dc2626">41</div><div class="l">🎯 高位博弈</div></div>
+  <div class="card" style="border:2px solid #534AB7"><div class="v" style="color:#534AB7">0</div><div class="l">🔮 预判候选</div></div>
+  <div class="card"><div class="v" style="color:#f59e0b">4</div><div class="l">重点关注</div></div>
+</div>
+
+<div class="tw" style="margin:0 0 8px">
+<table>
+<thead><tr>
+  <th>优先级</th><th>代码</th><th>名称</th><th>现价</th><th>异动</th><th>买点</th><th>止损</th><th>目标</th><th>RR</th><th>仓位</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td class="rank">1</td>
+  <td class="code-cell">603090</td>
+  <td class="name-cell">宏盛股份<span class="badge-high">高位</span></td>
+  <td class="price-cell">62.36</td>
+  <td class="num">22次</td>
+  <td>59.24</td>
+  <td class="dn">62.55</td>
+  <td class="up">68.60</td>
+  <td class="good">623.6x</td>
+  <td class="small">≤10%</td>
+</tr>
+<tr>
+  <td class="rank">2</td>
+  <td class="code-cell">603286</td>
+  <td class="name-cell">日盈电子<span class="badge-high">高位</span></td>
+  <td class="price-cell">59.64</td>
+  <td class="num">18次</td>
+  <td>56.66</td>
+  <td class="dn">61.54</td>
+  <td class="up">65.60</td>
+  <td class="good">596.4x</td>
+  <td class="small">≤10%</td>
+</tr>
+<tr>
+  <td class="rank">3</td>
+  <td class="code-cell">605060</td>
+  <td class="name-cell">联德股份<span class="badge-high">高位</span></td>
+  <td class="price-cell">52.44</td>
+  <td class="num">19次</td>
+  <td>49.82</td>
+  <td class="dn">52.85</td>
+  <td class="up">57.68</td>
+  <td class="good">524.4x</td>
+  <td class="small">≤10%</td>
+</tr>
+<tr>
+  <td class="rank">4</td>
+  <td class="code-cell">603516</td>
+  <td class="name-cell">淳中科技<span class="badge-high">高位</span></td>
+  <td class="price-cell">126.39</td>
+  <td class="num">29次</td>
+  <td>119.22</td>
+  <td class="dn">120.07</td>
+  <td class="up">139.03</td>
+  <td class="good">2.0x</td>
+  <td class="small">≤10%</td>
+</tr></tbody>
+</table>
+</div>
+
+<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:14px 18px;font-size:13px;line-height:1.8;color:#92400e">
+  <b>📌 操作纪律（严格执行）：</b>
+  <ol style="margin:8px 0 0 18px;padding:0"><li><b>🏗 中段池首选 000733 振华科技</b>：回踩MA5(53.94)或MA10(52.50)分批买入，盈利8%减半，破5日线全走，单只仓位≤30%</li><br><li><b>🎯 高位池观察 603516 淳中科技</b>：只在大跌回踩MA10(116.88)附近低吸，亏损5%无条件止损，盈利10%全部离场，单只≤10%</li><br><li><b>📊 总仓位控制：</b>中段池单只≤30% + 高位池单只≤10%，永远不满仓</li></ol>
+  <p style="margin:10px 0 0;font-size:12px;color:#a16207">
+    ⚠ 禁止追涨停板 | 中段回踩买高位大跌买 | 止损必须执行 | 数据仅供研究，不构成投资建议
+  </p>
+</div>
+</div>
 
 <script>
 function tog(c){
@@ -368,4 +1654,8 @@ function tog(c){
 }
 document.querySelectorAll('.det').forEach(function(r){r.style.display='none'});
 </script>
+<div style="text-align:center;padding:16px 20px 24px;font-size:12px;color:#888">
+  <a href="yidong_history.html" style="color:#2563eb;text-decoration:none;font-weight:600">📋 查看历史扫描记录 →</a>
+  &nbsp;|&nbsp; 数据仅供研究参考，不构成投资建议
+</div>
 </body></html>

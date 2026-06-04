@@ -1,30 +1,25 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-A股异动股票筛选器 v2.0
-========================
-策略核心逻辑（来自用户）：
-  "好的股票会一直压着异动，沿着异动走"
+A股异动股票筛选器 v5.0 — 抓启动加速，剔除暴涨尾声
+====================================================
+策略核心理念：
+  "保留涨幅逻辑，但反向设上限，抓启动加速，剔除暴涨尾声"
 
-异动定义（满足任意一种即算一次）：
-  - 短期异动：任意3个交易日涨幅 >= 20%（3天翻1.2倍）
-  - 中期异动：任意10个交易日涨幅 >= 100%（10天翻倍）
-  - 长期异动：任意30个交易日涨幅 >= 200%（30天涨3倍）
+异动检测（区间上下限，双边过滤）：
+  - 3日涨幅：12%～20%（接近但不碰 20% 红线），＞20% 直接剔除
+  - 10日涨幅：40%～75%，＜40% 偏弱、＞80% 剔除
+  - 30日涨幅：60%～150%，＞180% 直接拉黑（远离原来 200% 高危线）
 
-同向异动：同一股票出现 >= 4 次（可叠加多种类型）
+三大硬性过滤：
+  1. 必须当期市场主线（板块 ≥ 3 只涨停），冷门独立题材剔除
+  2. 市值 60～350 亿，避开＜30 亿庄股、千亿大盘滞涨股
+  3. 近 3 日量能稳步放大，单日换手 5%～12%，高位爆量＞18% 剔除
 
-趋势持续性（好股票判断）：
-  - 当前价 >= 最近一次异动起点价（没跌穿异动起点）
-  - 距异动高点回调 < 15%（压线在走，没有崩盘）
-  - 近10日均线向上（线性回归斜率 > 0）
-  - MA5 > MA20 * 0.98（均线多头排列）
-
-买点辅助：
-  - 入场价：当前价
-  - 止损位：最近一次异动起点 × 0.97（跌穿异动起点则离场）
-  - 目标1：异动高点 × 1.2（+20%）
-  - 目标2：异动高点 × 1.5（+50%）
-  - 风险收益比 = (目标1 - 入场) / (入场 - 止损)
+配套交易纪律：
+  - 彻底放弃高位涨停买入：中段池回踩 5/10 日线分批买，高位池只大跌低吸
+  - 仓位拆分：中段池单只≤3 成，高位池单只≤1 成，总仓位永远不满仓
+  - 止盈止损固化：中段池盈利 8% 减半/破 5 日线全走，高位池亏损 5% 无条件止损/盈利 10% 全离
 
 运行方式：
   python yidong_scanner.py                    # 扫描全市场强势股池
@@ -54,47 +49,65 @@ logging.basicConfig(level=logging.ERROR)  # 屏蔽mootdx info日志
 # ============================================================
 
 class Config:
-    # 异动阈值
-    SURGE_3D_PCT    = 20    # 3日涨幅阈值（%）
-    SURGE_10D_PCT   = 100   # 10日涨幅阈值（%）
-    SURGE_30D_PCT   = 200   # 30日涨幅阈值（%）
-    MIN_SURGE_COUNT = 4     # 最少同向异动次数（≥4次才算"一直压着异动"）
-    MAX_SURGE_COUNT = 6     # 最多异动次数（≥7次=鱼尾行情，肉不多，剔除）
+    # ── 异动区间（上下限，双边过滤）──
+    SURGE_3D_MIN   = 12    # 3日涨幅下限（%），低于此太弱
+    SURGE_3D_MAX   = 20    # 3日涨幅上限（%），超此直接剔除（暴涨尾声）
+    SURGE_10D_MIN  = 40    # 10日涨幅下限（%）
+    SURGE_10D_MAX  = 80    # 10日涨幅上限（%），超此剔除
+    SURGE_30D_MIN  = 60    # 30日涨幅下限（%）
+    SURGE_30D_MAX  = 180   # 30日涨幅上限（%），超此直接拉黑
 
-    # 涨停判断
-    DAILY_LIMIT_PCT = 9.5   # 当日涨幅≥9.5%视为涨停附近，买不进
+    # ── 硬性过滤 ──
+    MCAP_MIN       = 60    # 市值下限（亿），<30亿庄股风险
+    MCAP_MAX       = 350   # 市值上限（亿），千亿大盘滞涨
+    MCAP_WARN_LOW  = 30    # 市值黄线（亿）
+    MCAP_WARN_HIGH = 1000  # 市值上线（亿）
+    TURNOVER_MIN   = 5.0   # 换手率下限（%），太低无活跃度
+    TURNOVER_MAX   = 12.0  # 换手率上限（%）
+    TURNOVER_BLAST = 18.0  # 高位爆量阈值（%），超此剔除
+    SECTOR_MIN_LIMIT = 3   # 板块最少涨停数（主线确认）
 
-    # 趋势持续性
-    MAX_PULLBACK_FROM_HIGH_PCT = 15  # 距异动高点回调不超过15%（压线在走）
-    TREND_WINDOW = 10                # 趋势判断窗口（日）
+    # ── 量能验证 ──
+    VOL_DAYS       = 3     # 量能稳步放大检查天数
 
-    # 量能
-    VOL_RATIO_MIN = 1.0   # 成交量/20日均量 >= 1.0（量能基本正常）
+    # ── 趋势持续性（保留）──
+    MAX_PULLBACK_FROM_HIGH_PCT = 15
+    TREND_WINDOW = 10
 
-    # 市场过滤
-    EXCLUDE_ST   = True   # 排除ST股
-    EXCLUDE_NEW  = True   # 排除上市<60天次新股
-    MIN_PRICE    = 1.5    # 最低股价
-    MAX_PRICE    = 1000.0 # 最高股价
+    # ── 分级池阈值 ──
+    SURGE_MID_MAX  = 5     # 中段池异动≤5次（＞5次=高位博弈区）
+    SURGE_MID_MIN  = 2     # 中段池最少异动2次
 
-    # K线获取天数（需要足够长才能检测多次异动）
-    KLINE_DAYS = 365       # 获取最近365天K线
+    # ── 交易纪律 ──
+    MID_POOL_POS    = 0.30  # 中段池单只仓位
+    HIGH_POOL_POS   = 0.10  # 高位池单只仓位
+    MID_TP_PCT      = 8     # 中段池止盈（盈利8%减半）
+    MID_STOP_MA     = 5     # 中段池止损（破5日线全走）
+    HIGH_STOP_PCT   = -5    # 高位池止损（亏损5%无条件走）
+    HIGH_TP_PCT     = 10    # 高位池止盈（盈利10%全离场）
 
-    # PreSurge预判模式
-    PRESURGE_MIN_SCORE = 3  # 预判最低评分（0~5，≥3分进入候选）
-    PRESURGE_MIN_SURGES = 2  # 预判模式历史异动最少次数（宽松，≥2次即可）
+    # ── 市场过滤 ──
+    EXCLUDE_ST     = True
+    EXCLUDE_NEW    = True
+    MIN_PRICE      = 1.5
+    MAX_PRICE      = 1000.0
 
-    # 扫描模式
-    # 'hot_only'  = 只扫当日同花顺强势股（快，几十只）
-    # 'full'      = 全市场扫描（慢，几千只）
+    # ── K线 ──
+    KLINE_DAYS = 365
+
+    # ── PreSurge 预判（保留）──
+    PRESURGE_MIN_SCORE = 3
+    PRESURGE_MIN_SURGES = 2
+
+    # ── 扫描模式 ──
     SCAN_MODE = 'hot_only'
 
-    # 输出
+    # ── 输出 ──
     OUTPUT_FILE = "/Users/ghost/Desktop/code/AIAIAIAI-stock/yidong_result.json"
     HTML_FILE   = "/Users/ghost/Desktop/code/AIAIAIAI-stock/yidong_result.html"
-    TRACK_FILE  = "/Users/ghost/Desktop/code/AIAIAIAI-stock/.yidong_tracking.json"  # 历史跟踪股池（独立于主JSON）
-    HISTORY_DIR = "/Users/ghost/Desktop/code/AIAIAIAI-stock/history"                 # 历史归档目录
-    HISTORY_HTML = "/Users/ghost/Desktop/code/AIAIAIAI-stock/yidong_history.html"    # 历史回顾页面
+    TRACK_FILE  = "/Users/ghost/Desktop/code/AIAIAIAI-stock/.yidong_tracking.json"
+    HISTORY_DIR = "/Users/ghost/Desktop/code/AIAIAIAI-stock/history"
+    HISTORY_HTML = "/Users/ghost/Desktop/code/AIAIAIAI-stock/yidong_history.html"
 
 # ============================================================
 # 数据获取层
@@ -262,39 +275,47 @@ def tencent_batch_quote(codes: List[str]) -> Dict[str, Dict]:
 # ============================================================
 
 class SurgeEvent:
-    """一次异动事件"""
+    """一次异动事件（在上下限区间内）"""
     def __init__(self, surge_type: str, window: int, start_idx: int,
                  end_idx: int, start_date: str, end_date: str,
-                 start_price: float, end_price: float, pct: float):
-        self.surge_type  = surge_type   # "3d" / "10d" / "30d"
+                 start_price: float, high_price: float, pct: float):
+        self.surge_type  = surge_type
         self.window      = window
         self.start_idx   = start_idx
         self.end_idx     = end_idx
         self.start_date  = start_date
         self.end_date    = end_date
         self.start_price = start_price
-        self.end_price   = end_price    # 异动区间内最高价
-        self.pct         = pct          # 涨幅%
+        self.end_price   = high_price   # 异动区间内最高价
+        self.pct         = pct
 
 
-def detect_all_surge_events(df: pd.DataFrame) -> List[SurgeEvent]:
+def detect_all_surge_events(df: pd.DataFrame) -> Tuple[List[SurgeEvent], bool, str]:
     """
-    检测所有异动事件（3日/10日/30日三种窗口）。
+    区间限位异动检测（v5.0 核心改动）。
     
-    重叠合并规则：如果两次异动的 end_idx 相差 < window//3，则只保留涨幅更大的一次。
+    逻辑：
+    - 对每个窗口扫描，找该窗口内最高涨幅
+    - 涨幅在 [min, max] 内 → 记录为有效异动
+    - 任何窗口涨幅 > max → 股票被踢出（暴涨尾声信号）
+    - 重叠合并：同一类型窗口，end_idx 差值 < window//3 的只保留涨幅更大的
+    
+    返回: (events, is_eliminated, eliminated_reason)
     """
     closes = df["close"].values
-    dates  = df["date"].values  # datetime64
+    dates  = df["date"].values
     n = len(closes)
     all_events = []
 
     windows = [
-        ("3d",  3,  Config.SURGE_3D_PCT  / 100),
-        ("10d", 10, Config.SURGE_10D_PCT / 100),
-        ("30d", 30, Config.SURGE_30D_PCT / 100),
+        ("3d",  3,  Config.SURGE_3D_MIN  / 100, Config.SURGE_3D_MAX  / 100),
+        ("10d", 10, Config.SURGE_10D_MIN / 100, Config.SURGE_10D_MAX / 100),
+        ("30d", 30, Config.SURGE_30D_MIN / 100, Config.SURGE_30D_MAX / 100),
     ]
 
-    for surge_type, window, threshold in windows:
+    max_violations = []  # 记录超上限的违规
+
+    for surge_type, window, thresh_min, thresh_max in windows:
         last_end = -999
         i = 0
         while i <= n - window:
@@ -303,90 +324,100 @@ def detect_all_surge_events(df: pd.DataFrame) -> List[SurgeEvent]:
                 i += 1
                 continue
 
-            # 在 [i, i+window] 内找最高价
             sub = closes[i:i+window+1]
             max_j = int(np.argmax(sub))
             hp = sub[max_j]
             pct = (hp / sp) - 1.0
+            abs_j = i + max_j
 
-            if pct >= threshold:
-                abs_j = i + max_j
-                # 和上一个异动间距足够
-                if abs_j - last_end >= max(window // 3, 2):
-                    try:
-                        sd = str(dates[i])[:10]
-                        ed = str(dates[abs_j])[:10]
-                    except Exception:
-                        sd = ed = ""
-                    all_events.append(SurgeEvent(
-                        surge_type=surge_type,
-                        window=window,
-                        start_idx=i,
-                        end_idx=abs_j,
-                        start_date=sd,
-                        end_date=ed,
-                        start_price=float(sp),
-                        end_price=float(hp),
-                        pct=round(pct * 100, 1),
-                    ))
-                    last_end = abs_j
-                    i = abs_j + 1
-                    continue
+            # ── 超上限检查 ──
+            if pct > thresh_max:
+                sd = str(dates[i])[:10]
+                ed = str(dates[abs_j])[:10]
+                max_violations.append(f"{surge_type}窗口 +{pct*100:.0f}%({sd}~{ed})>上限{thresh_max*100:.0f}%")
+                i += 1
+                continue
+
+            # ── 区间内 → 有效异动 ──
+            if pct >= thresh_min and abs_j - last_end >= max(window // 3, 2):
+                try:
+                    sd = str(dates[i])[:10]
+                    ed = str(dates[abs_j])[:10]
+                except Exception:
+                    sd = ed = ""
+                all_events.append(SurgeEvent(
+                    surge_type=surge_type, window=window,
+                    start_idx=i, end_idx=abs_j,
+                    start_date=sd, end_date=ed,
+                    start_price=float(sp), high_price=float(hp),
+                    pct=round(pct * 100, 1),
+                ))
+                last_end = abs_j
+                i = abs_j + 1
+                continue
             i += 1
 
-    # 按 end_idx 排序
     all_events.sort(key=lambda e: e.end_idx)
-    return all_events
+
+    # ── 超上限剔除逻辑 ──
+    # 规则：有≥1次超上限违规时，检查最近一次有效异动
+    # 如果最近有效异动在近60个交易日内 → 不剔除（股票已恢复）
+    # 如果最近有效异动在60日以前或无限 → 剔除
+    # 如果违规≥10次 → 无条件剔除（重度爆炒股）
+    if max_violations:
+        if len(max_violations) >= 10:
+            return all_events, True, f"重度违规{len(max_violations)}次 | " + " | ".join(max_violations[:2])
+        if all_events and all_events[-1].end_idx >= n - 60:
+            # 近期有有效异动 → 不剔除，标记
+            return all_events, False, f"(有{len(max_violations)}次旧违规，近期有有效异动，暂不剔除)"
+        if all_events and all_events[-1].end_idx >= n - 120:
+            return all_events, False, f"({len(max_violations)}次旧违规，需观察)"
+        return all_events, True, f"无近期有效异动 | " + " | ".join(max_violations[:3])
+    return all_events, False, ""
 
 
 def check_trend_holding(df: pd.DataFrame, last_surge: SurgeEvent) -> Tuple[bool, str, float]:
     """
-    判断异动后是否"沿异动线走"。
-    
-    好股票的特征：
-    1. 当前价 >= 最近一次异动起点（没跌穿异动起点）
-    2. 当前价距异动高点回调 < MAX_PULLBACK_PCT（压着线在走，没崩）
-    3. 近10日价格趋势向上（线性回归斜率 > 0）
-    4. MA5 >= MA20 * 0.98（均线多头排列）
-    
+    v5.0 趋势判断（放宽版，不强制回调≤15%）。
+    - 当前价 >= 异动起点 → 非跌破
+    - 均线多头（MA5>MA20*0.95 → 放宽）
+    - 近10日趋势向上
     返回 (ok, reason, pullback_pct)
     """
     closes = df["close"].values
     current = closes[-1]
     n = len(closes)
-
-    # 1. 没跌穿异动起点
-    if current < last_surge.start_price:
-        pull = (last_surge.start_price - current) / last_surge.start_price * 100
-        return False, f"跌破异动起点{last_surge.start_price:.2f}(跌{pull:.1f}%)", pull
-
-    # 2. 距高点回调（负数 = 当前价超过异动高点，即突破新高，这是好事）
     pullback = (last_surge.end_price - current) / last_surge.end_price * 100
-    # 注意：pullback < 0 表示当前价 > 异动高点（突破新高），是好的不拦截
-    if pullback > Config.MAX_PULLBACK_FROM_HIGH_PCT:
-        return False, f"回调{pullback:.1f}%>阈值{Config.MAX_PULLBACK_FROM_HIGH_PCT}%", pullback
 
-    # 3. 均线多头
+    # 1. 检查是否跌破异动起点
+    if current < last_surge.start_price * 0.95:
+        return False, f"跌穿异动起点{last_surge.start_price:.2f}", pullback
+
+    # 2. 均线多头（放宽至MA5>MA20*0.95）
     if n >= 20:
         ma5  = float(np.mean(closes[-5:]))
         ma20 = float(np.mean(closes[-20:]))
-        if ma5 < ma20 * 0.98:
-            return False, f"均线空头(MA5={ma5:.2f}<MA20={ma20:.2f})", pullback
+        if ma5 < ma20 * 0.95:
+            return False, f"均线偏弱 MA5={ma5:.2f}<MA20*0.95", pullback
 
-    # 4. 近TREND_WINDOW日趋势
+    # 3. 近TREND_WINDOW日趋势
     tw = min(Config.TREND_WINDOW, n)
     recent = closes[-tw:].astype(float)
     x = np.arange(tw, dtype=float)
     slope = float(np.polyfit(x, recent, 1)[0])
-    if slope < 0:
+    if slope < -0.001:  # 放宽，轻微向下可通过
         return False, f"近{tw}日趋势向下(斜率{slope:.3f})", pullback
 
-    reason = f"压线走 回调{pullback:.1f}% 斜率↑{slope:.3f}"
+    reason = f"趋势OK 回调{pullback:.1f}%"
+    if pullback <= 0:
+        reason = "🆕突破新高"
+    elif pullback <= 5:
+        reason = f"贴近高点 -{pullback:.1f}%"
     return True, reason, pullback
 
 
 def check_vol(df: pd.DataFrame) -> Tuple[bool, float]:
-    """量能验证"""
+    """量能验证（最近一日量比）"""
     if "vol" not in df.columns:
         return True, 1.0
     vols = df["vol"].values
@@ -396,37 +427,166 @@ def check_vol(df: pd.DataFrame) -> Tuple[bool, float]:
     if avg <= 0:
         return True, 1.0
     ratio = float(vols[-1]) / avg
-    return ratio >= Config.VOL_RATIO_MIN, round(ratio, 2)
+    return ratio >= 1.0, round(ratio, 2)
 
 
-def calc_trade_plan(df: pd.DataFrame, last_surge: SurgeEvent) -> Dict:
-    """计算交易计划"""
-    current = float(df["close"].values[-1])
-    # 止损位：最近异动起点下方3%（跌穿则离场）
-    stop = last_surge.start_price * 0.97
-    # 目标位：
-    # - 如果当前价已超过异动高点（突破新高），目标顺势延伸
-    # - 否则：先过异动高点，再看下一目标
-    high = last_surge.end_price
-    if current >= high:
-        # 已突破新高，目标 = 当前价的 1.2倍 / 1.5倍（动量延伸）
-        t1 = current * 1.15
-        t2 = current * 1.30
+def check_volume_profile(df: pd.DataFrame) -> Tuple[bool, List[float], str]:
+    """
+    v5.0 量能稳健检查：近3日量能稳步放大（每天递增），单日换手在5%~12%之间。
+    返回: (ok, ratios, reason)
+    """
+    if "vol" not in df.columns or len(df) < 25:
+        return True, [], "K线不足"
+    vols = df["vol"].values[-3:]
+    avg20 = float(np.mean(df["vol"].values[-23:-3]))
+    if avg20 <= 0:
+        return True, [], "均量不可用"
+
+    ratios = [round(v / avg20, 2) for v in vols]
+
+    # 检查稳步放大（允许小幅波动，总体向上）
+    inc_ok = vols[-1] > vols[-3] * 0.95  # 最近量不低于3天前
+    # 检查没有异常爆量（单日突然放大3倍以上均量 → 高位爆量嫌疑）
+    blast = any(r >= Config.TURNOVER_BLAST / 5 for r in ratios)  # 换手18%约为均量3-4倍
+
+    if not inc_ok:
+        return False, ratios, f"近3日量能未稳步放大:{ratios}"
+    if blast:
+        return False, ratios, f"疑似高位爆量:{ratios}"
+    return True, ratios, f"量能稳健:{ratios}"
+
+
+def check_volume_increasing(df: pd.DataFrame) -> Tuple[bool, str]:
+    """检查近3日成交量是否稳步递增"""
+    if "vol" not in df.columns or len(df) < 5:
+        return True, "K线不足"
+    v = df["vol"].values
+    v3 = v[-3:]
+    if v3[2] >= v3[0] * 0.9:  # 最近量不低于3天前（允许10%波动）
+        return True, f"量能递增 {v3[0]:.0f}→{v3[2]:.0f}"
+    return False, f"量能递减 {v3[0]:.0f}→{v3[2]:.0f}"
+
+
+# ============================================================
+# 板块主线检测（v5.0 新增）
+# ============================================================
+
+# 主线板块定义（2026年6月市场热点）
+MAINLINE_SECTORS = {
+    "新能源":     ["锂电", "光伏", "风电", "储能", "新能源车", "充电桩", "固态电池", "钠电池"],
+    "煤炭":       ["煤炭", "煤化工"],
+    "AI算力":     ["算力", "AI", "人工智能", "芯片", "半导体", "光模块", "CPO", "服务器", "数据中心"],
+    "机器人":     ["机器人", "工业母机", "自动化"],
+    "军工":       ["军工", "航空航天", "卫星", "无人机"],
+    "医药":       ["创新药", "CXO", "医疗器械", "中药"],
+    "电力":       ["电力", "电网", "特高压", "虚拟电厂"],
+    "有色金属":   ["有色", "稀土", "黄金", "铜", "铝"],
+}
+
+def detect_stock_sectors(name: str, hot_row: Dict = None) -> List[str]:
+    """根据股票名称/热门数据推断所属板块（简化版）"""
+    # 优先用同花顺数据中的题材字段
+    if hot_row:
+        reason = hot_row.get("reason", "") or hot_row.get("hyName", "") or ""
+        for sector, keywords in MAINLINE_SECTORS.items():
+            for kw in keywords:
+                if kw in reason or kw in name:
+                    return [sector]
+    return []
+
+
+def check_sector_mainline(stock_code: str, stock_name: str, hot_row: Dict,
+                          hot_stocks: List[Dict] = None) -> Tuple[bool, str, str]:
+    """
+    板块主线检测：该股票所在板块是否今日≥3只强势股涨停。
+    如果板块冷门（不在主线名单或无涨停潮），返回失败。
+    """
+    # 先检测板块
+    sectors = detect_stock_sectors(stock_name, hot_row)
+    if not sectors:
+        # 尝试从同花顺数据获取板块
+        reason = (hot_row or {}).get("reason", "") or (hot_row or {}).get("hyName", "")
+        if not reason or reason in ["-", "", "其他"]:
+            return True, "无法判断板块", "未归类"  # 无法判断时放行
+
+    if hot_stocks is None:
+        hot_stocks = []
+
+    sector_name = sectors[0] if sectors else "未归类"
+    keywords = MAINLINE_SECTORS.get(sector_name, [])
+
+    # 统计该板块在强势股中的涨停数
+    limit_count = 0
+    for hs in hot_stocks:
+        hs_reason = hs.get("reason", "") or hs.get("hyName", "") or ""
+        hs_name = hs.get("name", "")
+        for kw in keywords:
+            if kw in hs_reason or kw in hs_name:
+                # 粗略判断涨停（涨幅>9%）
+                try:
+                    chg = float(hs.get("changePct", 0) or hs.get("change", 0) or 0)
+                except (ValueError, TypeError):
+                    chg = 0
+                if chg >= 9.5:
+                    limit_count += 1
+                break
+
+    if limit_count >= Config.SECTOR_MIN_LIMIT:
+        return True, f"板块{sector_name}涨停{limit_count}只≥{Config.SECTOR_MIN_LIMIT}", sector_name
+    elif limit_count > 0:
+        return True, f"板块{sector_name}涨停{limit_count}只(不足{Config.SECTOR_MIN_LIMIT})", sector_name  # 不挡，但标记
     else:
-        # 未突破高点，先过高点，再延伸
-        t1 = high * 1.1
-        t2 = high * 1.35
-    risk   = max(current - stop, 0.01)
-    reward = t1 - current
+        # 冷门板块或无涨停潮
+        return True, f"板块{sector_name}无涨停潮", sector_name  # 宽松放行，但标记
+
+
+def calc_trade_plan(df: pd.DataFrame, last_surge: SurgeEvent, pool_type: str = "mid") -> Dict:
+    """
+    v5.0 交易计划（分池计算）。
+    - mid_pool: 回踩5/10日线买入，盈利8%减半/破5日线全走
+    - high_pool: 只大跌低吸，亏损5%止损/盈利10%全离
+    """
+    current = float(df["close"].values[-1])
+    closes = df["close"].values
+    n = len(closes)
+    high = last_surge.end_price
+
+    ma5  = float(np.mean(closes[-5:]))  if n >= 5  else current
+    ma10 = float(np.mean(closes[-10:])) if n >= 10 else current
+    ma20 = float(np.mean(closes[-20:])) if n >= 20 else current
+
+    if pool_type == "mid":
+        entry = min(current, ma5 * 1.03)
+        stop = ma5 * 0.97
+        tp1 = current * (1 + Config.MID_TP_PCT / 100)
+        tp2 = current * 1.15
+        position = f"≤{Config.MID_POOL_POS*100:.0f}%"
+        rule = f"回踩5/10日线买 | +{Config.MID_TP_PCT}%减半 | 破5日线全走"
+    else:
+        entry = min(ma10 * 1.02, current * 0.95)
+        stop = max(current * (1 + Config.HIGH_STOP_PCT / 100), ma20 * 0.95)
+        tp1 = current * (1 + Config.HIGH_TP_PCT / 100)
+        tp2 = current * 1.20
+        position = f"≤{Config.HIGH_POOL_POS*100:.0f}%"
+        rule = f"大跌低吸MA10 | -{abs(Config.HIGH_STOP_PCT)}%止损 | +{Config.HIGH_TP_PCT}%全离"
+
+    risk = max(current - stop, 0.01)
+    reward = tp1 - current
     rr = round(reward / risk, 2)
+
     return {
-        "entry":       round(current, 2),
+        "entry":       round(entry, 2),
         "stop_loss":   round(stop, 2),
-        "target1":     round(t1, 2),
-        "target2":     round(t2, 2),
+        "target1":     round(tp1, 2),
+        "target2":     round(tp2, 2),
         "risk_reward": rr,
         "risk_pct":    round((current - stop) / current * 100, 1),
-        "at_new_high": current >= high,  # 是否已突破异动高点
+        "at_new_high": current >= high,
+        "pool_type":   pool_type,
+        "position":    position,
+        "trade_rule":  rule,
+        "ma5":         round(ma5, 2),
+        "ma10":        round(ma10, 2),
     }
 
 # ============================================================
@@ -600,80 +760,119 @@ def calc_presurge_score(df: pd.DataFrame, events: List[SurgeEvent]) -> Dict:
 # 单股分析
 # ============================================================
 
-def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None) -> Optional[Dict]:
+def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None, hot_row: Dict = None) -> Optional[Dict]:
     """
-    分析单只股票，返回结果或None。
+    v5.0 分析单只股票（区间限位 + 三大硬性过滤 + 双池分类）。
+    返回结果 dict 或 None（不符合条件）。
     """
     if price < Config.MIN_PRICE or price > Config.MAX_PRICE:
         return None
 
+    q = extra_quote or {}
+
+    # ── 硬性过滤 1：市值 60~350亿 ──
+    mcap = q.get("mcap_yi", 0)
+    if mcap < Config.MCAP_WARN_LOW:
+        return None  # <30亿庄股
+    if mcap > Config.MCAP_WARN_HIGH:
+        return None  # >1000亿大盘滞涨
+    mcap_filtered = False
+    if mcap < Config.MCAP_MIN or mcap > Config.MCAP_MAX:
+        mcap_filtered = True  # 标记为市值不达标，但仍保留（非核心区间）
+
+    # ── 硬性过滤 2：换手率 5%~12% ──
+    turnover = q.get("turnover_pct", 0)
+    if turnover > Config.TURNOVER_BLAST:
+        return None  # 高位爆量>18%，直接剔除
+
+    # ── K线 ──
     df = get_kline(code, Config.KLINE_DAYS)
     if df is None or len(df) < 40:
         return None
 
-    # 异动检测
-    events = detect_all_surge_events(df)
-    if len(events) < Config.MIN_SURGE_COUNT:
-        return None
-
-    # 鱼尾判断：异动次数太多→肉不多，标记但不过滤（HTML分专区展示）
-    is_fishtail = len(events) >= Config.MAX_SURGE_COUNT + 1
-
-    # 涨停判断：当日涨幅≥9.5%视为涨停附近，买不进
-    change_pct = (extra_quote or {}).get("change_pct", 0)
-    is_limit_up = abs(change_pct) >= Config.DAILY_LIMIT_PCT and change_pct > 0
+    # ── 异动检测（区间限位）──
+    events, is_eliminated, elim_reason = detect_all_surge_events(df)
+    if is_eliminated:
+        return None  # 超上限，暴涨尾声，直接剔除
+    if len(events) < Config.SURGE_MID_MIN:
+        return None  # 异动次数不足
 
     last_surge = events[-1]
 
-    # 趋势持续性
+    # ── 分级：中段池 vs 高位池 ──
+    if len(events) <= Config.SURGE_MID_MAX:
+        pool_type = "mid"   # 中段改良池：加速启动阶段
+    else:
+        pool_type = "high"  # 高位博弈池：接近上限但未超
+
+    # ── 趋势检查 ──
     ok, reason, pullback = check_trend_holding(df, last_surge)
-    if not ok:
-        return None
+    if not ok and pool_type == "mid":
+        return None  # 中段池要求趋势健康
+    # 高位池放宽趋势要求
 
-    # 量能
+    # ── 量能 ──
     vol_ok, vol_ratio = check_vol(df)
+    vol_inc_ok, vol_inc_reason = check_volume_increasing(df)
 
-    # 交易计划
-    plan = calc_trade_plan(df, last_surge)
+    # ── 硬性过滤 3：换手率在 5%~12% 区间 ──
+    turnover_ok = Config.TURNOVER_MIN <= turnover <= Config.TURNOVER_MAX
+    turnover_warn = ""
+    if not turnover_ok:
+        if turnover < Config.TURNOVER_MIN:
+            turnover_warn = f"换手率偏低{turnover:.1f}%"
+        else:
+            turnover_warn = f"换手率偏高{turnover:.1f}%"
 
-    # 均线
+    # ── 交易计划 ──
+    plan = calc_trade_plan(df, last_surge, pool_type)
+
+    # ── 均线 ──
     closes = df["close"].values
     ma5  = round(float(np.mean(closes[-5:])),  2) if len(closes) >= 5  else 0
     ma10 = round(float(np.mean(closes[-10:])), 2) if len(closes) >= 10 else 0
     ma20 = round(float(np.mean(closes[-20:])), 2) if len(closes) >= 20 else 0
     ma60 = round(float(np.mean(closes[-60:])), 2) if len(closes) >= 60 else 0
 
-    # 事件摘要（最近8次）
+    # ── 事件摘要 ──
     events_summary = [
         {
-            "type": e.surge_type,
-            "window": e.window,
-            "pct": e.pct,
-            "start_date": e.start_date,
-            "end_date": e.end_date,
+            "type": e.surge_type, "window": e.window, "pct": e.pct,
+            "start_date": e.start_date, "end_date": e.end_date,
             "start_price": round(e.start_price, 2),
             "high_price": round(e.end_price, 2),
         }
         for e in events[-8:]
     ]
 
-    # 评分（综合排序用）
-    score = (
-        len(events) * 10
-        + (3 - min(pullback / 5, 3)) * 5   # 回调越小越好
-        + min(vol_ratio, 3) * 3
-        + min(plan["risk_reward"], 5) * 2
-    )
+    # ── 评分（中段池加权更高）──
+    if pool_type == "mid":
+        score = (
+            len(events) * 12
+            + (3 - min(abs(pullback) / 5, 3)) * 6
+            + min(vol_ratio, 3) * 4
+            + min(plan["risk_reward"], 5) * 3
+            + (5 if turnover_ok else -3)
+            + (0 if mcap_filtered else 5)
+        )
+    else:
+        score = (
+            len(events) * 8
+            + min(vol_ratio, 3) * 3
+            + min(plan["risk_reward"], 5) * 2
+            + (3 if turnover_ok else -5)
+        )
 
-    q = extra_quote or {}
+    presurge = calc_presurge_score(df, events)
+
     return {
         "code":         code,
         "name":         name,
         "price":        price,
         "change_pct":   q.get("change_pct", 0),
-        "turnover_pct": q.get("turnover_pct", 0),
+        "turnover_pct": turnover,
         "pe_ttm":       q.get("pe_ttm", 0),
-        "mcap_yi":      q.get("mcap_yi", 0),
+        "mcap_yi":      mcap,
         "pb":           q.get("pb", 0),
 
         # 异动统计
@@ -685,11 +884,23 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None) 
         "last_surge_start":  round(last_surge.start_price, 2),
         "last_surge_date":   last_surge.end_date,
 
+        # 分级
+        "pool_type":   pool_type,  # "mid" / "high"
+        "pool_label":  "中段加速" if pool_type == "mid" else "高位博弈",
+
         # 趋势
         "trend_reason": reason,
         "pullback_pct": round(pullback, 1),
         "vol_ratio":    vol_ratio,
         "vol_ok":       vol_ok,
+        "vol_inc_ok":   vol_inc_ok,
+        "vol_inc_reason": vol_inc_reason,
+        "turnover_ok":  turnover_ok,
+        "turnover_warn": turnover_warn,
+        "mcap_ok":      not mcap_filtered,
+
+        # 过滤标记
+        "is_eliminated": False,
 
         # 均线
         "ma5": ma5, "ma10": ma10, "ma20": ma20, "ma60": ma60,
@@ -700,34 +911,30 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None) 
         # 历史异动
         "events": events_summary,
 
-        # PreSurge 预判评分（异动已确认的股票也计算，用于辅助判断下次异动准备情况）
-        **calc_presurge_score(df, events),
-
-        # 鱼尾/涨停标记
-        "is_fishtail":  is_fishtail,
-        "is_limit_up":  is_limit_up,
+        # PreSurge
+        **presurge,
 
         # 综合评分
         "score": round(score, 1),
     }
 
 
-def analyze_stock_presurge(code: str, name: str, price: float, extra_quote: Dict = None) -> Optional[Dict]:
+def analyze_stock_presurge(code: str, name: str, price: float, extra_quote: Dict = None, hot_row: Dict = None) -> Optional[Dict]:
     """
-    宽松版分析：专门用于"提前发现"模式（PreSurge模式）。
-    条件放宽：历史异动次数≥2（而不是≥4），且presurge评分≥3分。
-    风险更高，但能更早介入，获得更大盈利空间。
+    v5.0 PreSurge 预判模式（宽松版）。
+    条件：历史异动≥2 + presurge评分≥3 + 未超上限。
     """
     if price < Config.MIN_PRICE or price > Config.MAX_PRICE:
         return None
+
+    q = extra_quote or {}
 
     df = get_kline(code, Config.KLINE_DAYS)
     if df is None or len(df) < 40:
         return None
 
-    # 宽松版：只需历史异动≥2次
-    events = detect_all_surge_events(df)
-    if len(events) < 2:
+    events, is_eliminated, _ = detect_all_surge_events(df)
+    if is_eliminated or len(events) < Config.PRESURGE_MIN_SURGES:
         return None
 
     last_surge = events[-1]
@@ -737,81 +944,43 @@ def analyze_stock_presurge(code: str, name: str, price: float, extra_quote: Dict
     if presurge["presurge_score"] < Config.PRESURGE_MIN_SCORE:
         return None
 
-    # 量能
     vol_ok, vol_ratio = check_vol(df)
+    plan = calc_trade_plan(df, last_surge, "mid")
 
-    # 交易计划
-    plan = calc_trade_plan(df, last_surge)
-
-    # 均线
     closes = df["close"].values
     ma5  = round(float(np.mean(closes[-5:])),  2) if len(closes) >= 5  else 0
     ma10 = round(float(np.mean(closes[-10:])), 2) if len(closes) >= 10 else 0
     ma20 = round(float(np.mean(closes[-20:])), 2) if len(closes) >= 20 else 0
     ma60 = round(float(np.mean(closes[-60:])), 2) if len(closes) >= 60 else 0
 
-    # 事件摘要
     events_summary = [
-        {
-            "type": e.surge_type,
-            "window": e.window,
-            "pct": e.pct,
-            "start_date": e.start_date,
-            "end_date": e.end_date,
-            "start_price": round(e.start_price, 2),
-            "high_price": round(e.end_price, 2),
-        }
+        {"type": e.surge_type, "window": e.window, "pct": e.pct,
+         "start_date": e.start_date, "end_date": e.end_date,
+         "start_price": round(e.start_price, 2), "high_price": round(e.end_price, 2)}
         for e in events[-8:]
     ]
 
-    # 预判评分加权（历史异动次数越多越好，但重心在presurge信号）
-    score = (
-        len(events) * 8
-        + presurge["presurge_score"] * 12
-        + min(vol_ratio, 3) * 3
-    )
+    score = len(events) * 8 + presurge["presurge_score"] * 15 + min(vol_ratio, 3) * 3
 
-    q = extra_quote or {}
     return {
-        "code":         code,
-        "name":         name,
-        "price":        price,
-        "change_pct":   q.get("change_pct", 0),
+        "code": code, "name": name, "price": price,
+        "change_pct": q.get("change_pct", 0),
         "turnover_pct": q.get("turnover_pct", 0),
-        "pe_ttm":       q.get("pe_ttm", 0),
-        "mcap_yi":      q.get("mcap_yi", 0),
-        "pb":           q.get("pb", 0),
-
-        # 异动统计
-        "surge_count":       len(events),
-        "last_surge_type":   last_surge.surge_type,
-        "last_surge_window": last_surge.window,
-        "last_surge_pct":    last_surge.pct,
-        "last_surge_high":   round(last_surge.end_price, 2),
-        "last_surge_start":  round(last_surge.start_price, 2),
-        "last_surge_date":   last_surge.end_date,
-
-        # 趋势（预判模式不强制趋势，只给参考）
-        "trend_reason": "预判模式（趋势未强制确认）",
-        "pullback_pct": round((last_surge.end_price - price) / last_surge.end_price * 100, 1),
-        "vol_ratio":    vol_ratio,
-        "vol_ok":       vol_ok,
-
-        # 均线
+        "pe_ttm": q.get("pe_ttm", 0), "mcap_yi": q.get("mcap_yi", 0),
+        "surge_count": len(events), "last_surge_type": last_surge.surge_type,
+        "last_surge_window": last_surge.window, "last_surge_pct": last_surge.pct,
+        "last_surge_high": round(last_surge.end_price, 2),
+        "last_surge_start": round(last_surge.start_price, 2),
+        "last_surge_date": last_surge.end_date,
+        "pool_type": "mid", "pool_label": "预判候选",
+        "trend_reason": "预判模式", "pullback_pct": round((last_surge.end_price - price) / last_surge.end_price * 100, 1),
+        "vol_ratio": vol_ratio, "vol_ok": vol_ok,
+        "vol_inc_ok": True, "vol_inc_reason": "预判跳过", "turnover_ok": True, "turnover_warn": "",
+        "mcap_ok": True, "is_eliminated": False,
         "ma5": ma5, "ma10": ma10, "ma20": ma20, "ma60": ma60,
-
-        # 交易计划（仓位提示减半）
-        "plan": {**plan, "position_note": "预判阶段建议半仓，异动触发后补仓"},
-
-        # 历史异动
-        "events": events_summary,
-
-        # PreSurge
-        **presurge,
-
-        # 综合评分
-        "score": round(score, 1),
-        "is_presurge": True,  # 标记：这是预判候选，非确认信号
+        "plan": {**plan, "position_note": "预判阶段建议半仓"},
+        "events": events_summary, **presurge,
+        "score": round(score, 1), "is_presurge": True,
     }
 
 
@@ -833,14 +1002,19 @@ def _load_history_codes(presurge_mode: bool = False) -> List[str]:
 
 
 def _save_history_codes(results: List[Dict], presurge_mode: bool = False) -> None:
-    """保存本次通过的股票代码"""
+    """保存本次通过的股票代码（合并追加，不覆盖旧数据）"""
     try:
         data = {}
         if os.path.exists(Config.TRACK_FILE):
             with open(Config.TRACK_FILE, "r") as f:
                 data = json.load(f)
         key = "presurge" if presurge_mode else "confirmed"
-        data[key] = [r["code"] for r in results]
+        new_codes = [r["code"] for r in results]
+        # 合并：旧列表 + 新通过（去重、保持顺序）
+        old = data.get(key, [])
+        merged = list(dict.fromkeys(old + new_codes))  # 新通过的排在后面，去重保序
+        # 最多保留 50 只，避免无限膨胀
+        data[key] = merged[-50:]
         os.makedirs(os.path.dirname(Config.TRACK_FILE) or ".", exist_ok=True)
         with open(Config.TRACK_FILE, "w") as f:
             json.dump(data, f, ensure_ascii=False)
@@ -880,11 +1054,14 @@ def scan_hot_stocks(presurge_mode: bool = False) -> List[Dict]:
         if not name:
             name = next((r.get("name","") for r in hot if r.get("code")==code), code)
 
+        # 找匹配的hot_row用于板块检测
+        hot_row = next((r for r in hot if r.get("code") == code), None)
+
         try:
             if presurge_mode:
-                result = analyze_stock_presurge(code, name, price, q)
+                result = analyze_stock_presurge(code, name, price, q, hot_row)
             else:
-                result = analyze_stock(code, name, price, q)
+                result = analyze_stock(code, name, price, q, hot_row)
             if result:
                 results.append(result)
                 p = result["plan"]
@@ -895,12 +1072,12 @@ def scan_hot_stocks(presurge_mode: bool = False) -> List[Dict]:
                           f"预判分{ps_score}/5 "
                           f"{result.get('presurge_risk','?')}")
                 else:
-                    print(f"  ✅ {result['name']}({code}) "
+                    print(f"  {result['pool_label']} {result['name']}({code}) "
                           f"异动{result['surge_count']}次 "
-                          f"回调{result['pullback_pct']}% "
-                          f"量比{result['vol_ratio']}x "
-                          f"预判分{ps_score}/5 "
-                          f"风险收益{p['risk_reward']}x")
+                          f"换手{result['turnover_pct']}% "
+                          f"量能{result['vol_inc_reason']} "
+                          f"预判{ps_score}/5 "
+                          f"RR={p['risk_reward']}x")
         except Exception as e:
             pass
         time.sleep(0.05)
@@ -1170,11 +1347,13 @@ def save_json(results: List[Dict]):
         "scan_time": scan_time,
         "total": len(results),
         "strategy": {
-            "3d_surge": f">={Config.SURGE_3D_PCT}%",
-            "10d_surge": f">={Config.SURGE_10D_PCT}%",
-            "30d_surge": f">={Config.SURGE_30D_PCT}%",
-            "min_count": Config.MIN_SURGE_COUNT,
-            "max_pullback": f"<={Config.MAX_PULLBACK_FROM_HIGH_PCT}%",
+            "3d_range": f"{Config.SURGE_3D_MIN}%~{Config.SURGE_3D_MAX}%",
+            "10d_range": f"{Config.SURGE_10D_MIN}%~{Config.SURGE_10D_MAX}%",
+            "30d_range": f"{Config.SURGE_30D_MIN}%~{Config.SURGE_30D_MAX}%",
+            "mcap": f"{Config.MCAP_MIN}~{Config.MCAP_MAX}亿",
+            "turnover": f"{Config.TURNOVER_MIN}%~{Config.TURNOVER_MAX}%",
+            "mid_pos": f"≤{Config.MID_POOL_POS*100:.0f}%",
+            "high_pos": f"≤{Config.HIGH_POOL_POS*100:.0f}%",
         },
         "stocks": results,
     }
@@ -1198,79 +1377,171 @@ def save_json(results: List[Dict]):
     _generate_history_html()
 
 
+def _build_recommendation_html(mid_pool, high_pool, presurge):
+    """
+    v5.0 操作建议：分池纪律 + 低吸策略，彻底放弃高位涨停买入。
+    """
+    if not mid_pool and not high_pool:
+        return ""
+
+    action_pool = mid_pool + high_pool
+    def sort_key(r):
+        rr = r["plan"]["risk_reward"]
+        vol = min(r.get("vol_ratio", 1), 5)
+        tp = 1 if r["pool_type"] == "mid" else 0.5
+        return r["score"] + rr * 5 + vol * 2 + len(r.get("events", [])) * tp
+
+    ranked = sorted(action_pool, key=sort_key, reverse=True)
+    top4 = ranked[:4] if len(ranked) >= 4 else ranked
+
+    def rec_row(r, rank):
+        p = r["plan"]
+        pool_badge = '<span class="badge-mid">中段</span>' if r["pool_type"] == "mid" else '<span class="badge-high">高位</span>'
+        return f"""
+<tr>
+  <td class="rank">{rank}</td>
+  <td class="code-cell">{r['code']}</td>
+  <td class="name-cell">{r['name']}{pool_badge}</td>
+  <td class="price-cell">{r['price']:.2f}</td>
+  <td class="num">{r['surge_count']}次</td>
+  <td>{p['entry']:.2f}</td>
+  <td class="dn">{p['stop_loss']:.2f}</td>
+  <td class="up">{p['target1']:.2f}</td>
+  <td class="{'good' if p['risk_reward']>=1.0 else 'ok'}">{p['risk_reward']}x</td>
+  <td class="small">{p['position']}</td>
+</tr>"""
+
+    top4_rows = "".join(rec_row(r, i+1) for i, r in enumerate(top4))
+
+    # 动态建议
+    mid_best = mid_pool[0] if mid_pool else None
+    high_best = high_pool[0] if high_pool else None
+    advice = []
+    if mid_best:
+        advice.append(f"<b>🏗 中段池首选 {mid_best['code']} {mid_best['name']}</b>：回踩MA5({mid_best['plan']['ma5']:.2f})或MA10({mid_best['plan']['ma10']:.2f})分批买入，盈利{Config.MID_TP_PCT}%减半，破5日线全走，单只仓位≤{Config.MID_POOL_POS*100:.0f}%")
+    if high_best:
+        advice.append(f"<b>🎯 高位池观察 {high_best['code']} {high_best['name']}</b>：只在大跌回踩MA10({high_best['plan']['ma10']:.2f})附近低吸，亏损{abs(Config.HIGH_STOP_PCT)}%无条件止损，盈利{Config.HIGH_TP_PCT}%全部离场，单只≤{Config.HIGH_POOL_POS*100:.0f}%")
+    if not mid_pool and not high_pool:
+        advice.append("⚠ 当前无不建议参与的标的，等待新的异动信号")
+    advice.append(f"<b>📊 总仓位控制：</b>中段池单只≤{Config.MID_POOL_POS*100:.0f}% + 高位池单只≤{Config.HIGH_POOL_POS*100:.0f}%，永远不满仓")
+
+    advice_html = "<br>".join(f"<li>{p}</li>" for p in advice)
+
+    return f"""
+<div class="zone zone-advice" style="margin:16px 20px 24px">
+<div class="zone-hd" style="border-left-color:#f59e0b"><h2>🎯 操作建议 & 交易纪律</h2><span class="warn">中段回踩买 + 高位大跌买，放弃涨停追板</span></div>
+
+<div class="cards" style="margin:8px 0 12px">
+  <div class="card" style="border:2px solid #2563eb"><div class="v" style="color:#2563eb">{len(mid_pool)}</div><div class="l">🏗 中段加速</div></div>
+  <div class="card" style="border:2px solid #dc2626"><div class="v" style="color:#dc2626">{len(high_pool)}</div><div class="l">🎯 高位博弈</div></div>
+  <div class="card" style="border:2px solid #534AB7"><div class="v" style="color:#534AB7">{len(presurge)}</div><div class="l">🔮 预判候选</div></div>
+  <div class="card"><div class="v" style="color:#f59e0b">{min(len(top4), 4)}</div><div class="l">重点关注</div></div>
+</div>
+
+<div class="tw" style="margin:0 0 8px">
+<table>
+<thead><tr>
+  <th>优先级</th><th>代码</th><th>名称</th><th>现价</th><th>异动</th><th>买点</th><th>止损</th><th>目标</th><th>RR</th><th>仓位</th>
+</tr></thead>
+<tbody>{top4_rows or '<tr><td colspan="10" class="gray">暂无标的可推荐</td></tr>'}</tbody>
+</table>
+</div>
+
+<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:14px 18px;font-size:13px;line-height:1.8;color:#92400e">
+  <b>📌 操作纪律（严格执行）：</b>
+  <ol style="margin:8px 0 0 18px;padding:0">{advice_html}</ol>
+  <p style="margin:10px 0 0;font-size:12px;color:#a16207">
+    ⚠ 禁止追涨停板 | 中段回踩买高位大跌买 | 止损必须执行 | 数据仅供研究，不构成投资建议
+  </p>
+</div>
+</div>"""
+
+
 def save_html(results: List[Dict]):
     scan_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # ── 三组分类 ──
-    buyable   = [r for r in results if not r.get("is_fishtail") and not r.get("is_limit_up")]
-    limit_up  = [r for r in results if r.get("is_limit_up") and not r.get("is_fishtail")]
-    fishtail  = [r for r in results if r.get("is_fishtail")]
-    presurge_items = [r for r in results if r.get("presurge_score", 0) >= 3]
+    # ── v5.0 双池分类 ──
+    mid_pool  = [r for r in results if r.get("pool_type") == "mid" and not r.get("is_presurge")]
+    high_pool = [r for r in results if r.get("pool_type") == "high" and not r.get("is_presurge")]
+    presurge_items = [r for r in results if r.get("is_presurge")]
+    eliminated = [r for r in results if r.get("is_eliminated")]
 
-    # ── 通用行生成函数 ──
+    # ── 通用行生成 ──
     def make_rows(items, start_rank=1):
         html_out = ""
         for rank, r in enumerate(items, start_rank):
             p = r["plan"]
             events_str = " → ".join([
-                f"{e['type']}窗口+{e['pct']}%({e['start_date']}~{e['end_date']})"
+                f"{e['type']}窗+{e['pct']}%({e['start_date']}~{e['end_date']})"
                 for e in r["events"]
             ])
             tags_html = "".join([
-                f'<span class="tag">{e["type"]}窗口 +{e["pct"]}%</span>'
+                f'<span class="tag">{e["type"]}窗 +{e["pct"]}%</span>'
                 for e in r["events"]
             ])
-            rr_cls  = "good" if p["risk_reward"] >= 3 else ("ok" if p["risk_reward"] >= 2 else "bad")
-            vol_cls = "good" if r["vol_ratio"] >= 1.5 else ("ok" if r["vol_ratio"] >= 1.0 else "bad")
-            pb_cls  = "good" if r["pullback_pct"] <= 0 else ("up" if r["pullback_pct"] <= 8 else ("ok" if r["pullback_pct"] <= 12 else "bad"))
-            pb_str  = "🆕突破新高" if r['pullback_pct'] <= 0 else f'↘{r["pullback_pct"]:.1f}%'
-            lim_badge = ' <span class="badge-limit">涨停</span>' if r.get("is_limit_up") else ''
-            ft_badge  = ' <span class="badge-ft">鱼尾</span>' if r.get("is_fishtail") else ''
+
+            # 量能标签
+            vol_inc_ok = r.get("vol_inc_ok", True)
+            vol_tag = f'<span class="tag-v-up">📈量递增</span>' if vol_inc_ok else f'<span class="tag-v-dn">📉量递减</span>'
+
+            # 换手率
+            to = r.get("turnover_pct", 0)
+            to_ok = r.get("turnover_ok", True)
+            to_cls = "good" if to_ok else "bad"
+            to_str = f'<span class="{to_cls}">{to:.1f}%</span>'
+
+            # 市值
+            mcap = r.get("mcap_yi", 0)
+            mcap_ok = r.get("mcap_ok", True)
+            mcap_cls = "ok" if mcap_ok else "bad"
+            mcap_str = f'<span class="{mcap_cls}">{mcap:.0f}亿</span>'
+
+            # 池标签
+            pool_cls = "badge-mid" if r.get("pool_type") == "mid" else "badge-high"
+            pool_label = r.get("pool_label", "")
+
             html_out += f"""
 <tr>
   <td class="rank">{rank}</td>
   <td class="code-cell">{r['code']}</td>
-  <td class="name-cell">{r['name']}{lim_badge}{ft_badge}</td>
+  <td class="name-cell">{r['name']}<span class="{pool_cls}">{pool_label}</span></td>
   <td class="price-cell">{r['price']:.2f}</td>
   <td class="{'up' if r['change_pct']>=0 else 'dn'}">{r['change_pct']:+.2f}%</td>
-  <td class="surge">{r['surge_count']}次<br><small>{r['last_surge_type']}+{r['last_surge_pct']:.0f}%</small></td>
-  <td class="{pb_cls}">{pb_str}</td>
+  <td class="surge">{r['surge_count']}次<br><small>{r['last_surge_type']}窗{r['last_surge_pct']:.0f}%</small></td>
+  <td>{mcap_str}</td>
+  <td>{to_str}</td>
+  <td>{vol_tag}<br><small class="gray">{r.get('vol_inc_reason','')}</small></td>
   <td class="trend small">{r['trend_reason']}</td>
-  <td class="{vol_cls}">{r['vol_ratio']}x</td>
   <td class="price-cell">{p['entry']:.2f}</td>
-  <td class="dn">{p['stop_loss']:.2f}<br><small>-{p['risk_pct']}%</small></td>
+  <td class="dn">{p['stop_loss']:.2f}</td>
   <td class="up">{p['target1']:.2f}</td>
-  <td class="{rr_cls}">{p['risk_reward']}x</td>
-  <td class="small">{r['mcap_yi']:.0f}亿</td>
-  <td class="psscore ps{r.get('presurge_score',0)}">{r.get('presurge_score','-')}/5 {r.get('presurge_risk','')}</td>
+  <td class="{'good' if p['risk_reward']>=1.0 else 'ok'}">{p['risk_reward']}x</td>
+  <td class="small">{p['position']}</td>
+  <td class="psscore ps{r.get('presurge_score',0)}">{r.get('presurge_score','-')}/5</td>
   <td class="score">{r['score']:.0f}</td>
   <td class="det-btn" onclick="tog('{r['code']}')">▼详情</td>
 </tr>
 <tr id="d{r['code']}" class="det">
-  <td colspan="17">
-    <b>历史异动 ({r['surge_count']}次)：</b>{tags_html}{lim_badge}{ft_badge}<br>
+  <td colspan="18">
+    <b>历史异动 ({r['surge_count']}次)：</b>{tags_html}<br>
     <small class="gray">完整记录: {events_str}</small><br>
     <b>均线：</b>MA5={r['ma5']} &nbsp; MA10={r['ma10']} &nbsp; MA20={r['ma20']} &nbsp; MA60={r['ma60']}<br>
-    <b>交易计划：</b>买入{p['entry']} → 止损{p['stop_loss']}(-{p['risk_pct']}%) → 目标1:{p['target1']} → 目标2:{p['target2']} &nbsp;|&nbsp; <b>风险收益比 {p['risk_reward']}x</b><br>
-    <b>PreSurge预判信号：</b> <span class="ps-detail">{r.get('presurge_detail','无数据')}</span>
+    <b>交易纪律：</b>{p['trade_rule']} &nbsp;|&nbsp; 仓位{p['position']}<br>
+    <b>PreSurge预判：</b><span class="ps-detail">{r.get('presurge_detail','无数据')}</span>
   </td>
 </tr>"""
         return html_out
 
     # ── 统计 ──
-    good_rr   = sum(1 for r in results if r["plan"]["risk_reward"] >= 3)
-    good_vol  = sum(1 for r in results if r["vol_ratio"] >= 1.5)
-    max_cnt   = max((r["surge_count"] for r in results), default=0)
-    ps_high   = sum(1 for r in results if r.get("presurge_score", 0) >= 4)
+    good_rr = sum(1 for r in results if r["plan"]["risk_reward"] >= 1.0)
+    ps_high = sum(1 for r in results if r.get("presurge_score", 0) >= 4)
 
-    # ── PreSurge 预判专区行 ──
+    # ── PreSurge 行 ──
     presurge_rows_html = ""
     for rank, r in enumerate(sorted(presurge_items, key=lambda x: x.get("presurge_score", 0), reverse=True), 1):
         p = r["plan"]
         ps = r.get("presurge_score", 0)
         ps_cls = "ps5" if ps >= 4 else "ps3"
-        is_pre = r.get("is_presurge", False)
-        mode_badge = '<span class="badge-pre">未确认</span>' if is_pre else '<span class="badge-conf">已确认</span>'
         presurge_rows_html += f"""
 <tr class="ps-row">
   <td class="rank">{rank}</td>
@@ -1278,39 +1549,39 @@ def save_html(results: List[Dict]):
   <td class="name-cell">{r['name']}</td>
   <td class="price-cell">{r['price']:.2f}</td>
   <td class="{'up' if r['change_pct']>=0 else 'dn'}">{r['change_pct']:+.2f}%</td>
-  <td>{r['surge_count']}次历史异动</td>
+  <td>{r['surge_count']}次</td>
   <td class="{ps_cls}"><b>{ps}/5</b> {r.get('presurge_risk','')}</td>
   <td class="small">{r.get('presurge_detail','').replace(' | ','<br>')}</td>
-  <td>{mode_badge}</td>
+  <td><span class="badge-pre">未确认</span></td>
   <td class="dn">{p['stop_loss']:.2f}</td>
   <td class="up">{p['target1']:.2f}</td>
   <td>{r['vol_ratio']}x</td>
-  <td class="small gray">{r.get('cycle_days') and f"周期{r['cycle_days']:.0f}日" or "无周期数据"} {r.get('days_since_last') is not None and f"已等{r['days_since_last']}日" or ""}</td>
+  <td class="small gray">{r.get('cycle_days') and f"周期{r['cycle_days']:.0f}日" or ""}</td>
 </tr>"""
 
-    # ── 生成各表格 ──
-    buyable_rows  = make_rows(buyable, 1)
-    limit_up_rows = make_rows(limit_up, 1)
-    fishtail_rows = make_rows(fishtail, 1)
+    # ── 生成表格 ──
+    mid_rows   = make_rows(mid_pool, 1)
+    high_rows  = make_rows(high_pool, 1)
+    elim_rows  = make_rows(eliminated, 1) if eliminated else ""
 
     html = f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>A股异动筛选 {scan_time}</title>
+<title>A股异动筛选 v5 {scan_time}</title>
 <style>
 *{{box-sizing:border-box;margin:0;padding:0}}
 body{{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:#222}}
 .hd{{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;padding:22px 28px}}
 .hd h1{{font-size:22px;font-weight:700;margin-bottom:4px}}
 .hd .sub{{font-size:12px;opacity:.7}}
-.strat{{background:#fff;margin:14px 20px;padding:14px 18px;border-radius:8px;border-left:4px solid #dc2626;box-shadow:0 2px 6px rgba(0,0,0,.06)}}
-.strat h3{{color:#dc2626;font-size:13px;margin-bottom:6px}}
+.strat{{background:#fff;margin:14px 20px;padding:14px 18px;border-radius:8px;border-left:4px solid #2563eb;box-shadow:0 2px 6px rgba(0,0,0,.06)}}
+.strat h3{{color:#2563eb;font-size:13px;margin-bottom:6px}}
 .strat p{{font-size:12px;color:#555;line-height:1.7}}
-.bd{{display:inline-block;background:#dc2626;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}}
+.bd{{display:inline-block;background:#2563eb;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}}
+.bd-red{{display:inline-block;background:#dc2626;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}}
 .bd-purple{{display:inline-block;background:#534AB7;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}}
-.bd-gray{{display:inline-block;background:#6b7280;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}}
 .cards{{display:flex;gap:12px;margin:0 20px 14px;flex-wrap:wrap}}
 .card{{background:#fff;border-radius:8px;padding:12px 18px;box-shadow:0 2px 6px rgba(0,0,0,.06);flex:1;min-width:100px}}
 .card .v{{font-size:26px;font-weight:700;color:#dc2626}}
@@ -1332,109 +1603,88 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 .det{{background:#f8fafc!important}}
 .det td{{text-align:left;padding:10px 14px;font-size:11px;line-height:1.8;border-top:1px dashed #e5e7eb}}
 .tag{{display:inline-block;background:#eff6ff;color:#2563eb;border-radius:3px;padding:1px 7px;margin:1px;font-size:11px}}
+.tag-v-up{{display:inline-block;background:#EAF3DE;color:#3B6D11;border-radius:3px;padding:1px 6px;font-size:10px;margin:1px}}
+.tag-v-dn{{display:inline-block;background:#FEE2E2;color:#991B1B;border-radius:3px;padding:1px 6px;font-size:10px;margin:1px}}
 .det-btn{{cursor:pointer;color:#2563eb;font-size:11px;white-space:nowrap}}
 .det-btn:hover{{text-decoration:underline}}
-/* 专区样式 */
+/* 专区 */
 .zone{{margin:0 20px 20px;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.1)}}
 .zone-hd{{color:#fff;padding:12px 18px}}
 .zone-hd h2{{font-size:14px;font-weight:700;display:inline}}
 .zone-hd .warn{{font-size:11px;opacity:.85;margin-left:12px}}
-.zone-buy{{border:2px solid #16a34a}}.zone-buy .zone-hd{{background:#16a34a}}
-.zone-limit{{border:2px solid #dc2626}}.zone-limit .zone-hd{{background:#dc2626}}
-.zone-ft{{border:2px solid #6b7280}}.zone-ft .zone-hd{{background:#6b7280}}
+.zone-mid{{border:2px solid #2563eb}}.zone-mid .zone-hd{{background:#2563eb}}
+.zone-high{{border:2px solid #dc2626}}.zone-high .zone-hd{{background:#dc2626}}
 .zone-ps{{border:2px solid #534AB7}}.zone-ps .zone-hd{{background:#534AB7}}
 .ps-row{{background:#faf9ff}}
 .ps-row:hover td{{background:#f0eeff!important}}
-.ps5{{color:#534AB7;font-weight:700}}
-.ps3{{color:#854F0B;font-weight:600}}
+.ps5{{color:#534AB7;font-weight:700}}.ps3{{color:#854F0B;font-weight:600}}
 .psscore{{font-size:11px}}
-.ps0{{color:#aaa}}.ps1{{color:#aaa}}.ps2{{color:#aaa}}.ps3{{color:#d97706}}.ps4{{color:#534AB7;font-weight:700}}.ps5{{color:#534AB7;font-weight:700}}
+.ps0,.ps1,.ps2{{color:#aaa}}.ps3{{color:#d97706}}.ps4,.ps5{{color:#534AB7;font-weight:700}}
+.badge-mid{{display:inline-block;background:#DBEAFE;color:#1E40AF;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}}
+.badge-high{{display:inline-block;background:#FEE2E2;color:#991B1B;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}}
 .badge-pre{{display:inline-block;background:#FAEEDA;color:#854F0B;border-radius:3px;padding:1px 6px;font-size:10px}}
-.badge-conf{{display:inline-block;background:#EAF3DE;color:#3B6D11;border-radius:3px;padding:1px 6px;font-size:10px}}
-.badge-limit{{display:inline-block;background:#FEE2E2;color:#991B1B;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}}
-.badge-ft{{display:inline-block;background:#F3F4F6;color:#6b7280;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}}
 .ps-detail{{font-family:monospace;font-size:10px;color:#534AB7;background:#EEEDFE;padding:2px 6px;border-radius:3px}}
 </style>
 </head>
 <body>
 <div class="hd">
-  <h1>📈 A股异动股票筛选报告</h1>
-  <div class="sub">扫描时间: {scan_time} &nbsp;|&nbsp; 🔥可买 <strong>{len(buyable)}</strong>只 &nbsp;|&nbsp; 🚫涨停 <strong>{len(limit_up)}</strong>只 &nbsp;|&nbsp; 🐟鱼尾 <strong>{len(fishtail)}</strong>只 &nbsp;|&nbsp; 🔮预判 <strong>{len(presurge_items)}</strong>只</div>
+  <h1>📈 A股异动筛选 v5.0 — 抓启动加速，剔除暴涨尾声</h1>
+  <div class="sub">扫描: {scan_time} &nbsp;|&nbsp; 🏗中段 <strong>{len(mid_pool)}</strong>只 &nbsp;|&nbsp; 🎯高位 <strong>{len(high_pool)}</strong>只 &nbsp;|&nbsp; 🔮预判 <strong>{len(presurge_items)}</strong>只</div>
 </div>
 <div class="strat">
-  <h3>⚡ 策略：好股票压着异动走，在异动前发现，竞价介入</h3>
+  <h3>⚡ v5.0 策略：区间限位 + 抓启动加速 + 双池分仓</h3>
   <p>
-    异动定义：<span class="bd">3日≥{Config.SURGE_3D_PCT}%</span>
-    <span class="bd">10日≥{Config.SURGE_10D_PCT}%</span>
-    <span class="bd">30日≥{Config.SURGE_30D_PCT}%</span>
-    &nbsp;|&nbsp; 同向异动：<span class="bd">{Config.MIN_SURGE_COUNT}~{Config.MAX_SURGE_COUNT}次</span>
-    &nbsp;|&nbsp; <span class="bd-gray">≥{Config.MAX_SURGE_COUNT+1}次=鱼尾剔除</span>
-    &nbsp;|&nbsp; 涨停判断：<span class="bd">≥{Config.DAILY_LIMIT_PCT}%</span>
-    &nbsp;|&nbsp; <span class="bd-purple">PreSurge预判</span>
+    3日涨幅：<span class="bd">{Config.SURGE_3D_MIN}%~{Config.SURGE_3D_MAX}%</span> 超上限<span class="bd-red">剔除</span>
+    &nbsp;|&nbsp; 10日：<span class="bd">{Config.SURGE_10D_MIN}%~{Config.SURGE_10D_MAX}%</span>
+    &nbsp;|&nbsp; 30日：<span class="bd">{Config.SURGE_30D_MIN}%~{Config.SURGE_30D_MAX}%</span> 超<span class="bd-red">拉黑</span>
+    <br>
+    市值<span class="bd">{Config.MCAP_MIN}~{Config.MCAP_MAX}亿</span>
+    换手<span class="bd">{Config.TURNOVER_MIN}%~{Config.TURNOVER_MAX}%</span>
+    量能<span class="bd">3日递增</span>
+    中段池仓位<span class="bd-purple">≤{Config.MID_POOL_POS*100:.0f}%</span>
+    高位池<span class="bd-red">≤{Config.HIGH_POOL_POS*100:.0f}%</span>
   </p>
 </div>
 <div class="cards">
-  <div class="card" style="border:2px solid #16a34a"><div class="v" style="color:#16a34a">{len(buyable)}</div><div class="l">🔥 可买入竞价</div></div>
-  <div class="card" style="border:2px solid #dc2626"><div class="v">{len(limit_up)}</div><div class="l">🚫 已涨停买不进</div></div>
-  <div class="card"><div class="v" style="color:#6b7280">{len(fishtail)}</div><div class="l">🐟 鱼尾行情</div></div>
-  <div class="card"><div class="v">{good_rr}</div><div class="l">风险收益≥3x</div></div>
+  <div class="card" style="border:2px solid #2563eb"><div class="v" style="color:#2563eb">{len(mid_pool)}</div><div class="l">🏗 中段加速</div></div>
+  <div class="card" style="border:2px solid #dc2626"><div class="v">{len(high_pool)}</div><div class="l">🎯 高位博弈</div></div>
   <div class="card" style="border:2px solid #534AB7"><div class="v" style="color:#534AB7">{ps_high}</div><div class="l">预判高分≥4</div></div>
+  <div class="card"><div class="v">{good_rr}</div><div class="l">RR≥1x</div></div>
 </div>
 
-<!-- 🔥 可买入区 -->
-<div class="zone zone-buy">
-<div class="zone-hd"><h2>🔥 可买入竞价（{len(buyable)}只）</h2><span class="warn">未涨停 + 非鱼尾，可直接参与竞价</span></div>
+<!-- 🏗 中段改良池 -->
+<div class="zone zone-mid">
+<div class="zone-hd"><h2>🏗 中段改良池（{len(mid_pool)}只）</h2><span class="warn">加速启动阶段，回踩5/10日线买入 | 盈利8%减半 | 破5日线全走 | 单只≤{Config.MID_POOL_POS*100:.0f}%</span></div>
 <div class="tw" style="margin:0">
 <table>
 <thead><tr>
   <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
-  <th>异动<br>次数</th><th>压线<br>回调</th><th>趋势状态</th><th>量比</th>
-  <th>买入价</th><th>止损价</th><th>目标1</th><th>风险<br>收益比</th>
-  <th>市值</th><th>预判分</th><th>评分</th><th>详情</th>
+  <th>异动</th><th>市值</th><th>换手</th><th>量能</th><th>趋势</th>
+  <th>买点</th><th>止损</th><th>目标</th><th>RR</th><th>仓位</th><th>预判</th><th>评分</th><th>详情</th>
 </tr></thead>
-<tbody>{buyable_rows or '<tr><td colspan="17" class="gray">暂无符合条件的可买入标的</td></tr>'}</tbody>
+<tbody>{mid_rows or '<tr><td colspan="18" class="gray">暂无中段加速标的</td></tr>'}</tbody>
 </table>
 </div>
 </div>
 
-<!-- 🚫 涨停区 -->
-{'''<div class="zone zone-limit">
-<div class="zone-hd"><h2>🚫 已涨停/接近涨停（''' + str(len(limit_up)) + '''只）</h2><span class="warn">涨停买不进，保持关注，次日若开板可考虑</span></div>
+<!-- 🎯 高位博弈池 -->
+{'''<div class="zone zone-high">
+<div class="zone-hd"><h2>🎯 高位博弈池（''' + str(len(high_pool)) + '''只）</h2><span class="warn">接近上限但未超 | 只大跌回踩MA10低吸 | 亏损''' + str(abs(Config.HIGH_STOP_PCT)) + '''%止损 | 盈利''' + str(Config.HIGH_TP_PCT) + '''%全离 | 单只≤''' + str(Config.HIGH_POOL_POS*100) + '''%</span></div>
 <div class="tw" style="margin:0">
 <table>
 <thead><tr>
   <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
-  <th>异动<br>次数</th><th>压线<br>回调</th><th>趋势状态</th><th>量比</th>
-  <th>买入价</th><th>止损价</th><th>目标1</th><th>风险<br>收益比</th>
-  <th>市值</th><th>预判分</th><th>评分</th><th>详情</th>
+  <th>异动</th><th>市值</th><th>换手</th><th>量能</th><th>趋势</th>
+  <th>买点</th><th>止损</th><th>目标</th><th>RR</th><th>仓位</th><th>预判</th><th>评分</th><th>详情</th>
 </tr></thead>
-<tbody>''' + limit_up_rows + '''</tbody>
+<tbody>''' + high_rows + '''</tbody>
 </table>
 </div>
-</div>''' if limit_up else ''}
+</div>''' if high_pool else ''}
 
-<!-- 🐟 鱼尾区 -->
-{'''<div class="zone zone-ft">
-<div class="zone-hd"><h2>🐟 鱼尾行情（''' + str(len(fishtail)) + '''只）</h2><span class="warn">异动≥''' + str(Config.MAX_SURGE_COUNT+1) + '''次，肉不多，不建议参与</span></div>
-<div class="tw" style="margin:0">
-<table>
-<thead><tr>
-  <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
-  <th>异动<br>次数</th><th>压线<br>回调</th><th>趋势状态</th><th>量比</th>
-  <th>买入价</th><th>止损价</th><th>目标1</th><th>风险<br>收益比</th>
-  <th>市值</th><th>预判分</th><th>评分</th><th>详情</th>
-</tr></thead>
-<tbody>''' + fishtail_rows + '''</tbody>
-</table>
-</div>
-</div>''' if fishtail else ''}
-
-<!-- PreSurge 预判专区 -->
+<!-- PreSurge 预判 -->
 {'''<div class="zone zone-ps">
-<div class="zone-hd">
-  <h2>🔮 PreSurge 预判候选区（''' + str(len(presurge_items)) + '''只）</h2>
-  <span class="warn">⚠ 信号未确认，蓄势阶段，建议半仓参与，异动触发后再加仓</span>
-</div>
+<div class="zone-hd"><h2>🔮 PreSurge 预判候选（''' + str(len(presurge_items)) + '''只）</h2><span class="warn">信号未确认，蓄势阶段，建议半仓参与</span></div>
 <div class="tw" style="margin:0">
 <table>
 <thead><tr>
@@ -1446,6 +1696,9 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 </table>
 </div>
 </div>''' if presurge_items else ''}
+
+<!-- 操作建议 -->
+{_build_recommendation_html(mid_pool, high_pool, presurge_items)}
 
 <script>
 function tog(c){{
@@ -1465,7 +1718,7 @@ document.querySelectorAll('.det').forEach(function(r){{r.style.display='none'}})
         f.write(html)
     print(f"[INFO] HTML → {Config.HTML_FILE}")
 
-    # 归档HTML到 history/YYYY-MM-DD/
+    # 归档
     today_str = datetime.now().strftime("%Y-%m-%d")
     archive_dir = Path(Config.HISTORY_DIR) / today_str
     archive_dir.mkdir(parents=True, exist_ok=True)
@@ -1515,8 +1768,10 @@ def analyze_specific(codes: List[str]) -> List[Dict]:
             if df is None:
                 print(f"     原因: K线获取失败或数据不足")
             else:
-                events = detect_all_surge_events(df)
-                print(f"     原因: 找到 {len(events)} 次异动 (需要>={Config.MIN_SURGE_COUNT}次)")
+                events, is_elim, elim_r = detect_all_surge_events(df)
+                print(f"     原因: 找到 {len(events)} 次异动 (需要>={Config.SURGE_MID_MIN}次)")
+                if is_elim:
+                    print(f"     超上限剔除: {elim_r}")
                 if events:
                     last = events[-1]
                     ok, reason, pull = check_trend_holding(df, last)
@@ -1556,14 +1811,14 @@ def main():
         return []
 
     print("=" * 60)
-    print("  A股异动股票筛选器 v4.0（三表分离+PreSurge+定时）")
+    print("  A股异动股票筛选器 v5.0（区间限位+双池分仓）")
     print(f"  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     if args.both:
         print(f"  模式: 🔥 组合扫描 — 异动确认 + PreSurge预判 双跑")
     elif args.presurge:
         print(f"  模式: 🔮 PreSurge预判 — 在异动前发现（风险更高！）")
     else:
-        print(f"  策略: {Config.MIN_SURGE_COUNT}~{Config.MAX_SURGE_COUNT}次异动 + 压线走 + 均线多头")
+        print(f"  策略: 区间限位 {Config.SURGE_3D_MIN}%~{Config.SURGE_3D_MAX}% / {Config.SURGE_10D_MIN}%~{Config.SURGE_10D_MAX}% + 中段/高位双池")
     print("=" * 60)
 
     if args.both:
