@@ -1534,6 +1534,102 @@ def _build_review_html(predicted: List[Dict], actual: List[Dict]) -> str:
 </div>"""
 
 
+
+def _build_tomorrow_picks_html(results: List[Dict]) -> str:
+    """
+    明日精选：只从中段池挑选最有把握的标的（2-5只），
+    给出明天开盘具体买点、止损、目标、仓位。
+    只在收盘复盘(evening)时生成。
+    """
+    if not results:
+        return ""
+
+    # 只从中段池选，高位池风险太高不纳入明日精选
+    mid_pool  = [r for r in results if r.get("pool_type") == "mid"]
+
+    candidates = []
+    for r in mid_pool:
+        p = r.get("plan", {})
+        rr = p.get("risk_reward", 0)
+        score = r.get("score", 0)
+        # 中段池：RR>=0.8, 评分>=55
+        if rr >= 0.8 and score >= 55:
+            candidates.append(r)
+
+    if not candidates:
+        return ""
+
+    # 排序：score + rr*5 + vol_ratio*2
+    def sort_key(r):
+        p = r["plan"]
+        rr = p.get("risk_reward", 0)
+        vol = min(r.get("vol_ratio", 1), 5)
+        return r["score"] + rr * 5 + vol * 2
+
+    candidates.sort(key=sort_key, reverse=True)
+    picks = candidates[:5]  # 最多5只
+
+    rows_html = ""
+    for i, r in enumerate(picks, 1):
+        p = r["plan"]
+        code = r["code"]
+        name = r["name"]
+        price = r["price"]
+        ma5  = r.get("ma5", 0)
+        ma10 = r.get("ma10", 0)
+        entry_strategy = f"回踩MA5({ma5:.2f})或MA10({ma10:.2f})低吸"
+        badge = '<span class="badge-mid">中段</span>'
+
+        stop = p.get("stop_loss", 0)
+        target = p.get("target1", 0)
+        rr_val = p.get("risk_reward", 0)
+        pos    = p.get("position", "")
+        reason = r.get("trend_reason", "")[:30]
+
+        rows_html += f"""
+<tr style="background:{'#f0f9ff' if i%2==1 else '#fff'}">
+  <td style="padding:8px 6px;font-weight:700;color:#d97706">{i}</td>
+  <td style="padding:8px 6px;font-family:monospace">{code}</td>
+  <td style="padding:8px 6px;font-weight:600">{name}{badge}</td>
+  <td style="padding:8px 6px;color:#666;font-size:12px">{reason}</td>
+  <td style="padding:8px 6px;font-weight:700;color:#059669">📌 {entry_strategy}</td>
+  <td style="padding:8px 6px;font-weight:700;color:#dc2626">止损 {stop:.2f}</td>
+  <td style="padding:8px 6px;font-weight:700;color:#059669">目标 {target:.2f}</td>
+  <td style="padding:8px 6px;color:{'#059669' if rr_val>=1.0 else '#d97706'}">{rr_val}x</td>
+  <td style="padding:8px 6px;font-weight:700;color:#7c3aed">{pos}</td>
+</tr>"""
+
+    return f"""
+<!-- 明日精选 -->
+<div class="tomorrow-picks" style="margin:14px 20px 18px;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(217,119,6,.18);border:2px solid #d97706">
+  <div style="background:linear-gradient(135deg,#d97706,#b45309);color:#fff;padding:12px 20px;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:space-between">
+    <span>🎯 明日精选 — 开盘参考买点（仅供参考，不构成投资建议）</span>
+    <span style="font-size:12px;opacity:.8">共 {len(picks)} 只</span>
+  </div>
+  <table style="width:100%;border-collapse:collapse;font-size:13px">
+  <thead>
+    <tr style="background:#fffbeb;color:#92400e;font-size:12px">
+      <th style="padding:8px 6px;text-align:left">#</th>
+      <th style="padding:8px 6px;text-align:left">代码</th>
+      <th style="padding:8px 6px;text-align:left">名称</th>
+      <th style="padding:8px 6px;text-align:left">信号</th>
+      <th style="padding:8px 6px;text-align:left">📌 明天买点</th>
+      <th style="padding:8px 6px;text-align:left">止损</th>
+      <th style="padding:8px 6px;text-align:left">目标</th>
+      <th style="padding:8px 6px;text-align:left">RR</th>
+      <th style="padding:8px 6px;text-align:left">仓位</th>
+    </tr>
+  </thead>
+  <tbody>{rows_html}
+  </tbody>
+  </table>
+  <div style="background:#fffbeb;padding:8px 18px;font-size:11px;color:#92400e;border-top:1px solid #fcd34d">
+    ⚠ 开盘前5分钟观察集合竞价，确认方向后再操作 ｜ 设好止损再买入 ｜ 中段池回踩买，高位池只大跌买
+  </div>
+</div>
+"""
+
+
 def save_html(results: List[Dict], schedule: str = None, predicted: List[Dict] = None):
     scan_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -1812,6 +1908,13 @@ document.querySelectorAll('.det').forEach(function(r){{r.style.display='none'}})
   &nbsp;|&nbsp; 数据仅供研究参考，不构成投资建议
 </div>
 </body></html>"""
+
+    # ── 明日精选（只在收盘复盘时插入）──
+    if schedule == "evening":
+        tp_html = _build_tomorrow_picks_html(results)
+        if tp_html:
+            # 插入到 </body> 前（策略区后面，页面最底部之前）
+            html = html.replace("</body>", tp_html + "\n</body>")
 
     Path(Config.HTML_FILE).parent.mkdir(parents=True, exist_ok=True)
     with open(Config.HTML_FILE, "w", encoding="utf-8") as f:
