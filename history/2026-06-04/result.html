@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A股异动筛选 2026-06-04 10:19:22</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:#222}
+.hd{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;padding:22px 28px}
+.hd h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.hd .sub{font-size:12px;opacity:.7}
+.strat{background:#fff;margin:14px 20px;padding:14px 18px;border-radius:8px;border-left:4px solid #dc2626;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.strat h3{color:#dc2626;font-size:13px;margin-bottom:6px}
+.strat p{font-size:12px;color:#555;line-height:1.7}
+.bd{display:inline-block;background:#dc2626;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}
+.bd-purple{display:inline-block;background:#534AB7;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}
+.bd-gray{display:inline-block;background:#6b7280;color:#fff;border-radius:4px;padding:1px 7px;font-size:11px;margin:0 3px}
+.cards{display:flex;gap:12px;margin:0 20px 14px;flex-wrap:wrap}
+.card{background:#fff;border-radius:8px;padding:12px 18px;box-shadow:0 2px 6px rgba(0,0,0,.06);flex:1;min-width:100px}
+.card .v{font-size:26px;font-weight:700;color:#dc2626}
+.card .l{font-size:11px;color:#999;margin-top:2px}
+.tw{margin:0 20px 20px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+thead tr{background:#0f172a;color:#fff}
+th{padding:10px 8px;font-size:11px;white-space:nowrap;text-align:center}
+tbody tr{border-bottom:1px solid #f0f0f0}
+tbody tr:not(.det):hover td{background:#fafbff}
+td{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}
+.rank{color:#aaa;font-weight:700;width:30px}
+.code-cell{font-family:monospace;color:#2563eb;font-weight:600}
+.name-cell{font-weight:600;text-align:left;min-width:72px}
+.price-cell{font-weight:700}
+.up{color:#dc2626}.dn{color:#16a34a}.good{color:#dc2626;font-weight:700}.ok{color:#d97706;font-weight:600}.bad{color:#aaa}
+.surge{font-size:12px}.small{font-size:11px}.gray{color:#888}
+.score{font-weight:700;color:#7c3aed}
+.det{background:#f8fafc!important}
+.det td{text-align:left;padding:10px 14px;font-size:11px;line-height:1.8;border-top:1px dashed #e5e7eb}
+.tag{display:inline-block;background:#eff6ff;color:#2563eb;border-radius:3px;padding:1px 7px;margin:1px;font-size:11px}
+.det-btn{cursor:pointer;color:#2563eb;font-size:11px;white-space:nowrap}
+.det-btn:hover{text-decoration:underline}
+/* 专区样式 */
+.zone{margin:0 20px 20px;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.zone-hd{color:#fff;padding:12px 18px}
+.zone-hd h2{font-size:14px;font-weight:700;display:inline}
+.zone-hd .warn{font-size:11px;opacity:.85;margin-left:12px}
+.zone-buy{border:2px solid #16a34a}.zone-buy .zone-hd{background:#16a34a}
+.zone-limit{border:2px solid #dc2626}.zone-limit .zone-hd{background:#dc2626}
+.zone-ft{border:2px solid #6b7280}.zone-ft .zone-hd{background:#6b7280}
+.zone-ps{border:2px solid #534AB7}.zone-ps .zone-hd{background:#534AB7}
+.ps-row{background:#faf9ff}
+.ps-row:hover td{background:#f0eeff!important}
+.ps5{color:#534AB7;font-weight:700}
+.ps3{color:#854F0B;font-weight:600}
+.psscore{font-size:11px}
+.ps0{color:#aaa}.ps1{color:#aaa}.ps2{color:#aaa}.ps3{color:#d97706}.ps4{color:#534AB7;font-weight:700}.ps5{color:#534AB7;font-weight:700}
+.badge-pre{display:inline-block;background:#FAEEDA;color:#854F0B;border-radius:3px;padding:1px 6px;font-size:10px}
+.badge-conf{display:inline-block;background:#EAF3DE;color:#3B6D11;border-radius:3px;padding:1px 6px;font-size:10px}
+.badge-limit{display:inline-block;background:#FEE2E2;color:#991B1B;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}
+.badge-ft{display:inline-block;background:#F3F4F6;color:#6b7280;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}
+.ps-detail{font-family:monospace;font-size:10px;color:#534AB7;background:#EEEDFE;padding:2px 6px;border-radius:3px}
+</style>
+</head>
+<body>
+<div class="hd">
+  <h1>📈 A股异动股票筛选报告</h1>
+  <div class="sub">扫描时间: 2026-06-04 10:19:22 &nbsp;|&nbsp; 🔥可买 <strong>2</strong>只 &nbsp;|&nbsp; 🚫涨停 <strong>4</strong>只 &nbsp;|&nbsp; 🐟鱼尾 <strong>2</strong>只 &nbsp;|&nbsp; 🔮预判 <strong>0</strong>只</div>
+</div>
+<div class="strat">
+  <h3>⚡ 策略：好股票压着异动走，在异动前发现，竞价介入</h3>
+  <p>
+    异动定义：<span class="bd">3日≥20%</span>
+    <span class="bd">10日≥100%</span>
+    <span class="bd">30日≥200%</span>
+    &nbsp;|&nbsp; 同向异动：<span class="bd">4~6次</span>
+    &nbsp;|&nbsp; <span class="bd-gray">≥7次=鱼尾剔除</span>
+    &nbsp;|&nbsp; 涨停判断：<span class="bd">≥9.5%</span>
+    &nbsp;|&nbsp; <span class="bd-purple">PreSurge预判</span>
+  </p>
+</div>
+<div class="cards">
+  <div class="card" style="border:2px solid #16a34a"><div class="v" style="color:#16a34a">2</div><div class="l">🔥 可买入竞价</div></div>
+  <div class="card" style="border:2px solid #dc2626"><div class="v">4</div><div class="l">🚫 已涨停买不进</div></div>
+  <div class="card"><div class="v" style="color:#6b7280">2</div><div class="l">🐟 鱼尾行情</div></div>
+  <div class="card"><div class="v">0</div><div class="l">风险收益≥3x</div></div>
+  <div class="card" style="border:2px solid #534AB7"><div class="v" style="color:#534AB7">0</div><div class="l">预判高分≥4</div></div>
+</div>
+
+<!-- 🔥 可买入区 -->
+<div class="zone zone-buy">
+<div class="zone-hd"><h2>🔥 可买入竞价（2只）</h2><span class="warn">未涨停 + 非鱼尾，可直接参与竞价</span></div>
+<div class="tw" style="margin:0">
+<table>
+<thead><tr>
+  <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
+  <th>异动<br>次数</th><th>压线<br>回调</th><th>趋势状态</th><th>量比</th>
+  <th>买入价</th><th>止损价</th><th>目标1</th><th>风险<br>收益比</th>
+  <th>市值</th><th>预判分</th><th>评分</th><th>详情</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td class="rank">1</td>
+  <td class="code-cell">001896</td>
+  <td class="name-cell">豫能控股</td>
+  <td class="price-cell">21.60</td>
+  <td class="up">+7.57%</td>
+  <td class="surge">6次<br><small>3d+23%</small></td>
+  <td class="good">🆕突破新高</td>
+  <td class="trend small">压线走 回调-7.9% 斜率↑0.546</td>
+  <td class="bad">0.69x</td>
+  <td class="price-cell">21.66</td>
+  <td class="dn">15.88<br><small>-26.7%</small></td>
+  <td class="up">24.91</td>
+  <td class="bad">0.56x</td>
+  <td class="small">330亿</td>
+  <td class="psscore ps1">1/5 信号弱</td>
+  <td class="score">86</td>
+  <td class="det-btn" onclick="tog('001896')">▼详情</td>
+</tr>
+<tr id="d001896" class="det">
+  <td colspan="17">
+    <b>历史异动 (6次)：</b><span class="tag">3d窗口 +21.0%</span><span class="tag">3d窗口 +22.5%</span><span class="tag">3d窗口 +33.0%</span><span class="tag">10d窗口 +118.7%</span><span class="tag">3d窗口 +25.4%</span><span class="tag">3d窗口 +22.7%</span><br>
+    <small class="gray">完整记录: 3d窗口+21.0%(2025-07-10~2025-07-14) → 3d窗口+22.5%(2026-02-09~2026-02-12) → 3d窗口+33.0%(2026-02-13~2026-02-26) → 10d窗口+118.7%(2026-02-05~2026-02-27) → 3d窗口+25.4%(2026-04-10~2026-04-15) → 3d窗口+22.7%(2026-05-29~2026-06-03)</small><br>
+    <b>均线：</b>MA5=18.8 &nbsp; MA10=17.47 &nbsp; MA20=16.84 &nbsp; MA60=15.93<br>
+    <b>交易计划：</b>买入21.66 → 止损15.88(-26.7%) → 目标1:24.91 → 目标2:28.16 &nbsp;|&nbsp; <b>风险收益比 0.56x</b><br>
+    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.01x 价变22.7% | S2韵律✗ 历史间隔均50日 已等1日(比值0.02) | S3收口✗ ATR=1.84 前=1.54 未明显收窄 | S4底抬✗ 低点:15.02→14.38→14.76 | S5MACD✓ 柱扩大 0.259→0.603→0.983</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">2</td>
+  <td class="code-cell">600367</td>
+  <td class="name-cell">XD红星发</td>
+  <td class="price-cell">46.50</td>
+  <td class="up">+8.87%</td>
+  <td class="surge">5次<br><small>3d+33%</small></td>
+  <td class="good">🆕突破新高</td>
+  <td class="trend small">压线走 回调-8.9% 斜率↑2.130</td>
+  <td class="ok">1.1x</td>
+  <td class="price-cell">46.53</td>
+  <td class="dn">31.14<br><small>-33.1%</small></td>
+  <td class="up">53.51</td>
+  <td class="bad">0.45x</td>
+  <td class="small">150亿</td>
+  <td class="psscore ps2">2/5 信号弱</td>
+  <td class="score">78</td>
+  <td class="det-btn" onclick="tog('600367')">▼详情</td>
+</tr>
+<tr id="d600367" class="det">
+  <td colspan="17">
+    <b>历史异动 (5次)：</b><span class="tag">3d窗口 +24.6%</span><span class="tag">3d窗口 +27.3%</span><span class="tag">3d窗口 +21.3%</span><span class="tag">3d窗口 +22.7%</span><span class="tag">3d窗口 +33.1%</span><br>
+    <small class="gray">完整记录: 3d窗口+24.6%(2025-01-13~2025-01-16) → 3d窗口+27.3%(2026-02-26~2026-03-03) → 3d窗口+21.3%(2026-03-12~2026-03-17) → 3d窗口+22.7%(2026-05-25~2026-05-28) → 3d窗口+33.1%(2026-05-29~2026-06-03)</small><br>
+    <b>均线：</b>MA5=39.1 &nbsp; MA10=34.2 &nbsp; MA20=29.36 &nbsp; MA60=24.81<br>
+    <b>交易计划：</b>买入46.53 → 止损31.14(-33.1%) → 目标1:53.51 → 目标2:60.49 &nbsp;|&nbsp; <b>风险收益比 0.45x</b><br>
+    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比0.71x 价变31.8% | S2韵律✗ 历史间隔均80日 已等1日(比值0.01) | S3收口✗ ATR=3.06 前=1.43 未明显收窄 | S4底抬✓ 低点抬高:20.43→23.01→25.19 | S5MACD✓ 柱扩大 2.460→3.118→3.810</span>
+  </td>
+</tr></tbody>
+</table>
+</div>
+</div>
+
+<!-- 🚫 涨停区 -->
+<div class="zone zone-limit">
+<div class="zone-hd"><h2>🚫 已涨停/接近涨停（4只）</h2><span class="warn">涨停买不进，保持关注，次日若开板可考虑</span></div>
+<div class="tw" style="margin:0">
+<table>
+<thead><tr>
+  <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
+  <th>异动<br>次数</th><th>压线<br>回调</th><th>趋势状态</th><th>量比</th>
+  <th>买入价</th><th>止损价</th><th>目标1</th><th>风险<br>收益比</th>
+  <th>市值</th><th>预判分</th><th>评分</th><th>详情</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td class="rank">1</td>
+  <td class="code-cell">600246</td>
+  <td class="name-cell">万通发展 <span class="badge-limit">涨停</span></td>
+  <td class="price-cell">18.87</td>
+  <td class="up">+10.03%</td>
+  <td class="surge">6次<br><small>3d+21%</small></td>
+  <td class="good">🆕突破新高</td>
+  <td class="trend small">压线走 回调0.0% 斜率↑0.267</td>
+  <td class="bad">0.77x</td>
+  <td class="price-cell">18.87</td>
+  <td class="dn">15.15<br><small>-19.7%</small></td>
+  <td class="up">21.70</td>
+  <td class="bad">0.76x</td>
+  <td class="small">357亿</td>
+  <td class="psscore ps2">2/5 信号弱</td>
+  <td class="score">79</td>
+  <td class="det-btn" onclick="tog('600246')">▼详情</td>
+</tr>
+<tr id="d600246" class="det">
+  <td colspan="17">
+    <b>历史异动 (6次)：</b><span class="tag">3d窗口 +33.0%</span><span class="tag">3d窗口 +31.2%</span><span class="tag">3d窗口 +23.2%</span><span class="tag">3d窗口 +29.2%</span><span class="tag">3d窗口 +21.8%</span><span class="tag">3d窗口 +20.8%</span> <span class="badge-limit">涨停</span><br>
+    <small class="gray">完整记录: 3d窗口+33.0%(2025-08-07~2025-08-12) → 3d窗口+31.2%(2025-08-19~2025-08-22) → 3d窗口+23.2%(2025-08-29~2025-09-03) → 3d窗口+29.2%(2025-11-24~2025-11-27) → 3d窗口+21.8%(2026-05-18~2026-05-21) → 3d窗口+20.8%(2026-06-02~2026-06-04)</small><br>
+    <b>均线：</b>MA5=16.73 &nbsp; MA10=16.2 &nbsp; MA20=14.77 &nbsp; MA60=11.69<br>
+    <b>交易计划：</b>买入18.87 → 止损15.15(-19.7%) → 目标1:21.7 → 目标2:24.53 &nbsp;|&nbsp; <b>风险收益比 0.76x</b><br>
+    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.02x 价变19.1% | S2韵律✗ 历史间隔均36日 已等0日(比值0.00) | S3收口✗ ATR=1.54 前=1.00 未明显收窄 | S4底抬✓ 低点抬高:9.38→12.00→14.15 | S5MACD✓ 柱扩大 0.176→0.244→0.470</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">2</td>
+  <td class="code-cell">000700</td>
+  <td class="name-cell">模塑科技 <span class="badge-limit">涨停</span></td>
+  <td class="price-cell">18.24</td>
+  <td class="up">+10.01%</td>
+  <td class="surge">5次<br><small>3d+33%</small></td>
+  <td class="good">🆕突破新高</td>
+  <td class="trend small">压线走 回调0.0% 斜率↑0.167</td>
+  <td class="ok">1.13x</td>
+  <td class="price-cell">18.24</td>
+  <td class="dn">13.29<br><small>-27.1%</small></td>
+  <td class="up">20.98</td>
+  <td class="bad">0.55x</td>
+  <td class="small">167亿</td>
+  <td class="psscore ps2">2/5 信号弱</td>
+  <td class="score">70</td>
+  <td class="det-btn" onclick="tog('000700')">▼详情</td>
+</tr>
+<tr id="d000700" class="det">
+  <td colspan="17">
+    <b>历史异动 (5次)：</b><span class="tag">3d窗口 +23.6%</span><span class="tag">3d窗口 +21.2%</span><span class="tag">3d窗口 +20.6%</span><span class="tag">3d窗口 +20.4%</span><span class="tag">3d窗口 +33.1%</span> <span class="badge-limit">涨停</span><br>
+    <small class="gray">完整记录: 3d窗口+23.6%(2025-08-11~2025-08-14) → 3d窗口+21.2%(2025-09-12~2025-09-17) → 3d窗口+20.6%(2025-12-24~2025-12-29) → 3d窗口+20.4%(2026-04-30~2026-05-08) → 3d窗口+33.1%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=15.55 &nbsp; MA10=15.39 &nbsp; MA20=14.71 &nbsp; MA60=12.79<br>
+    <b>交易计划：</b>买入18.24 → 止损13.29(-27.1%) → 目标1:20.98 → 目标2:23.71 &nbsp;|&nbsp; <b>风险收益比 0.55x</b><br>
+    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.36x 价变33.1% | S2韵律✗ 历史间隔均45日 已等0日(比值0.00) | S3收口✗ ATR=1.14 前=0.90 未明显收窄 | S4底抬✓ 低点抬高:10.80→12.98→13.65 | S5MACD✓ 柱扩大 -0.117→0.104→0.436</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">3</td>
+  <td class="code-cell">605162</td>
+  <td class="name-cell">新中港 <span class="badge-limit">涨停</span></td>
+  <td class="price-cell">12.71</td>
+  <td class="up">+10.04%</td>
+  <td class="surge">4次<br><small>3d+25%</small></td>
+  <td class="good">🆕突破新高</td>
+  <td class="trend small">压线走 回调0.0% 斜率↑0.120</td>
+  <td class="good">1.66x</td>
+  <td class="price-cell">12.71</td>
+  <td class="dn">9.89<br><small>-22.2%</small></td>
+  <td class="up">14.62</td>
+  <td class="bad">0.68x</td>
+  <td class="small">56亿</td>
+  <td class="psscore ps1">1/5 信号弱</td>
+  <td class="score">61</td>
+  <td class="det-btn" onclick="tog('605162')">▼详情</td>
+</tr>
+<tr id="d605162" class="det">
+  <td colspan="17">
+    <b>历史异动 (4次)：</b><span class="tag">3d窗口 +23.2%</span><span class="tag">3d窗口 +33.2%</span><span class="tag">3d窗口 +21.0%</span><span class="tag">3d窗口 +24.6%</span> <span class="badge-limit">涨停</span><br>
+    <small class="gray">完整记录: 3d窗口+23.2%(2025-07-02~2025-07-07) → 3d窗口+33.2%(2026-03-30~2026-04-02) → 3d窗口+21.0%(2026-04-03~2026-04-08) → 3d窗口+24.6%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=10.95 &nbsp; MA10=10.79 &nbsp; MA20=11.08 &nbsp; MA60=11.63<br>
+    <b>交易计划：</b>买入12.71 → 止损9.89(-22.2%) → 目标1:14.62 → 目标2:16.52 &nbsp;|&nbsp; <b>风险收益比 0.68x</b><br>
+    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.38x 价变24.6% | S2韵律✗ 历史间隔均71日 已等0日(比值0.00) | S3收口✗ ATR=0.85 前=0.47 未明显收窄 | S4底抬✗ 低点:11.09→10.39→9.55 | S5MACD✓ 柱扩大 -0.141→0.062→0.341</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">4</td>
+  <td class="code-cell">300726</td>
+  <td class="name-cell">宏达电子 <span class="badge-limit">涨停</span></td>
+  <td class="price-cell">79.92</td>
+  <td class="up">+20.00%</td>
+  <td class="surge">4次<br><small>3d+33%</small></td>
+  <td class="good">🆕突破新高</td>
+  <td class="trend small">压线走 回调0.0% 斜率↑1.106</td>
+  <td class="ok">1.28x</td>
+  <td class="price-cell">79.92</td>
+  <td class="dn">58.36<br><small>-27.0%</small></td>
+  <td class="up">91.91</td>
+  <td class="bad">0.56x</td>
+  <td class="small">171亿</td>
+  <td class="psscore ps2">2/5 信号弱</td>
+  <td class="score">60</td>
+  <td class="det-btn" onclick="tog('300726')">▼详情</td>
+</tr>
+<tr id="d300726" class="det">
+  <td colspan="17">
+    <b>历史异动 (4次)：</b><span class="tag">3d窗口 +20.4%</span><span class="tag">3d窗口 +22.7%</span><span class="tag">3d窗口 +30.8%</span><span class="tag">3d窗口 +32.8%</span> <span class="badge-limit">涨停</span><br>
+    <small class="gray">完整记录: 3d窗口+20.4%(2025-03-06~2025-03-11) → 3d窗口+22.7%(2025-10-22~2025-10-27) → 3d窗口+30.8%(2025-12-18~2025-12-23) → 3d窗口+32.8%(2026-06-01~2026-06-04)</small><br>
+    <b>均线：</b>MA5=66.79 &nbsp; MA10=64.74 &nbsp; MA20=60.71 &nbsp; MA60=50.64<br>
+    <b>交易计划：</b>买入79.92 → 止损58.36(-27.0%) → 目标1:91.91 → 目标2:103.9 &nbsp;|&nbsp; <b>风险收益比 0.56x</b><br>
+    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比1.46x 价变32.8% | S2韵律✗ 历史间隔均97日 已等0日(比值0.00) | S3收口✗ ATR=5.99 前=3.86 未明显收窄 | S4底抬✓ 低点抬高:45.51→50.35→57.20 | S5MACD✓ 柱扩大 0.235→0.486→2.251</span>
+  </td>
+</tr></tbody>
+</table>
+</div>
+</div>
+
+<!-- 🐟 鱼尾区 -->
+<div class="zone zone-ft">
+<div class="zone-hd"><h2>🐟 鱼尾行情（2只）</h2><span class="warn">异动≥7次，肉不多，不建议参与</span></div>
+<div class="tw" style="margin:0">
+<table>
+<thead><tr>
+  <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
+  <th>异动<br>次数</th><th>压线<br>回调</th><th>趋势状态</th><th>量比</th>
+  <th>买入价</th><th>止损价</th><th>目标1</th><th>风险<br>收益比</th>
+  <th>市值</th><th>预判分</th><th>评分</th><th>详情</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td class="rank">1</td>
+  <td class="code-cell">600403</td>
+  <td class="name-cell">大有能源 <span class="badge-limit">涨停</span> <span class="badge-ft">鱼尾</span></td>
+  <td class="price-cell">7.40</td>
+  <td class="up">+9.96%</td>
+  <td class="surge">8次<br><small>3d+22%</small></td>
+  <td class="good">🆕突破新高</td>
+  <td class="trend small">压线走 回调-20.9% 斜率↑0.229</td>
+  <td class="ok">1.14x</td>
+  <td class="price-cell">7.40</td>
+  <td class="dn">4.87<br><small>-34.2%</small></td>
+  <td class="up">8.51</td>
+  <td class="bad">0.44x</td>
+  <td class="small">177亿</td>
+  <td class="psscore ps1">1/5 信号弱</td>
+  <td class="score">120</td>
+  <td class="det-btn" onclick="tog('600403')">▼详情</td>
+</tr>
+<tr id="d600403" class="det">
+  <td colspan="17">
+    <b>历史异动 (8次)：</b><span class="tag">3d窗口 +21.3%</span><span class="tag">3d窗口 +21.0%</span><span class="tag">3d窗口 +26.3%</span><span class="tag">3d窗口 +33.2%</span><span class="tag">10d窗口 +116.5%</span><span class="tag">3d窗口 +21.0%</span><span class="tag">3d窗口 +25.7%</span><span class="tag">3d窗口 +21.9%</span> <span class="badge-limit">涨停</span> <span class="badge-ft">鱼尾</span><br>
+    <small class="gray">完整记录: 3d窗口+21.3%(2025-03-12~2025-03-14) → 3d窗口+21.0%(2025-03-17~2025-03-19) → 3d窗口+26.3%(2025-10-09~2025-10-14) → 3d窗口+33.2%(2025-10-15~2025-10-20) → 10d窗口+116.5%(2025-09-30~2025-10-22) → 3d窗口+21.0%(2025-10-21~2025-10-23) → 3d窗口+25.7%(2025-11-12~2025-11-17) → 3d窗口+21.9%(2026-05-28~2026-06-02)</small><br>
+    <b>均线：</b>MA5=6.17 &nbsp; MA10=5.63 &nbsp; MA20=5.56 &nbsp; MA60=5.88<br>
+    <b>交易计划：</b>买入7.4 → 止损4.87(-34.2%) → 目标1:8.51 → 目标2:9.62 &nbsp;|&nbsp; <b>风险收益比 0.44x</b><br>
+    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比2.43x 价变33.1% | S2韵律✗ 历史间隔均55日 已等2日(比值0.04) | S3收口✗ ATR=0.36 前=0.18 未明显收窄 | S4底抬✗ 低点:5.52→5.09→4.90 | S5MACD✓ 柱扩大 0.148→0.299→0.466</span>
+  </td>
+</tr>
+<tr>
+  <td class="rank">2</td>
+  <td class="code-cell">003036</td>
+  <td class="name-cell">泰坦股份 <span class="badge-limit">涨停</span> <span class="badge-ft">鱼尾</span></td>
+  <td class="price-cell">74.86</td>
+  <td class="up">+10.01%</td>
+  <td class="surge">7次<br><small>3d+28%</small></td>
+  <td class="good">🆕突破新高</td>
+  <td class="trend small">压线走 回调-4.9% 斜率↑2.132</td>
+  <td class="bad">0.63x</td>
+  <td class="price-cell">74.86</td>
+  <td class="dn">54.30<br><small>-27.5%</small></td>
+  <td class="up">86.09</td>
+  <td class="bad">0.55x</td>
+  <td class="small">162亿</td>
+  <td class="psscore ps1">1/5 信号弱</td>
+  <td class="score">93</td>
+  <td class="det-btn" onclick="tog('003036')">▼详情</td>
+</tr>
+<tr id="d003036" class="det">
+  <td colspan="17">
+    <b>历史异动 (7次)：</b><span class="tag">3d窗口 +22.7%</span><span class="tag">3d窗口 +20.3%</span><span class="tag">3d窗口 +21.1%</span><span class="tag">3d窗口 +22.0%</span><span class="tag">3d窗口 +28.0%</span><span class="tag">3d窗口 +21.7%</span><span class="tag">3d窗口 +27.5%</span> <span class="badge-limit">涨停</span> <span class="badge-ft">鱼尾</span><br>
+    <small class="gray">完整记录: 3d窗口+22.7%(2025-04-30~2025-05-08) → 3d窗口+20.3%(2025-09-03~2025-09-08) → 3d窗口+21.1%(2025-10-28~2025-10-31) → 3d窗口+22.0%(2026-04-21~2026-04-24) → 3d窗口+28.0%(2026-04-30~2026-05-08) → 3d窗口+21.7%(2026-05-19~2026-05-22) → 3d窗口+27.5%(2026-05-25~2026-05-28)</small><br>
+    <b>均线：</b>MA5=70.7 &nbsp; MA10=65.82 &nbsp; MA20=54.78 &nbsp; MA60=35.55<br>
+    <b>交易计划：</b>买入74.86 → 止损54.3(-27.5%) → 目标1:86.09 → 目标2:97.32 &nbsp;|&nbsp; <b>风险收益比 0.55x</b><br>
+    <b>PreSurge预判信号：</b> <span class="ps-detail">S1量预热✗ 量比0.83x 价变4.3% | S2韵律✗ 历史间隔均40日 已等5日(比值0.13) | S3收口✗ ATR=6.44 前=3.96 未明显收窄 | S4底抬✓ 低点抬高:27.06→39.24→46.92 | S5MACD✗ 柱=2.891</span>
+  </td>
+</tr></tbody>
+</table>
+</div>
+</div>
+
+<!-- PreSurge 预判专区 -->
+
+
+<script>
+function tog(c){
+  var r=document.getElementById('d'+c);
+  r.style.display=r.style.display==='none'?'table-row':'none';
+}
+document.querySelectorAll('.det').forEach(function(r){r.style.display='none'});
+</script>
+</body></html>

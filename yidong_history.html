@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>异动扫描历史回顾</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f6f9;color:#222}
+.hd{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff;padding:22px 28px}
+.hd h1{font-size:22px;font-weight:700;margin-bottom:4px}
+.hd .sub{font-size:12px;opacity:.7}
+.cards{display:flex;gap:12px;margin:14px 20px;flex-wrap:wrap}
+.card{background:#fff;border-radius:8px;padding:12px 18px;box-shadow:0 2px 6px rgba(0,0,0,.06);flex:1;min-width:80px}
+.card .v{font-size:24px;font-weight:700;color:#0f172a}
+.card .l{font-size:11px;color:#999;margin-top:4px}
+.tw{margin:0 20px 20px;overflow-x:auto}
+.sec-hd{margin:20px 20px 8px;font-size:14px;font-weight:700;color:#0f172a;border-left:3px solid #dc2626;padding-left:10px}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+thead tr{background:#0f172a;color:#fff}
+th{padding:10px 8px;font-size:11px;white-space:nowrap;text-align:center}
+tbody tr{border-bottom:1px solid #f0f0f0}
+tbody tr:hover td{background:#fafbff}
+td{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}
+.date-cell{font-weight:700;text-align:left}
+.date-cell a{color:#2563eb;text-decoration:none}
+.date-cell a:hover{text-decoration:underline}
+.num{font-weight:700}
+.buyable{color:#16a34a;font-weight:700}
+.limit{color:#dc2626}
+.fish{color:#6b7280}
+.pre{color:#534AB7}
+.action a{color:#2563eb;text-decoration:none;font-size:11px}
+.name-cell{font-weight:600;text-align:left}
+.up{color:#dc2626;font-weight:700}.dn{color:#16a34a;font-weight:700}.good{color:#16a34a;font-weight:700}
+.rank{color:#aaa;font-weight:700;width:30px}
+.small{font-size:11px}.gray{color:#888}
+.btn-sm{display:inline-block;background:#eff6ff;color:#2563eb;border-radius:4px;padding:3px 10px;font-size:11px;text-decoration:none}
+.btn-sm:hover{background:#dbeafe}
+.ft{text-align:center;padding:16px;font-size:11px;color:#aaa}
+.ft a{color:#2563eb;text-decoration:none}
+</style>
+</head>
+<body>
+<div class="hd">
+  <h1>📋 A股异动扫描 — 历史回顾</h1>
+  <div class="sub">更新: 2026-06-04 10:30:43 &nbsp;|&nbsp; 共 1 个扫描日</div>
+</div>
+
+<div class="cards">
+  <div class="card"><div class="v">1</div><div class="l">扫描天数</div></div>
+  <div class="card"><div class="v">8</div><div class="l">累计标的数</div></div>
+  <div class="card"><div class="v" style="color:#16a34a">2</div><div class="l">历史可买总数</div></div>
+  <div class="card"><div class="v" style="color:#534AB7">0</div><div class="l">跨日出现≥2次</div></div>
+</div>
+
+<!-- 每日扫描记录 -->
+<div class="sec-hd">📅 每日扫描摘要</div>
+<div class="tw">
+<table>
+<thead><tr>
+  <th>日期</th><th>总数</th><th>🔥可买</th><th>🚫涨停</th><th>🐟鱼尾</th><th>🔮预判</th><th>详情</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td class="date-cell"><a href="history/2026-06-04/result.html">2026-06-04</a></td>
+  <td class="num">8</td>
+  <td class="buyable good">2</td>
+  <td class="limit">4</td>
+  <td class="fish">2</td>
+  <td class="pre">0</td>
+  <td class="action"><a href="history/2026-06-04/result.html" class="btn-sm">查看</a></td>
+</tr></tbody>
+</table>
+</div>
+
+<!-- 跨日追踪 -->
+
+
+<div class="ft">
+  <a href="yidong_result.html">← 返回最新扫描结果</a>
+  &nbsp;|&nbsp; 数据仅供研究参考，不构成投资建议
+</div>
+</body></html>
