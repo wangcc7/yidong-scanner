@@ -1713,9 +1713,6 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 <!-- 早盘预测 vs 收盘复盘 -->
 """ + _build_review_html(predicted, results) if schedule == "evening" and predicted else "") + f"""
 
-<!-- 操作建议 & 交易纪律（置顶） -->
-{_build_recommendation_html(mid_pool, high_pool, presurge_items)}
-
 <div class="cards">
   <div class="card" style="border:2px solid #2563eb"><div class="v" style="color:#2563eb">{len(mid_pool)}</div><div class="l">🏗 中段加速</div></div>
   <div class="card" style="border:2px solid #dc2626"><div class="v">{len(high_pool)}</div><div class="l">🎯 高位博弈</div></div>
@@ -1767,6 +1764,9 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 </table>
 </div>
 </div>''' if presurge_items else ''}
+
+<!-- 操作建议 & 交易纪律 -->
+{_build_recommendation_html(mid_pool, high_pool, presurge_items)}
 
 <div class="strat">
   <h3>⚡ v5.0 策略：区间限位 + 双池分仓</h3>
