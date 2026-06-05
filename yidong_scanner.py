@@ -102,12 +102,13 @@ class Config:
     # ── 扫描模式 ──
     SCAN_MODE = 'hot_only'
 
-    # ── 输出 ──
-    OUTPUT_FILE = "/Users/ghost/Desktop/code/AIAIAIAI-stock/yidong_result.json"
-    HTML_FILE   = "/Users/ghost/Desktop/code/AIAIAIAI-stock/yidong_result.html"
-    TRACK_FILE  = "/Users/ghost/Desktop/code/AIAIAIAI-stock/.yidong_tracking.json"
-    HISTORY_DIR = "/Users/ghost/Desktop/code/AIAIAIAI-stock/history"
-    HISTORY_HTML = "/Users/ghost/Desktop/code/AIAIAIAI-stock/yidong_history.html"
+    # ── 输出（相对于脚本目录）──
+    _BASE = Path(__file__).parent
+    OUTPUT_FILE = str(_BASE / "yidong_result.json")
+    HTML_FILE   = str(_BASE / "yidong_result.html")
+    TRACK_FILE  = str(_BASE / ".yidong_tracking.json")
+    HISTORY_DIR = str(_BASE / "history")
+    HISTORY_HTML = str(_BASE / "yidong_history.html")
 
 # ============================================================
 # 数据获取层
