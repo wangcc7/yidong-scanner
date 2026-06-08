@@ -474,14 +474,15 @@ def check_volume_increasing(df: pd.DataFrame) -> Tuple[bool, str]:
 
 # 主线板块定义（2026年6月市场热点）
 MAINLINE_SECTORS = {
-    "新能源":     ["锂电", "光伏", "风电", "储能", "新能源车", "充电桩", "固态电池", "钠电池"],
+    "新能源":     ["锂电", "光伏", "风电", "储能", "新能源车", "充电桩", "固态电池", "钠电池", "绿色电力", "氢能", "HJT", "钙钛矿"],
     "煤炭":       ["煤炭", "煤化工"],
-    "AI算力":     ["算力", "AI", "人工智能", "芯片", "半导体", "光模块", "CPO", "服务器", "数据中心"],
-    "机器人":     ["机器人", "工业母机", "自动化"],
-    "军工":       ["军工", "航空航天", "卫星", "无人机"],
-    "医药":       ["创新药", "CXO", "医疗器械", "中药"],
-    "电力":       ["电力", "电网", "特高压", "虚拟电厂"],
-    "有色金属":   ["有色", "稀土", "黄金", "铜", "铝"],
+    "AI算力":     ["算力", "AI", "人工智能", "芯片", "半导体", "光模块", "CPO", "服务器", "数据中心", "洁净室", "覆铜板", "PCB", "HBM"],
+    "机器人":     ["机器人", "工业母机", "自动化", "减速器", "机器视觉", "伺服", "具身智能"],
+    "军工":       ["军工", "航空航天", "卫星", "无人机", "低空经济", "商业航天", "航空发动机", "导弹", "雷达"],
+    "医药":       ["创新药", "CXO", "医疗器械", "中药", "原料药", "生物制药", "细胞治疗"],
+    "电力":       ["电力", "电网", "特高压", "虚拟电厂", "火电", "水电", "核电", "绿电"],
+    "有色金属":   ["有色", "稀土", "黄金", "铜", "铝", "矿业", "钴", "镍"],
+    "地产基建":   ["房地产", "基建", "REITs", "仓储物流", "建筑", "建材", "玻璃基板", "装修"],
 }
 
 def detect_stock_sectors(name: str, hot_row: Dict = None) -> List[str]:
@@ -758,10 +759,109 @@ def calc_presurge_score(df: pd.DataFrame, events: List[SurgeEvent]) -> Dict:
 
 
 # ============================================================
+# 板块爆发力 & 筹码连板惯性（v5.1 新增权重）
+# ============================================================
+
+def calc_sector_momentum(stock_code: str, stock_name: str, hot_row: Dict,
+                          hot_stocks: List[Dict], quotes: Dict = None) -> Tuple[int, str]:
+    """
+    计算板块爆发力：
+    - 检测股票所属主线板块
+    - 统计该板块在当日强势股中的涨停个股数（排除自身）
+    - 返回 (sector_limit_count, sector_name)
+    """
+    if not hot_stocks:
+        return 0, "数据缺失"
+
+    sectors = detect_stock_sectors(stock_name, hot_row)
+    if not sectors:
+        reason = (hot_row or {}).get("reason", "") or (hot_row or {}).get("hyName", "")
+        if not reason or reason in ["-", "", "其他"]:
+            return 0, "未归类"
+        # 模糊匹配
+        for s_name, keywords in MAINLINE_SECTORS.items():
+            for kw in keywords:
+                if kw in reason or kw in stock_name:
+                    sectors = [s_name]
+                    break
+            if sectors:
+                break
+
+    if not sectors:
+        return 0, "无法判断"
+
+    sector_name = sectors[0]
+    keywords = MAINLINE_SECTORS.get(sector_name, [])
+
+    # 统计同板块涨停数（排除自身）
+    limit_count = 0
+    for hs in hot_stocks:
+        hs_code = hs.get("code", "")
+        if hs_code == stock_code:
+            continue  # 不算自己
+        hs_reason = hs.get("reason", "") or hs.get("hyName", "") or ""
+        hs_name = hs.get("name", "")
+        in_sector = False
+        for kw in keywords:
+            if kw in hs_reason or kw in hs_name:
+                in_sector = True
+                break
+        if not in_sector:
+            continue
+        # 优先用传入的行情数据判断涨停
+        chg = 0
+        if quotes and hs_code in quotes:
+            chg = quotes[hs_code].get("change_pct", 0)
+        else:
+            try:
+                chg = float(hs.get("changePct", 0) or hs.get("change", 0) or 0)
+            except (ValueError, TypeError):
+                chg = 0
+        if chg >= 9.5:
+            limit_count += 1
+
+    return limit_count, sector_name
+
+
+def calc_consecutive_limit_days(df: pd.DataFrame) -> int:
+    """
+    筹码连板惯性：从最近K线检测连续涨停天数。
+    涨停标准：当日涨幅 ≥ 9.5%（含主板10%、创业板/科创板20%）。
+    返回连续涨停天数（0表示未涨停）。
+    抽样检测近10日K线。
+    """
+    if df is None or len(df) < 5:
+        return 0
+    closes = df["close"].values
+    opens  = df["open"].values
+
+    # 最近N日起逐日判断涨停（从今天往前数）
+    consecutive = 0
+    for i in range(len(closes) - 1, max(len(closes) - 11, 0), -1):
+        if i < 1:
+            break
+        prev_close = closes[i - 1]
+        if prev_close <= 0:
+            break
+        day_chg = (closes[i] - prev_close) / prev_close * 100
+        # 一字板检测：开盘=涨停价
+        limit_up_price = round(prev_close * 1.10, 2) if prev_close < 100 else round(prev_close * 1.10, 1)
+        is_limit = (day_chg >= 9.5) or (abs(closes[i] - limit_up_price) < 0.02)
+        if is_limit:
+            consecutive += 1
+        else:
+            break
+
+    return consecutive
+
+
+# ============================================================
 # 单股分析
 # ============================================================
 
-def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None, hot_row: Dict = None) -> Optional[Dict]:
+def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None,
+                  hot_row: Dict = None, hot_stocks: List[Dict] = None,
+                  quotes: Dict = None) -> Optional[Dict]:
     """
     v5.0 分析单只股票（区间限位 + 三大硬性过滤 + 双池分类）。
     返回结果 dict 或 None（不符合条件）。
@@ -846,15 +946,23 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None, 
         for e in events[-8:]
     ]
 
+    # ── 板块爆发力 ──
+    sector_limit_count, sector_name = calc_sector_momentum(
+        code, name, hot_row, hot_stocks, quotes=quotes)
+    # ── 筹码连板惯性 ──
+    consecutive_limits = calc_consecutive_limit_days(df)
+
     # ── 评分（中段池加权更高）──
     if pool_type == "mid":
         score = (
-            len(events) * 12
-            + (3 - min(abs(pullback) / 5, 3)) * 6
-            + min(vol_ratio, 3) * 4
-            + min(plan["risk_reward"], 5) * 3
-            + (5 if turnover_ok else -3)
-            + (0 if mcap_filtered else 5)
+            len(events) * 12                                          # 异动积累
+            + (3 - min(abs(pullback) / 5, 3)) * 6                    # 回踩深度
+            + min(vol_ratio, 3) * 4                                   # 量比
+            + min(plan["risk_reward"], 5) * 3                         # 风险收益比
+            + (5 if turnover_ok else -3)                              # 换手
+            + (0 if mcap_filtered else 5)                             # 市值
+            + min(sector_limit_count, 5) * 4                          # v5.1 板块爆发力
+            + min(consecutive_limits, 3) * 5                          # v5.1 连板惯性
         )
     else:
         score = (
@@ -862,6 +970,8 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None, 
             + min(vol_ratio, 3) * 3
             + min(plan["risk_reward"], 5) * 2
             + (3 if turnover_ok else -5)
+            + min(sector_limit_count, 5) * 2                          # v5.1 板块爆发力(高位减半)
+            + min(consecutive_limits, 3) * 3                          # v5.1 连板惯性(高位减半)
         )
 
     presurge = calc_presurge_score(df, events)
@@ -917,6 +1027,11 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None, 
 
         # 综合评分
         "score": round(score, 1),
+
+        # v5.1 板块爆发力 & 连板惯性
+        "sector_name":          sector_name,
+        "sector_limit_count":   sector_limit_count,
+        "consecutive_limits":   consecutive_limits,
     }
 
 
@@ -1062,7 +1177,7 @@ def scan_hot_stocks(presurge_mode: bool = False) -> List[Dict]:
             if presurge_mode:
                 result = analyze_stock_presurge(code, name, price, q, hot_row)
             else:
-                result = analyze_stock(code, name, price, q, hot_row)
+                result = analyze_stock(code, name, price, q, hot_row, hot_stocks=hot, quotes=quotes)
             if result:
                 results.append(result)
                 p = result["plan"]
@@ -1073,12 +1188,19 @@ def scan_hot_stocks(presurge_mode: bool = False) -> List[Dict]:
                           f"预判分{ps_score}/5 "
                           f"{result.get('presurge_risk','?')}")
                 else:
+                    sec_tag = ""
+                    if result.get("sector_limit_count", 0) >= 3:
+                        sec_tag = f" 🔥板块{result['sector_name']}+{result['sector_limit_count']}"
+                    elif result.get("sector_limit_count", 0) >= 1:
+                        sec_tag = f" 📊板块+{result['sector_limit_count']}"
+                    limit_tag = f" 连板{result['consecutive_limits']}日" if result.get("consecutive_limits", 0) >= 1 else ""
                     print(f"  {result['pool_label']} {result['name']}({code}) "
                           f"异动{result['surge_count']}次 "
                           f"换手{result['turnover_pct']}% "
                           f"量能{result['vol_inc_reason']} "
                           f"预判{ps_score}/5 "
-                          f"RR={p['risk_reward']}x")
+                          f"RR={p['risk_reward']}x "
+                          f"分={result['score']:.0f}{sec_tag}{limit_tag}")
         except Exception as e:
             pass
         time.sleep(0.05)
@@ -1674,6 +1796,23 @@ def save_html(results: List[Dict], schedule: str = None, predicted: List[Dict] =
             pool_cls = "badge-mid" if r.get("pool_type") == "mid" else "badge-high"
             pool_label = r.get("pool_label", "")
 
+            # v5.1 板块爆发力 & 连板惯性
+            sector_limit = r.get("sector_limit_count", 0)
+            sector_name  = r.get("sector_name", "-")
+            cons_limits  = r.get("consecutive_limits", 0)
+            if sector_limit >= 3:
+                sector_html = f'<span class="tag-hot">🔥{sector_name}+{sector_limit}</span>'
+            elif sector_limit >= 1:
+                sector_html = f'<span class="tag">{sector_name}+{sector_limit}</span>'
+            else:
+                sector_html = f'<span class="gray">{sector_name}</span>'
+            if cons_limits >= 3:
+                limit_html = f'<span class="tag-limit-high">⚡{cons_limits}连板</span>'
+            elif cons_limits >= 1:
+                limit_html = f'<span class="tag-limit">{cons_limits}连板</span>'
+            else:
+                limit_html = '<span class="gray">-</span>'
+
             html_out += f"""
 <tr>
   <td class="rank">{rank}</td>
@@ -1686,6 +1825,8 @@ def save_html(results: List[Dict], schedule: str = None, predicted: List[Dict] =
   <td>{to_str}</td>
   <td>{vol_tag}<br><small class="gray">{r.get('vol_inc_reason','')}</small></td>
   <td class="trend small">{r['trend_reason']}</td>
+  <td>{sector_html}</td>
+  <td>{limit_html}</td>
   <td class="price-cell">{p['entry']:.2f}</td>
   <td class="dn">{p['stop_loss']:.2f}</td>
   <td class="up">{p['target1']:.2f}</td>
@@ -1696,7 +1837,7 @@ def save_html(results: List[Dict], schedule: str = None, predicted: List[Dict] =
   <td class="det-btn" onclick="tog('{r['code']}')">▼详情</td>
 </tr>
 <tr id="d{r['code']}" class="det">
-  <td colspan="18">
+  <td colspan="20">
     <b>历史异动 ({r['surge_count']}次)：</b>{tags_html}<br>
     <small class="gray">完整记录: {events_str}</small><br>
     <b>均线：</b>MA5={r['ma5']} &nbsp; MA10={r['ma10']} &nbsp; MA20={r['ma20']} &nbsp; MA60={r['ma60']}<br>
@@ -1798,6 +1939,9 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 .badge-high{{display:inline-block;background:#FEE2E2;color:#991B1B;border-radius:3px;padding:1px 6px;font-size:10px;margin-left:4px}}
 .badge-pre{{display:inline-block;background:#FAEEDA;color:#854F0B;border-radius:3px;padding:1px 6px;font-size:10px}}
 .ps-detail{{font-family:monospace;font-size:10px;color:#534AB7;background:#EEEDFE;padding:2px 6px;border-radius:3px}}
+.tag-hot{{display:inline-block;background:#FEE2E2;color:#DC2626;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700}}
+.tag-limit-high{{display:inline-block;background:#FEF3C7;color:#B45309;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700}}
+.tag-limit{{display:inline-block;background:#DBEAFE;color:#1E40AF;border-radius:3px;padding:1px 6px;font-size:10px}}
 </style>
 </head>
 <body>
@@ -1825,9 +1969,10 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 <thead><tr>
   <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
   <th>异动</th><th>市值</th><th>换手</th><th>量能</th><th>趋势</th>
+  <th>板块</th><th>连板</th>
   <th>买点</th><th>止损</th><th>目标</th><th>RR</th><th>仓位</th><th>预判</th><th>评分</th><th>详情</th>
 </tr></thead>
-<tbody>{mid_rows or '<tr><td colspan="18" class="gray">暂无中段加速标的</td></tr>'}</tbody>
+<tbody>{mid_rows or '<tr><td colspan="20" class="gray">暂无中段加速标的</td></tr>'}</tbody>
 </table>
 </div>
 </div>
@@ -1840,6 +1985,7 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 <thead><tr>
   <th>#</th><th>代码</th><th>名称</th><th>现价</th><th>今日</th>
   <th>异动</th><th>市值</th><th>换手</th><th>量能</th><th>趋势</th>
+  <th>板块</th><th>连板</th>
   <th>买点</th><th>止损</th><th>目标</th><th>RR</th><th>仓位</th><th>预判</th><th>评分</th><th>详情</th>
 </tr></thead>
 <tbody>''' + high_rows + '''</tbody>
