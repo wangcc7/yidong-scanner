@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>早盘操作报告 2026-06-09（v5.0异动策略）</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 13px; color: #2c2c2a; background: #f7f6f2; padding: 20px; line-height: 1.6; }
+  .page { max-width: 920px; margin: 0 auto; }
+  .header { background: #fff; border-radius: 12px; border: 0.5px solid rgba(0,0,0,0.12); padding: 20px 24px; margin-bottom: 16px; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .header h1 { font-size: 17px; font-weight: 500; }
+  .header-date { font-size: 12px; color: #888780; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .metric { background: #f7f6f2; border-radius: 8px; padding: 12px 14px; }
+  .metric-label { font-size: 11px; color: #888780; margin-bottom: 4px; }
+  .metric-value { font-size: 20px; font-weight: 500; }
+  .red { color: #e24b4a; }
+  .green { color: #3b6d11; }
+  .orange { color: #ba7517; }
+  .section { background: #fff; border-radius: 12px; border: 0.5px solid rgba(0,0,0,0.12); padding: 20px 24px; margin-bottom: 16px; }
+  .section-title { font-size: 14px; font-weight: 500; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
+  .badge { font-size: 11px; font-weight: 400; padding: 2px 8px; border-radius: 20px; }
+  .badge-red { background: #fcebeb; color: #a32d2d; }
+  .badge-green { background: #eaf3de; color: #3b6d11; }
+  .badge-orange { background: #faeeda; color: #854f0b; }
+  .badge-blue { background: #e6f1fb; color: #185fa5; }
+  .badge-gray { background: #f1efe8; color: #5f5e5a; }
+  .divider { height: 0.5px; background: rgba(0,0,0,0.08); margin: 12px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; font-weight: 500; color: #888780; font-size: 11px; padding: 6px 8px; border-bottom: 0.5px solid rgba(0,0,0,0.1); }
+  td { padding: 8px; border-bottom: 0.5px solid rgba(0,0,0,0.06); vertical-align: top; }
+  tr:hover { background: #f7f6f2; }
+  .name-cell { font-weight: 500; font-size: 13px; }
+  .code-cell { font-size: 11px; color: #888780; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .tag { display: inline-block; font-size: 10px; padding: 1px 6px; border-radius: 10px; margin-right: 3px; }
+  .tag-red { background: #fcebeb; color: #a32d2d; }
+  .tag-green { background: #eaf3de; color: #3b6d11; }
+  .tag-orange { background: #faeeda; color: #854f0b; }
+  .tag-gray { background: #f1efe8; color: #5f5e5a; }
+  .tag-blue { background: #e6f1fb; color: #185fa5; }
+  .plan-box { background: #f7f6f2; border-radius: 8px; padding: 10px 12px; margin-top: 6px; }
+  .plan-row { display: flex; justify-content: space-between; font-size: 12px; padding: 2px 0; }
+  .plan-key { color: #888780; }
+  .plan-val { font-weight: 500; }
+  .rule-box { border-radius: 8px; padding: 14px 18px; }
+  .rule-mid { background: #e6f1fb; }
+  .rule-mid p { font-size: 12px; color: #0c447c; line-height: 2; }
+  .rule-high { background: #fcebeb; }
+  .rule-high p { font-size: 12px; color: #791f1f; line-height: 2; }
+  .sector-list { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+  .sector-chip { padding: 4px 12px; border-radius: 20px; font-size: 12px; background: #f1efe8; border: 0.5px solid rgba(0,0,0,0.1); }
+  .note { font-size: 12px; color: #5f5e5a; margin-top: 8px; line-height: 1.7; }
+  .warn-box { background: #faeeda; border-radius: 8px; padding: 12px 16px; margin-top: 10px; }
+  .warn-box p { font-size: 12px; color: #633806; line-height: 1.8; }
+  .footer { text-align: center; font-size: 11px; color: #b4b2a9; padding: 12px 0 4px; }
+  @media (max-width: 600px) {
+    .metrics { grid-template-columns: repeat(2, 1fr); }
+    table { font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-top">
+      <h1>早盘异动操作报告</h1>
+      <span class="header-date">2026-06-09 09:44 &nbsp;|&nbsp; v5.0 异动策略</span>
+    </div>
+    <div class="metrics">
+      <div class="metric">
+        <div class="metric-label">中段改良池</div>
+        <div class="metric-value" style="color:#185fa5;">10</div>
+        <div class="metric-sub">2~5次异动 · 加速启动</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">高位博弈池</div>
+        <div class="metric-value red">33</div>
+        <div class="metric-sub">&gt;5次异动 · 大跌低吸</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">主线板块</div>
+        <div class="metric-value red">AI算力</div>
+        <div class="metric-sub">+18/+19板</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">今日涨停</div>
+        <div class="metric-value red">~22只</div>
+        <div class="metric-sub">高位池为主</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 核心策略规则 -->
+  <div class="section">
+    <div class="section-title">v5.0 异动策略 · 操作纪律</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+      <div class="rule-box rule-mid">
+        <p style="font-weight:500;font-size:13px;margin-bottom:4px;">🏗 中段改良池（2~5次异动）</p>
+        <p>
+          买点：回踩5/10日线买入<br>
+          止盈：盈利 <strong>8%减半</strong><br>
+          止损：破 <strong>5日线全走</strong><br>
+          仓位：单只 ≤ <strong>30%</strong>
+        </p>
+      </div>
+      <div class="rule-box rule-high">
+        <p style="font-weight:500;font-size:13px;margin-bottom:4px;">🎯 高位博弈池（＞5次异动）</p>
+        <p>
+          买点：<strong>只大跌低吸MA10</strong>（不追涨！）<br>
+          止损：亏损 <strong>5%无条件离场</strong><br>
+          止盈：盈利 <strong>10%全出</strong><br>
+          仓位：单只 ≤ <strong>10%</strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 板块环境 -->
+  <div class="section">
+    <div class="section-title">板块异动环境</div>
+    <div class="sector-list">
+      <div class="sector-chip"><span class="red">AI算力</span> &nbsp;连板 18-19 &nbsp;🔥主线</div>
+      <div class="sector-chip"><span class="red">机器人</span> &nbsp;连板 14 &nbsp;次主线</div>
+      <div class="sector-chip"><span class="red">军工</span> &nbsp;连板 6</div>
+      <div class="sector-chip">新能源 &nbsp;连板 4</div>
+    </div>
+    <p class="note">异动核心逻辑：好股票一直压着异动线走，反复触碰异动阈值（3日≥12%/10日≥40%/30日≥60%）。策略是跟着异动走——中段票刚加速，回踩均线介入；高位票异动次数多但临近上限，只有大跌才能接。</p>
+  </div>
+
+  <!-- ==================== 中段改良池 ==================== -->
+  <div class="section">
+    <div class="section-title">🏗 中段改良池（10只）<span class="badge badge-blue">回踩5/10日线 · +8%减半 · 破5日线全走</span></div>
+
+    <table>
+      <tr>
+        <th>标的</th>
+        <th>异动</th>
+        <th>价格/涨幅</th>
+        <th>换手/量比</th>
+        <th>量能</th>
+        <th>MA5 / MA10</th>
+        <th>入场→目标1</th>
+        <th>操作</th>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">天安新材</span><br><span class="code-cell">603725</span></td>
+        <td>5次</td>
+        <td>12.69<br><span class="green">-1.2%</span></td>
+        <td>9.7%<br>1.62x</td>
+        <td><span class="tag tag-green">✓递增</span></td>
+        <td>12.18 / 12.14</td>
+        <td>
+          <span class="orange">12.54 → 13.71</span><br>
+          <span style="font-size:11px;color:#888780">止损 11.81 | RR 1.15</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-blue">最佳标的</span><br>
+          量能+换手+趋势全✓<br>
+          今日微跌已在MA5附近<br>
+          <strong>可直接入场</strong>
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">三羊马</span><br><span class="code-cell">001317</span></td>
+        <td>5次</td>
+        <td>56.86<br><span class="red">+10.0%</span></td>
+        <td>6.3%<br>1.25x</td>
+        <td><span class="tag tag-green">✓递增</span></td>
+        <td>53.36 / 53.28</td>
+        <td>
+          <span class="orange">54.96 → 61.41</span><br>
+          <span style="font-size:11px;color:#888780">止损 51.76 | RR 0.89</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">等回踩</span><br>
+          今日涨停买不进<br>
+          等回踩MA5≈53.4再接
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">昊华科技</span><br><span class="code-cell">600378</span></td>
+        <td>4次</td>
+        <td>50.22<br><span class="red">+7.8%</span></td>
+        <td>9.5%<br>2.79x</td>
+        <td><span class="tag tag-green">✓递增</span></td>
+        <td>45.09 / 42.47</td>
+        <td>
+          <span class="orange">46.44 → 54.24</span><br>
+          <span style="font-size:11px;color:#888780">止损 43.74 | RR 0.62</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">等回踩</span><br>
+          量比2.79x活跃<br>
+          等回踩MA5≈45附近
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">维信诺</span><br><span class="code-cell">002387</span></td>
+        <td>3次</td>
+        <td>8.69<br><span class="green">-6.2%</span></td>
+        <td>6.3%<br>2.96x</td>
+        <td><span class="tag tag-green">✓递增</span></td>
+        <td>8.53 / 8.45</td>
+        <td>
+          <span class="orange">8.69 → 9.39</span><br>
+          <span style="font-size:11px;color:#888780">止损 8.28 | RR 1.68</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-blue">大跌低吸</span><br>
+          今日跌6.2% 正好在MA5附近<br>
+          量比2.96x放量<br>
+          <strong>可入场</strong> | RR最高1.68
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">北玻股份</span><br><span class="code-cell">002613</span></td>
+        <td>5次</td>
+        <td>5.46<br><span class="red">+10.1%</span></td>
+        <td>7.8%<br>0.65x</td>
+        <td><span class="tag tag-red">✗递减</span></td>
+        <td>4.87 / 4.76</td>
+        <td>
+          <span class="orange">5.02 → 5.90</span><br>
+          <span style="font-size:11px;color:#888780">止损 4.72 | RR 0.59</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-gray">观望</span><br>
+          量能递减，涨停后缩量<br>
+          等放量突破再跟
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">中重科技</span><br><span class="code-cell">603135</span></td>
+        <td>4次</td>
+        <td>15.43<br><span class="red">+10.0%</span></td>
+        <td>12.0%<br>11.69x</td>
+        <td><span class="tag tag-green">✓递增</span></td>
+        <td>12.87 / 11.68</td>
+        <td>
+          <span class="orange">13.25 → 16.66</span><br>
+          <span style="font-size:11px;color:#888780">止损 12.48 | RR 0.42</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-red">严重放量</span><br>
+          量比11.69x！连板4日<br>
+          最后放量日，不追
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">中科三环</span><br><span class="code-cell">000970</span></td>
+        <td>2次</td>
+        <td>12.63<br><span class="red">+10.0%</span></td>
+        <td>3.3%<br>1.75x</td>
+        <td><span class="tag tag-green">✓递增</span></td>
+        <td>11.49 / 11.53</td>
+        <td>
+          <span class="orange">11.84 → 13.64</span><br>
+          <span style="font-size:11px;color:#888780">止损 11.15 | RR 0.68</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">换手偏低</span><br>
+          异动仅2次 较早期<br>
+          等换手起来再看
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">南山控股</span><br><span class="code-cell">002314</span></td>
+        <td>3次</td>
+        <td>2.66<br><span class="red">+6.4%</span></td>
+        <td>13.2%<br>4.80x</td>
+        <td><span class="tag tag-green">✓递增</span></td>
+        <td>2.56 / 2.42</td>
+        <td>
+          <span class="orange">2.63 → 2.87</span><br>
+          <span style="font-size:11px;color:#888780">止损 2.48 | RR 1.19</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">换手偏高</span><br>
+          量比4.8x 极端放量<br>
+          低价股 注意爆量风险
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">爱普股份</span><br><span class="code-cell">603020</span></td>
+        <td>2次</td>
+        <td>10.58<br><span class="green">-0.8%</span></td>
+        <td>3.2%<br>1.39x</td>
+        <td><span class="tag tag-green">✓递增</span></td>
+        <td>10.13 / 10.10</td>
+        <td>
+          <span class="orange">10.43 → 11.43</span><br>
+          <span style="font-size:11px;color:#888780">止损 9.83 | RR 1.12</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-gray">换手偏低</span><br>
+          异动仅2次<br>
+          活跃度不够 观望
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">北辰实业</span><br><span class="code-cell">601588</span></td>
+        <td>3次</td>
+        <td>2.22<br><span class="red">+9.9%</span></td>
+        <td>4.4%<br>1.49x</td>
+        <td><span class="tag tag-green">✓递增</span></td>
+        <td>2.08 / 2.04</td>
+        <td>
+          <span class="orange">2.14 → 2.40</span><br>
+          <span style="font-size:11px;color:#888780">止损 2.02 | RR 0.87</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-gray">换手偏低</span><br>
+          低价股 异动3次<br>
+          换手4.4%不够活跃
+        </td>
+      </tr>
+    </table>
+
+    <div class="warn-box">
+      <p><strong>中段池今日操作优先级：</strong></p>
+      <p>① <strong>天安新材</strong> 603725 —— 微跌-1.2%已回踩MA5附近，量能+换手全✓，可直接入场</p>
+      <p>② <strong>维信诺</strong> 002387 —— 今日大跌-6.2%正好到MA5，量比2.96x+RR1.68最高，可入场</p>
+      <p>③ <strong>三羊马</strong> 001317 / <strong>昊华科技</strong> 600378 —— 今日涨停/大涨，等回踩MA5后再接</p>
+    </div>
+  </div>
+
+  <!-- ==================== 高位博弈池 ==================== -->
+  <div class="section">
+    <div class="section-title">🎯 高位博弈池（33只 · TOP12）<span class="badge badge-red">只大跌低吸MA10 | -5%止损 | +10%全离</span></div>
+
+    <table>
+      <tr>
+        <th>标的</th>
+        <th>异动</th>
+        <th>价格/涨幅</th>
+        <th>换手/量比</th>
+        <th>回调</th>
+        <th>MA10</th>
+        <th>入场→目标1</th>
+        <th>判断</th>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">三孚股份</span><br><span class="code-cell">603938</span></td>
+        <td>18次</td>
+        <td>52.19<br><span class="green">-1.2%</span></td>
+        <td>11.9%<br>1.43x</td>
+        <td><span class="green">-8.7%</span></td>
+        <td>46.00</td>
+        <td>
+          <span class="orange">46.92 → 57.41</span><br>
+          <span style="font-size:11px;color:#888780">止损 49.58 | RR 2.0</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-blue">最佳标的</span><br>
+          突破新高后回调-8.7%<br>
+          换手11.9%+量比1.43x<br>
+          等跌到MA10≈46低吸
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">粤桂股份</span><br><span class="code-cell">000833</span></td>
+        <td>14次</td>
+        <td>23.68<br><span class="red">+10.0%</span></td>
+        <td>5.3%<br>0.57x</td>
+        <td><span class="green">-25.3%</span></td>
+        <td>23.19</td>
+        <td>
+          <span class="orange">22.50 → 26.05</span><br>
+          <span style="font-size:11px;color:#888780">止损 23.84 | 已深调</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">深度回调</span><br>
+          从27.4跌到23.7 调-25%<br>
+          已在MA10附近<br>
+          但量比0.57x缩量 观望
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">金安国纪</span><br><span class="code-cell">002636</span></td>
+        <td>24次</td>
+        <td>63.98<br><span class="red">+10.0%</span></td>
+        <td>5.5%<br>0.88x</td>
+        <td>0%</td>
+        <td>53.17</td>
+        <td>
+          <span class="orange">54.23 → 70.38</span><br>
+          <span style="font-size:11px;color:#888780">止损 60.78 | RR 2.0</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">等大跌</span><br>
+          突破新高 涨停<br>
+          只等大跌回踩MA10≈53<br>
+          不追涨停！
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">亚翔集成</span><br><span class="code-cell">603929</span></td>
+        <td>20次</td>
+        <td>187.10<br><span class="red">+10.0%</span></td>
+        <td>4.7%<br>1.82x</td>
+        <td><span class="green">-10%</span></td>
+        <td>160.09</td>
+        <td>
+          <span class="orange">163.29 → 205.81</span><br>
+          <span style="font-size:11px;color:#888780">止损 177.74 | RR 2.0</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">等大跌</span><br>
+          前期回调-10% 均线偏弱<br>
+          等跌到MA10≈160再接
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">宁波东力</span><br><span class="code-cell">002164</span></td>
+        <td>17次</td>
+        <td>14.66<br><span class="red">+10.0%</span></td>
+        <td>11.4%<br>1.97x</td>
+        <td>0%</td>
+        <td>13.10</td>
+        <td>
+          <span class="orange">13.36 → 16.13</span><br>
+          <span style="font-size:11px;color:#888780">止损 13.93 | RR 2.0</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">等大跌</span><br>
+          突破新高 涨停<br>
+          只等大跌到MA10≈13.1
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">国机精工</span><br><span class="code-cell">002046</span></td>
+        <td>15次</td>
+        <td>60.37<br><span class="red">+10.0%</span></td>
+        <td>8.2%<br>2.10x</td>
+        <td><span class="green">-5.9%</span></td>
+        <td>54.53</td>
+        <td>
+          <span class="orange">55.62 → 66.41</span><br>
+          <span style="font-size:11px;color:#888780">止损 57.35 | RR 2.0</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">等大跌</span><br>
+          突破新高 量比2.1x活跃<br>
+          等回调到MA10≈54.5
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">中天火箭</span><br><span class="code-cell">003009</span></td>
+        <td>11次</td>
+        <td>60.94<br><span class="red">+10.0%</span></td>
+        <td>8.6%<br>3.27x</td>
+        <td>0%</td>
+        <td>52.91</td>
+        <td>
+          <span class="orange">53.97 → 67.03</span><br>
+          <span style="font-size:11px;color:#888780">止损 57.89 | RR 2.0</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">等大跌</span><br>
+          量比3.27x极度活跃<br>
+          均线偏弱 等MA10≈53
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">华正新材</span><br><span class="code-cell">603186</span></td>
+        <td>17次</td>
+        <td>136.03<br><span class="red">+10.0%</span></td>
+        <td>15.7%<br>1.44x</td>
+        <td>0%</td>
+        <td>126.90</td>
+        <td>
+          <span class="orange">129.23 → 149.63</span><br>
+          <span style="font-size:11px;color:#888780">止损 129.23 | 换手高</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-red">换手过高</span><br>
+          换手15.7%接近爆量线<br>
+          冲高回落概率大<br>
+          不急 等大跌到MA10≈127
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">狮头股份</span><br><span class="code-cell">600539</span></td>
+        <td>17次</td>
+        <td>15.40<br><span class="red">+10.0%</span></td>
+        <td>6.1%<br>0.53x</td>
+        <td><span class="green">-5.8%</span></td>
+        <td>15.30</td>
+        <td>
+          <span class="orange">14.63 → 16.94</span><br>
+          <span style="font-size:11px;color:#888780">止损 14.93 | RR 3.28</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-orange">缩量涨停</span><br>
+          量比0.53x缩量 均线偏弱<br>
+          等调整后放量再看
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">大业股份</span><br><span class="code-cell">603278</span></td>
+        <td>18次</td>
+        <td>14.14<br><span class="red">+10.0%</span></td>
+        <td>16.9%<br>0.95x</td>
+        <td>0%</td>
+        <td>12.84</td>
+        <td>
+          <span class="orange">13.09 → 15.55</span><br>
+          <span style="font-size:11px;color:#888780">止损 13.43 | 换手高</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-red">换手过高</span><br>
+          换手16.9%接近18%爆量线<br>
+          MA5=12.85远低于价<br>
+          等大幅回调再说
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">华如科技</span><br><span class="code-cell">301302</span></td>
+        <td>11次</td>
+        <td>30.12<br><span class="red">+20.0%</span></td>
+        <td>11.7%<br>1.73x</td>
+        <td>0%</td>
+        <td>26.41</td>
+        <td>
+          <span class="orange">26.94 → 33.13</span><br>
+          <span style="font-size:11px;color:#888780">止损 28.61</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-red">加速板</span><br>
+          +20%加速板 趋势向下<br>
+          高位接刀！回避
+        </td>
+      </tr>
+
+      <tr>
+        <td><span class="name-cell">*ST正平</span><br><span class="code-cell">603843</span></td>
+        <td>27次</td>
+        <td>8.43<br><span class="red">+5.0%</span></td>
+        <td>1.4%<br>0.49x</td>
+        <td><span class="green">-6%</span></td>
+        <td>8.06</td>
+        <td>
+          <span style="font-size:11px;color:#888780">不操作</span>
+        </td>
+        <td style="font-size:12px;">
+          <span class="tag tag-red">ST+量萎缩</span><br>
+          量比0.49x 量能递减<br>
+          ST类票不稳 回避
+        </td>
+      </tr>
+    </table>
+
+    <div class="warn-box">
+      <p><strong>高位池今日要点：</strong></p>
+      <p>① 高位池22只涨停，<strong>今天买不进</strong>，不要追</p>
+      <p>② <strong>三孚股份</strong> 603938 —— 已回调-8.7% + 突破新高，最接近"大跌低吸"条件，等跌到MA10≈46可接</p>
+      <p>③ <strong>粤桂股份</strong> 000833 —— 深度回调-25%已在MA10附近，但量比0.57x缩量，等放量确认再接</p>
+      <p>④ 其余涨停票全部等大跌到MA10再看，不追涨！</p>
+    </div>
+  </div>
+
+  <!-- 今日操作清单 -->
+  <div class="section">
+    <div class="section-title">今日操作清单 <span class="badge badge-green">可执行</span></div>
+    <table>
+      <tr>
+        <th>优先级</th>
+        <th>标的</th>
+        <th>池</th>
+        <th>入场条件</th>
+        <th>止盈</th>
+        <th>止损</th>
+        <th>仓位</th>
+      </tr>
+      <tr>
+        <td><span class="tag tag-blue">P1</span></td>
+        <td><strong>天安新材</strong> 603725</td>
+        <td>🏗中段</td>
+        <td>12.5附近（MA5=12.18）</td>
+        <td>+8%减半 → 13.71</td>
+        <td>破5日线=11.81全走</td>
+        <td>≤30%</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-blue">P2</span></td>
+        <td><strong>维信诺</strong> 002387</td>
+        <td>🏗中段</td>
+        <td>8.5附近（MA5=8.53）今日跌6.2%</td>
+        <td>+8%减半 → 9.39</td>
+        <td>破5日线=8.28全走</td>
+        <td>≤30%</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-orange">P3</span></td>
+        <td><strong>三孚股份</strong> 603938</td>
+        <td>🎯高位</td>
+        <td>等跌到MA10≈46.0 大跌低吸</td>
+        <td>+10%全出 → 57.41</td>
+        <td>-5%止损 → 49.58</td>
+        <td>≤10%</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-orange">P4</span></td>
+        <td><strong>三羊马</strong> 001317</td>
+        <td>🏗中段</td>
+        <td>涨停开板后回踩MA5≈53.4</td>
+        <td>+8%减半 → 61.41</td>
+        <td>破5日线=51.76全走</td>
+        <td>≤30%</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-orange">P5</span></td>
+        <td><strong>昊华科技</strong> 600378</td>
+        <td>🏗中段</td>
+        <td>回踩MA5≈45附近</td>
+        <td>+8%减半 → 54.24</td>
+        <td>破5日线=43.74全走</td>
+        <td>≤30%</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 回避清单 -->
+  <div class="section">
+    <div class="section-title">回避 <span class="badge badge-red">不操作</span></div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:12px;">
+      <div style="background:#f7f6f2;padding:8px 12px;border-radius:8px;">
+        <strong>华如科技</strong> 301302 —— +20%加速板，趋势向下，高位接刀
+      </div>
+      <div style="background:#f7f6f2;padding:8px 12px;border-radius:8px;">
+        <strong>中重科技</strong> 603135 —— 连板4日+量比11.7x，最后放量日
+      </div>
+      <div style="background:#f7f6f2;padding:8px 12px;border-radius:8px;">
+        <strong>*ST正平</strong> 603843 —— ST+量比0.49x+量能递减
+      </div>
+      <div style="background:#f7f6f2;padding:8px 12px;border-radius:8px;">
+        <strong>天娱数科</strong> 002354 —— 趋势向下+量能递减
+      </div>
+      <div style="background:#f7f6f2;padding:8px 12px;border-radius:8px;">
+        <strong>大业股份</strong> 603278 —— 换手16.9%接近18%爆量线
+      </div>
+      <div style="background:#f7f6f2;padding:8px 12px;border-radius:8px;">
+        <strong>华正新材</strong> 603186 —— 换手15.7%+冲高回落风险
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">AIAIAIAI-stock v5.0 异动策略 &nbsp;·&nbsp; 2026-06-09 &nbsp;·&nbsp; 仅供参考，操作风险自负</div>
+
+</div>
+</body>
+</html>
