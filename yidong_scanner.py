@@ -75,7 +75,7 @@ class Config:
     TREND_WINDOW = 10
 
     # ── 分级池阈值 ──
-    SURGE_MID_MAX  = 5     # 中段池异动≤5次（＞5次=高位博弈区）
+    SURGE_MID_MAX  = 7     # 中段池异动≤7次（＞7次=高位博弈区，收缩高位池）
     SURGE_MID_MIN  = 3     # 中段池最少异动3次（2次不足以确认趋势）
 
     # ── 交易纪律 ──
@@ -89,6 +89,9 @@ class Config:
     # ── 中段池质量硬性门槛 ──
     MIN_RR_MID        = 0.8   # 中段池最低RR（赔率不够不参与）
     MAX_CHANGE_MID    = 9.5   # 中段池剔除当日涨幅≥9.5%（涨停没法回踩买）
+
+    # ── 高位池质量硬性门槛 ──
+    MIN_SCORE_HIGH    = 65    # 高位池最低综合评分（砍掉底部垃圾）
 
     # ── 市场过滤 ──
     EXCLUDE_ST     = True
@@ -995,6 +998,10 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None,
             + min(sector_limit_count, 5) * 2                          # v5.1 板块爆发力(高位减半)
             + min(consecutive_limits, 3) * 3                          # v5.1 连板惯性(高位减半)
         )
+
+    # ── v1.2 高位池最低分过滤 ──
+    if pool_type == "high" and score < Config.MIN_SCORE_HIGH:
+        return None  # 分数太低，砍掉
 
     presurge = calc_presurge_score(df, events)
 
