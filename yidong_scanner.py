@@ -76,7 +76,7 @@ class Config:
 
     # ── 分级池阈值 ──
     SURGE_MID_MAX  = 5     # 中段池异动≤5次（＞5次=高位博弈区）
-    SURGE_MID_MIN  = 2     # 中段池最少异动2次
+    SURGE_MID_MIN  = 3     # 中段池最少异动3次（2次不足以确认趋势）
 
     # ── 交易纪律 ──
     MID_POOL_POS    = 0.30  # 中段池单只仓位
@@ -85,6 +85,10 @@ class Config:
     MID_STOP_MA     = 5     # 中段池止损（破5日线全走）
     HIGH_STOP_PCT   = -5    # 高位池止损（亏损5%无条件走）
     HIGH_TP_PCT     = 10    # 高位池止盈（盈利10%全离场）
+
+    # ── 中段池质量硬性门槛 ──
+    MIN_RR_MID        = 0.8   # 中段池最低RR（赔率不够不参与）
+    MAX_CHANGE_MID    = 9.5   # 中段池剔除当日涨幅≥9.5%（涨停没法回踩买）
 
     # ── 市场过滤 ──
     EXCLUDE_ST     = True
@@ -911,6 +915,15 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None,
     else:
         pool_type = "high"  # 高位博弈池：接近上限但未超
 
+    # ── v1.1 中段池质量硬性过滤 ──
+    if pool_type == "mid":
+        # 涨停/接近涨停 → 剔除（策略是回踩买，涨停没法回踩）
+        if change_pct >= Config.MAX_CHANGE_MID:
+            return None
+        # 换手率过低 → 剔除（流动性不足，僵尸股不参与）
+        if turnover < Config.TURNOVER_MIN:
+            return None
+
     # ── 趋势检查 ──
     ok, reason, pullback = check_trend_holding(df, last_surge)
     if not ok and pool_type == "mid":
@@ -932,6 +945,10 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None,
 
     # ── 交易计划 ──
     plan = calc_trade_plan(df, last_surge, pool_type)
+
+    # ── v1.1 中段池 RR 过滤 ──
+    if pool_type == "mid" and plan["risk_reward"] < Config.MIN_RR_MID:
+        return None  # 赔率太差，不值得参与
 
     # ── 均线 ──
     closes = df["close"].values
