@@ -89,6 +89,7 @@ class Config:
     # ── 市场过滤 ──
     EXCLUDE_ST     = True
     EXCLUDE_NEW    = True
+    EXCLUDE_STAR   = True   # 科创板 688 开头
     MIN_PRICE      = 1.5
     MAX_PRICE      = 1000.0
 
@@ -866,6 +867,10 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None,
     v5.0 分析单只股票（区间限位 + 三大硬性过滤 + 双池分类）。
     返回结果 dict 或 None（不符合条件）。
     """
+    # ── 过滤科创板 688 ──
+    if Config.EXCLUDE_STAR and code.startswith("688"):
+        return None
+
     if price < Config.MIN_PRICE or price > Config.MAX_PRICE:
         return None
 
@@ -1040,6 +1045,10 @@ def analyze_stock_presurge(code: str, name: str, price: float, extra_quote: Dict
     v5.0 PreSurge 预判模式（宽松版）。
     条件：历史异动≥2 + presurge评分≥3 + 未超上限。
     """
+    # ── 过滤科创板 688 ──
+    if Config.EXCLUDE_STAR and code.startswith("688"):
+        return None
+
     if price < Config.MIN_PRICE or price > Config.MAX_PRICE:
         return None
 
