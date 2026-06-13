@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-A股异动股票筛选器 v5.0 — 抓启动加速，剔除暴涨尾声
+A股异动股票筛选器 v5.2 — 盈亏比优先 + 抓启动加速，剔除暴涨尾声
 ====================================================
 策略核心理念：
   "保留涨幅逻辑，但反向设上限，抓启动加速，剔除暴涨尾声"
@@ -88,6 +88,7 @@ class Config:
 
     # ── 中段池质量硬性门槛 ──
     MIN_RR_MID        = 0.8   # 中段池最低RR（赔率不够不参与）
+    MIN_RR_GLOBAL     = 0.5   # 全局最低RR，低于此无论什么池都剔除（性价比太差）
     MAX_CHANGE_MID    = 9.5   # 中段池剔除当日涨幅≥9.5%（涨停没法回踩买）
 
     # ── 高位池质量硬性门槛 ──
@@ -953,6 +954,10 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None,
     if pool_type == "mid" and plan["risk_reward"] < Config.MIN_RR_MID:
         return None  # 赔率太差，不值得参与
 
+    # ── v5.2 全局 RR 过滤：盈亏比优先 ──
+    if plan["risk_reward"] < Config.MIN_RR_GLOBAL:
+        return None  # 盈亏比太低，性价比差，无论什么池都剔除
+
     # ── 均线 ──
     closes = df["close"].values
     ma5  = round(float(np.mean(closes[-5:])),  2) if len(closes) >= 5  else 0
@@ -983,7 +988,7 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None,
             len(events) * 12                                          # 异动积累
             + (3 - min(abs(pullback) / 5, 3)) * 6                    # 回踩深度
             + min(vol_ratio, 3) * 4                                   # 量比
-            + min(plan["risk_reward"], 5) * 3                         # 风险收益比
+            + min(plan["risk_reward"], 5) * 8                         # 风险收益比(盈亏比优先)
             + (5 if turnover_ok else -3)                              # 换手
             + (0 if mcap_filtered else 5)                             # 市值
             + min(sector_limit_count, 5) * 4                          # v5.1 板块爆发力
@@ -993,7 +998,7 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None,
         score = (
             len(events) * 8
             + min(vol_ratio, 3) * 3
-            + min(plan["risk_reward"], 5) * 2
+            + min(plan["risk_reward"], 5) * 6
             + (3 if turnover_ok else -5)
             + min(sector_limit_count, 5) * 2                          # v5.1 板块爆发力(高位减半)
             + min(consecutive_limits, 3) * 3                          # v5.1 连板惯性(高位减半)
@@ -1829,6 +1834,14 @@ def save_html(results: List[Dict], schedule: str = None, predicted: List[Dict] =
             pool_cls = "badge-mid" if r.get("pool_type") == "mid" else "badge-high"
             pool_label = r.get("pool_label", "")
 
+            # v5.2 盈亏比高亮 — 性价比优先
+            rr_val = p.get("risk_reward", 0)
+            rr_badge = ""
+            if rr_val >= 2.0:
+                rr_badge = f'<span class="badge-rr-exc">⭐⭐RR{rr_val:.1f}x</span>'
+            elif rr_val >= 1.5:
+                rr_badge = f'<span class="badge-rr-good">⭐RR{rr_val:.1f}x</span>'
+
             # v5.1 板块爆发力 & 连板惯性
             sector_limit = r.get("sector_limit_count", 0)
             sector_name  = r.get("sector_name", "-")
@@ -1850,7 +1863,7 @@ def save_html(results: List[Dict], schedule: str = None, predicted: List[Dict] =
 <tr>
   <td class="rank">{rank}</td>
   <td class="code-cell">{r['code']}</td>
-  <td class="name-cell">{r['name']}<span class="{pool_cls}">{pool_label}</span></td>
+  <td class="name-cell">{r['name']}<span class="{pool_cls}">{pool_label}</span>{rr_badge}</td>
   <td class="price-cell">{r['price']:.2f}</td>
   <td class="{'up' if r['change_pct']>=0 else 'dn'}">{r['change_pct']:+.2f}%</td>
   <td class="surge">{r['surge_count']}次<br><small>{r['last_surge_type']}窗{r['last_surge_pct']:.0f}%</small></td>
@@ -1975,6 +1988,8 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 .tag-hot{{display:inline-block;background:#FEE2E2;color:#DC2626;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700}}
 .tag-limit-high{{display:inline-block;background:#FEF3C7;color:#B45309;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700}}
 .tag-limit{{display:inline-block;background:#DBEAFE;color:#1E40AF;border-radius:3px;padding:1px 6px;font-size:10px}}
+.badge-rr-exc{{display:inline-block;background:#DCFCE7;color:#166534;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700;margin-left:4px}}
+.badge-rr-good{{display:inline-block;background:#FEF9C3;color:#854D0E;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:600;margin-left:4px}}
 </style>
 </head>
 <body>
@@ -2195,7 +2210,7 @@ def main():
         return []
 
     print("=" * 60)
-    print("  A股异动股票筛选器 v5.0（区间限位+双池分仓）")
+    print("  A股异动股票筛选器 v5.2（盈亏比优先+区间限位+双池分仓）")
     print(f"  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     if args.both:
         print(f"  模式: 🔥 组合扫描 — 异动确认 + PreSurge预判 双跑")
