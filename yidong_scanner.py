@@ -883,6 +883,7 @@ def analyze_stock(code: str, name: str, price: float, extra_quote: Dict = None,
         return None
 
     q = extra_quote or {}
+    change_pct = q.get("change_pct", 0)
 
     # ── 硬性过滤 1：市值 60~350亿 ──
     mcap = q.get("mcap_yi", 0)
@@ -1332,9 +1333,10 @@ def _generate_history_html():
             continue
 
         stocks = data.get("stocks", [])
-        buyable = [s for s in stocks if not s.get("is_fishtail") and not s.get("is_limit_up")]
-        limit_up = [s for s in stocks if s.get("is_limit_up") and not s.get("is_fishtail")]
-        fishtail = [s for s in stocks if s.get("is_fishtail")]
+        # v5 字段映射：is_fishtail/is_limit_up → pool_type / is_presurge / consecutive_limits
+        buyable = [s for s in stocks if not s.get("is_presurge")]
+        limit_up = [s for s in stocks if s.get("consecutive_limits", 0) >= 1]
+        eliminated = [s for s in stocks if s.get("is_eliminated")]
         presurge = [s for s in stocks if s.get("presurge_score", 0) >= 3]
 
         daily_summaries.append({
@@ -1342,7 +1344,7 @@ def _generate_history_html():
             "total": len(stocks),
             "buyable": len(buyable),
             "limit_up": len(limit_up),
-            "fishtail": len(fishtail),
+            "eliminated": len(eliminated),
             "presurge": len(presurge),
             "stocks": stocks,
         })
@@ -1391,7 +1393,7 @@ def _generate_history_html():
   <td class="num">{ds['total']}</td>
   <td class="buyable {buy_cls}">{ds['buyable']}</td>
   <td class="limit">{ds['limit_up']}</td>
-  <td class="fish">{ds['fishtail']}</td>
+  <td class="fish">{ds['eliminated']}</td>
   <td class="pre">{ds['presurge']}</td>
   <td class="action"><a href="history/{ds['date']}/result.html" class="btn-sm">查看</a></td>
 </tr>"""
@@ -1476,7 +1478,7 @@ td{{padding:9px 7px;font-size:12px;text-align:center;vertical-align:middle}}
 <div class="tw">
 <table>
 <thead><tr>
-  <th>日期</th><th>总数</th><th>🔥可买</th><th>🚫涨停</th><th>🐟鱼尾</th><th>🔮预判</th><th>详情</th>
+  <th>日期</th><th>总数</th><th>🔥可买</th><th>🚫涨停</th><th>🚫剔除</th><th>🔮预判</th><th>详情</th>
 </tr></thead>
 <tbody>{daily_rows or '<tr><td colspan="7" class="gray">暂无归档记录</td></tr>'}</tbody>
 </table>
