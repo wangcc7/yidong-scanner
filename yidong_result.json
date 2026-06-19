@@ -1,5 +1,5 @@
 {
-  "scan_time": "2026-06-19T08:22:29.902074",
+  "scan_time": "2026-06-19T17:58:15.435657",
   "total": 50,
   "strategy": {
     "3d_range": "12%~20%",
@@ -5532,144 +5532,6 @@
       "consecutive_limits": 1
     },
     {
-      "code": "600026",
-      "name": "中远海能",
-      "price": 19.3,
-      "change_pct": -1.98,
-      "turnover_pct": 3.35,
-      "pe_ttm": 19.19,
-      "mcap_yi": 738.75,
-      "pb": 2.19,
-      "surge_count": 10,
-      "last_surge_type": "3d",
-      "last_surge_window": 3,
-      "last_surge_pct": 16.1,
-      "last_surge_high": 19.25,
-      "last_surge_start": 16.58,
-      "last_surge_date": "2026-06-15",
-      "pool_type": "high",
-      "pool_label": "高位博弈",
-      "trend_reason": "🆕突破新高",
-      "pullback_pct": -0.3,
-      "vol_ratio": 1.82,
-      "vol_ok": true,
-      "vol_inc_ok": false,
-      "vol_inc_reason": "量能递减 1798831→1281213",
-      "turnover_ok": false,
-      "turnover_warn": "换手率偏低3.4%",
-      "mcap_ok": false,
-      "is_eliminated": false,
-      "ma5": 18.73,
-      "ma10": 17.8,
-      "ma20": 18.83,
-      "ma60": 21.56,
-      "plan": {
-        "entry": 18.16,
-        "stop_loss": 18.34,
-        "target1": 21.23,
-        "target2": 23.16,
-        "risk_reward": 2.0,
-        "risk_pct": 5.0,
-        "at_new_high": true,
-        "pool_type": "high",
-        "position": "≤10%",
-        "trade_rule": "大跌低吸MA10 | -5%止损 | +10%全离",
-        "ma5": 18.73,
-        "ma10": 17.8
-      },
-      "events": [
-        {
-          "type": "3d",
-          "window": 3,
-          "pct": 13.7,
-          "start_date": "2026-01-07",
-          "end_date": "2026-01-12",
-          "start_price": 11.99,
-          "high_price": 13.63
-        },
-        {
-          "type": "3d",
-          "window": 3,
-          "pct": 14.0,
-          "start_date": "2026-02-09",
-          "end_date": "2026-02-12",
-          "start_price": 16.43,
-          "high_price": 18.73
-        },
-        {
-          "type": "30d",
-          "window": 30,
-          "pct": 60.4,
-          "start_date": "2025-12-31",
-          "end_date": "2026-02-12",
-          "start_price": 11.68,
-          "high_price": 18.73
-        },
-        {
-          "type": "3d",
-          "window": 3,
-          "pct": 12.4,
-          "start_date": "2026-02-25",
-          "end_date": "2026-03-02",
-          "start_price": 20.15,
-          "high_price": 22.64
-        },
-        {
-          "type": "10d",
-          "window": 10,
-          "pct": 41.8,
-          "start_date": "2026-02-06",
-          "end_date": "2026-03-02",
-          "start_price": 15.97,
-          "high_price": 22.64
-        },
-        {
-          "type": "3d",
-          "window": 3,
-          "pct": 12.5,
-          "start_date": "2026-03-13",
-          "end_date": "2026-03-18",
-          "start_price": 22.11,
-          "high_price": 24.88
-        },
-        {
-          "type": "3d",
-          "window": 3,
-          "pct": 13.0,
-          "start_date": "2026-03-31",
-          "end_date": "2026-04-03",
-          "start_price": 22.0,
-          "high_price": 24.85
-        },
-        {
-          "type": "3d",
-          "window": 3,
-          "pct": 16.1,
-          "start_date": "2026-06-10",
-          "end_date": "2026-06-15",
-          "start_price": 16.58,
-          "high_price": 19.25
-        }
-      ],
-      "presurge_score": 2,
-      "presurge_signals": {
-        "vol_warmup": 1,
-        "rhythm": 0,
-        "atr_compress": 0,
-        "higher_lows": 0,
-        "macd_cross": 1
-      },
-      "presurge_detail": "S1量预热✓ 近3日量比2.17x 价格仅动0.3% | S2韵律✗ 历史间隔均23日 已等3日(比值0.13) | S3收口✗ ATR=1.27 前=1.09 未明显收窄 | S4底抬✗ 低点:20.82→17.59→15.99 | S5MACD✓ 柱扩大 0.105→0.417→0.562",
-      "presurge_risk": "信号弱",
-      "presurge_risk_cls": "presurge_low",
-      "cycle_days": 23.0,
-      "days_since_last": 3,
-      "score": 92.5,
-      "sector_name": "未归类",
-      "sector_limit_count": 0,
-      "consecutive_limits": 0
-    },
-    {
       "code": "002254",
       "name": "泰和新材",
       "price": 18.7,
@@ -6910,6 +6772,142 @@
       "sector_name": "无法判断",
       "sector_limit_count": 0,
       "consecutive_limits": 0
+    },
+    {
+      "code": "600381",
+      "name": "*ST春天",
+      "price": 5.04,
+      "change_pct": 5.0,
+      "turnover_pct": 1.34,
+      "pe_ttm": -47.33,
+      "mcap_yi": 29.59,
+      "surge_count": 16,
+      "last_surge_type": "3d",
+      "last_surge_window": 3,
+      "last_surge_pct": 15.8,
+      "last_surge_high": 5.43,
+      "last_surge_start": 4.69,
+      "last_surge_date": "2026-05-27",
+      "pool_type": "mid",
+      "pool_label": "预判候选",
+      "trend_reason": "预判模式",
+      "pullback_pct": 7.2,
+      "vol_ratio": 0.81,
+      "vol_ok": false,
+      "vol_inc_ok": true,
+      "vol_inc_reason": "预判跳过",
+      "turnover_ok": true,
+      "turnover_warn": "",
+      "mcap_ok": true,
+      "is_eliminated": false,
+      "ma5": 5.1,
+      "ma10": 5.25,
+      "ma20": 5.29,
+      "ma60": 4.12,
+      "plan": {
+        "entry": 5.04,
+        "stop_loss": 4.94,
+        "target1": 5.44,
+        "target2": 5.8,
+        "risk_reward": 4.16,
+        "risk_pct": 1.9,
+        "at_new_high": false,
+        "pool_type": "mid",
+        "position": "≤30%",
+        "trade_rule": "回踩5/10日线买 | +8%减半 | 破5日线全走",
+        "ma5": 5.1,
+        "ma10": 5.25,
+        "position_note": "预判阶段建议半仓"
+      },
+      "events": [
+        {
+          "type": "3d",
+          "window": 3,
+          "pct": 16.0,
+          "start_date": "2026-04-09",
+          "end_date": "2026-04-14",
+          "start_price": 2.63,
+          "high_price": 3.05
+        },
+        {
+          "type": "3d",
+          "window": 3,
+          "pct": 15.7,
+          "start_date": "2026-04-17",
+          "end_date": "2026-04-22",
+          "start_price": 2.81,
+          "high_price": 3.25
+        },
+        {
+          "type": "3d",
+          "window": 3,
+          "pct": 15.8,
+          "start_date": "2026-04-27",
+          "end_date": "2026-04-30",
+          "start_price": 3.1,
+          "high_price": 3.59
+        },
+        {
+          "type": "3d",
+          "window": 3,
+          "pct": 15.9,
+          "start_date": "2026-05-06",
+          "end_date": "2026-05-11",
+          "start_price": 3.77,
+          "high_price": 4.37
+        },
+        {
+          "type": "10d",
+          "window": 10,
+          "pct": 47.9,
+          "start_date": "2026-04-24",
+          "end_date": "2026-05-13",
+          "start_price": 3.26,
+          "high_price": 4.82
+        },
+        {
+          "type": "30d",
+          "window": 30,
+          "pct": 66.2,
+          "start_date": "2026-03-26",
+          "end_date": "2026-05-13",
+          "start_price": 2.9,
+          "high_price": 4.82
+        },
+        {
+          "type": "3d",
+          "window": 3,
+          "pct": 15.7,
+          "start_date": "2026-05-12",
+          "end_date": "2026-05-15",
+          "start_price": 4.59,
+          "high_price": 5.31
+        },
+        {
+          "type": "3d",
+          "window": 3,
+          "pct": 15.8,
+          "start_date": "2026-05-22",
+          "end_date": "2026-05-27",
+          "start_price": 4.69,
+          "high_price": 5.43
+        }
+      ],
+      "presurge_score": 3,
+      "presurge_signals": {
+        "vol_warmup": 0,
+        "rhythm": 1,
+        "atr_compress": 1,
+        "higher_lows": 1,
+        "macd_cross": 0
+      },
+      "presurge_detail": "S1量预热✗ 量比0.74x 价变-3.8% | S2韵律✓ 历史间隔均19日 已等16日(比值0.83) | S3收口✓ ATR从0.36→0.26(-29%) | S4底抬✓ 低点抬高:3.93→4.55→4.58 | S5MACD✗ 柱=-0.255",
+      "presurge_risk": "信号一般",
+      "presurge_risk_cls": "presurge_mid",
+      "cycle_days": 19.0,
+      "days_since_last": 16,
+      "score": 175.4,
+      "is_presurge": true
     }
   ]
 }
