@@ -133,7 +133,12 @@ def get_mootdx_client():
     if _mootdx_client is None:
         from mootdx.quotes import Quotes
         _mootdx_client = Quotes.factory(market='std')
-        time.sleep(1.5)  # 等待服务器选择完成
+        # 默认服务器(123.125.108.14)可能不返回数据，手动切换到可用服务器
+        try:
+            _mootdx_client.client.connect('115.238.56.198', 7709, time_out=10)
+            time.sleep(0.5)
+        except Exception:
+            pass  # fallback to default server
     return _mootdx_client
 
 
@@ -204,9 +209,21 @@ def get_kline(code: str, days: int = 365) -> Optional[pd.DataFrame]:
     获取K线，返回标准DataFrame:
     columns: date(datetime), open, close, high, low, vol
     """
+    import signal as _signal
+
+    def _kline_timeout_handler(signum, frame):
+        raise TimeoutError(f"mootdx bars timeout for {code}")
+
     try:
         client = get_mootdx_client()
-        klines = client.bars(symbol=code, category=4, offset=days)
+        # 设置15秒超时，防止TDX服务器无响应时卡死
+        old_handler = _signal.signal(_signal.SIGALRM, _kline_timeout_handler)
+        _signal.alarm(15)
+        try:
+            klines = client.bars(symbol=code, category=4, offset=days)
+        finally:
+            _signal.alarm(0)
+            _signal.signal(_signal.SIGALRM, old_handler)
         if klines is None or len(klines) < 40:
             return None
 
