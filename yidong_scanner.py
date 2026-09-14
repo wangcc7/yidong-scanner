@@ -204,51 +204,132 @@ def get_all_stock_codes() -> List[str]:
     return codes
 
 
+def _get_kline_sina(code: str, days: int = 365) -> Optional[pd.DataFrame]:
+    """新浪财经K线API（主数据源）"""
+    prefix = "sh" if code.startswith(("6", "9")) else "sz"
+    url = "http://money.finance.sina.com.cn/quotes_service/api/json_v2.php/CN_MarketData.getKLineData"
+    params = {
+        "symbol": f"{prefix}{code}",
+        "scale": "240",
+        "ma": "5",
+        "datalen": str(min(days, 1024)),
+    }
+    try:
+        r = requests.get(url, params=params, headers={"User-Agent": UA}, timeout=10, proxies={"http": None, "https": None})
+        data = r.json()
+        if not data or len(data) < 40:
+            return None
+        rows = []
+        for item in data:
+            rows.append({
+                "date": item["day"],
+                "open": float(item["open"]),
+                "close": float(item["close"]),
+                "high": float(item["high"]),
+                "low": float(item["low"]),
+                "vol": float(item["volume"]),
+            })
+        df = pd.DataFrame(rows)
+        df["date"] = pd.to_datetime(df["date"])
+        df = df.sort_values("date").reset_index(drop=True)
+        if Config.EXCLUDE_NEW and len(df) < 60:
+            return None
+        return df[["date", "open", "close", "high", "low", "vol"]]
+    except Exception:
+        return None
+
+
+def _get_kline_eastmoney(code: str, days: int = 365) -> Optional[pd.DataFrame]:
+    """东方财富K线API（备选数据源）"""
+    if code.startswith("6"):
+        secid = f"1.{code}"
+    elif code.startswith("8"):
+        secid = f"0.{code}"
+    else:
+        secid = f"0.{code}"
+
+    url = "http://push2his.eastmoney.com/api/qt/stock/kline/get"
+    params = {
+        "secid": secid,
+        "fields1": "f1,f2,f3,f4,f5,f6",
+        "fields2": "f51,f52,f53,f54,f55,f56,f57",
+        "klt": "101",
+        "fqt": "0",
+        "end": "20500101",
+        "lmt": str(days + 10),
+    }
+    try:
+        r = requests.get(url, params=params, headers={"User-Agent": UA}, timeout=10, proxies={"http": None, "https": None})
+        data = r.json()
+        klines = data.get("data", {}).get("klines", [])
+        if not klines:
+            return None
+        rows = []
+        for k in klines:
+            parts = k.split(",")
+            if len(parts) >= 6:
+                rows.append({
+                    "date": parts[0],
+                    "open": float(parts[1]),
+                    "close": float(parts[2]),
+                    "high": float(parts[3]),
+                    "low": float(parts[4]),
+                    "vol": float(parts[5]),
+                })
+        df = pd.DataFrame(rows)
+        df["date"] = pd.to_datetime(df["date"])
+        df = df.sort_values("date").reset_index(drop=True)
+        if Config.EXCLUDE_NEW and len(df) < 60:
+            return None
+        return df[["date", "open", "close", "high", "low", "vol"]]
+    except Exception:
+        return None
+
+
 def get_kline(code: str, days: int = 365) -> Optional[pd.DataFrame]:
     """
     获取K线，返回标准DataFrame:
     columns: date(datetime), open, close, high, low, vol
+    优先使用新浪API，其次mootdx（2秒超时），最后东方财富
     """
     import signal as _signal
 
     def _kline_timeout_handler(signum, frame):
         raise TimeoutError(f"mootdx bars timeout for {code}")
 
+    # ── 优先新浪API ──
+    df = _get_kline_sina(code, days)
+    if df is not None and len(df) >= 40:
+        return df
+
+    # ── 次选 mootdx（短超时）──
     try:
         client = get_mootdx_client()
-        # 设置15秒超时，防止TDX服务器无响应时卡死
         old_handler = _signal.signal(_signal.SIGALRM, _kline_timeout_handler)
-        _signal.alarm(15)
+        _signal.alarm(2)
         try:
             klines = client.bars(symbol=code, category=4, offset=days)
         finally:
             _signal.alarm(0)
             _signal.signal(_signal.SIGALRM, old_handler)
-        if klines is None or len(klines) < 40:
-            return None
+        if klines is not None and len(klines) >= 40:
+            df = klines.copy()
+            df.columns = [c.lower() for c in df.columns]
+            if "datetime" in df.columns:
+                df["date"] = pd.to_datetime(df["datetime"])
+            elif "date" in df.columns:
+                df["date"] = pd.to_datetime(df["date"])
+            if "volume" in df.columns and "vol" not in df.columns:
+                df["vol"] = df["volume"]
+            df = df.sort_values("date").reset_index(drop=True)
+            if Config.EXCLUDE_NEW and len(df) < 60:
+                return None
+            return df[["date", "open", "close", "high", "low", "vol"]]
+    except Exception:
+        pass
 
-        df = klines.copy()
-        df.columns = [c.lower() for c in df.columns]
-
-        # 统一date列
-        if "datetime" in df.columns:
-            df["date"] = pd.to_datetime(df["datetime"])
-        elif "date" in df.columns:
-            df["date"] = pd.to_datetime(df["date"])
-
-        # 统一vol列
-        if "volume" in df.columns and "vol" not in df.columns:
-            df["vol"] = df["volume"]
-
-        df = df.sort_values("date").reset_index(drop=True)
-
-        # 过滤次新股（K线天数 < 60 认为是次新）
-        if Config.EXCLUDE_NEW and len(df) < 60:
-            return None
-
-        return df[["date", "open", "close", "high", "low", "vol"]]
-    except Exception as e:
-        return None
+    # ── 回退到东方财富API ──
+    return _get_kline_eastmoney(code, days)
 
 
 def tencent_batch_quote(codes: List[str]) -> Dict[str, Dict]:
